@@ -27,7 +27,7 @@ end run
 --------------------
 
 on SFR_Unescape(someString)
-	-- version 1.0, Daniel A. Shockley
+	-- version 1.0
 	
 	set escapeCharList to {"=", ":", "<", ">"}
 	

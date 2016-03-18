@@ -30,7 +30,7 @@ end run
 --------------------
 
 on ensureFileMakerDatabase(prefs)
-	-- version 1.3, Daniel A. Shockley
+	-- version 1.3
 	
 	set dbName to dbName of prefs
 	

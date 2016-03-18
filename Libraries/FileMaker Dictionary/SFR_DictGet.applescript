@@ -28,7 +28,7 @@ end run
 --------------------
 
 on SFR_DictGet(someDict, itemName)
-	-- version 1.0, Daniel A. Shockley	
+	-- version 1.0
 	
 	set keyString to "<:" & SFR_Escape(itemName) & ":="
 	set endString to ":>"

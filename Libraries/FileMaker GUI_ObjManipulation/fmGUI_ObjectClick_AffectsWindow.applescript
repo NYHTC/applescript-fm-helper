@@ -33,6 +33,8 @@ end run
 --------------------
 
 on fmGUI_ObjectClick_AffectsWindow(buttonRef)
+	-- version 1.0
+	
 	using terms from application "System Events"
 		my clickObjectByCoords(buttonRef)
 	end using terms from

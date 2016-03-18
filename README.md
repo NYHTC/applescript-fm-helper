@@ -1,13 +1,13 @@
 # applescript-fm-helper Overview
----
-applescript-fm-helper is applescript script designed for assisting with GUI scripting, with a focus on FileMaker. It is written again OSX 10.10.5 and works with FileMaker 12. 
+applescript-fm-helper is applescript script designed for assisting with GUI scripting, with a focus on FileMaker. It is written again OSX 10.10.5 and works with FileMaker 12.
 
 **NOTE:** It should work on newer versions of OS X as well newer versions of FileMaker, **but it is not officially supported.**
+
+Although some of the FileMaker-specific handlers are written to work with both Pro and Advanced, the latter is the favored.
 
 
 
 ### Usage
----
 Once the repository is saved, `main.scpt` script needs to be loaded to be used. Assuming the save path of this repository is `~/Code/applescript-fm-helper/`, any file that needs access needs to load script with the following code:
 
 ```applescript
@@ -29,5 +29,9 @@ end tell
 
 
 ### Dependancy
----
 This package assumes that cliclick ([github](https://github.com/BlueM/cliclick)) exists. Once compiled, update `main.scpt` with its location. By default, it is set to be at the top level.
+
+
+
+### Helpful Tools
+[RCDefaultApp](http://www.rubicode.com/Software/RCDefaultApp/) is a helpful system prefenreces utility used for setting up the default app for opening FMP URLs. This tools is especially useful when both Pro and Advanced is installed.

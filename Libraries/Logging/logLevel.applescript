@@ -28,12 +28,10 @@ end run
 --------------------
 
 on logLEVEL(level, someMsg)
-	-- version 1.0, Daniel A. Shockley
+	-- version 1.0
 	
 	set maxXcount to 5
-	
 	set logName to ScriptName & "_"
-	
 	set xCount to maxXcount - level + 1
 	
 	repeat with i from 1 to xCount

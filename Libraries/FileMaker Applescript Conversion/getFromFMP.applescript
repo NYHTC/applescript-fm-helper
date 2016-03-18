@@ -22,7 +22,7 @@ end run
 --------------------
 
 on getFromFMP(prefs)
-	-- version 1.8, Daniel A. Shockley 
+	-- version 1.8
 	
 	try
 		-- prefs MIGHT be a record that looks like this: {fmType:"Adv"} 

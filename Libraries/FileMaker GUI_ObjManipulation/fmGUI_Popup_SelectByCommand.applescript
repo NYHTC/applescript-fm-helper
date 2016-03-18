@@ -26,7 +26,7 @@ end run
 --------------------
 
 on fmGUI_Popup_SelectByCommand(prefs)
-	-- version 1.0, Dan Shockley
+	-- version 1.0
 	
 	set defaultPrefs to {popupObject:null, popupChoice:null, selectCommand:"is", clickIfAlreadySet:false}
 	

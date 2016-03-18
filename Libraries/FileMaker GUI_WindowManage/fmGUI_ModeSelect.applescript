@@ -28,7 +28,7 @@ end run
 --------------------
 
 on fmGUI_ModeSelect(modeToSelect)
-	-- version 1.0, Dan Shockley
+	-- version 1.0
 	
 	try
 		tell application "System Events"

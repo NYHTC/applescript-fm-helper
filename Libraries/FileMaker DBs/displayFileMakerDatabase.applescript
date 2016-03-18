@@ -15,9 +15,17 @@ REQUIRES:
 *)
 
 
+property helper : ""
 property debugMode : true
+property ScriptName : "displayFileMakerDatabase_TEST"
 
 on run
+	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
+	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
+	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
+	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
+	set helper to load script file pathHelper
+	
 	displayFileMakerDatabase({dbName:"a00_TIMESSQUARE", fmAppType:"Adv"})
 end run
 
@@ -27,11 +35,13 @@ end run
 --------------------
 
 on displayFileMakerDatabase(prefs)
-	-- version 1.5, Daniel A. Shockley
+	-- version 1.5
 	
 	try
 		set defaultPrefs to {fmAppType:"Pro", waitCycleDelaySeconds:5, waitSaveTotalSeconds:2 * minutes}
 		set prefs to prefs & defaultPrefs
+		
+		if debugMode then logConsole(ScriptName, "displayFileMakerDatabase prefs: " & coerceToString(prefs))
 		
 		set dbName to dbName of prefs
 		
@@ -79,21 +89,23 @@ on displayFileMakerDatabase(prefs)
 			if debugMode then log dbName
 			if debugMode then log docName
 			ignoring case
-				--			if debugMode then log class of docName
-				--			if debugMode then log class of dbName
+				--if debugMode then logConsole(ScriptName, "displayFileMakerDatabase docName: " & coerceToString(class of docName))
+				--if debugMode then logConsole(ScriptName, "displayFileMakerDatabase dbName: " & coerceToString(class of dbName))
+				
 				
 				-- apparently these two TEXT variables have some difference (formatting?) even when they are identical STRINGS:
 				if (docName as string) is equal to (dbName as string) then
-					--				if debugMode then log "SAME"
+					--if debugMode then log "SAME"
 					using terms from application "FileMaker Pro Advanced"
 						tell application ID fmAppBundleID
 							show oneDoc
-							--						if debugMode then log (path to it)
+							if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase oneDoc: " & my coerceToString(oneDoc))
+							--if debugMode then log (path to it)
 						end tell
 					end using terms from
 					return true
 				else
-					--				if debugMode then log "DIFF"
+					--if debugMode then logConsole(ScriptName, "displayFileMakerDatabase DIFF" )
 				end if
 			end ignoring
 		end repeat
@@ -108,3 +120,11 @@ end displayFileMakerDatabase
 --------------------
 -- END OF CODE
 --------------------
+
+on logConsole(processName, consoleMsg)
+	tell helper to logConsole(processName, consoleMsg)
+end logConsole
+
+on coerceToString(incomingObject)
+	tell helper to coerceToString(incomingObject)
+end coerceToString

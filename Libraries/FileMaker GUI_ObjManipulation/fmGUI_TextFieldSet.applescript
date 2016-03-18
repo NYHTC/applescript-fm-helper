@@ -25,7 +25,7 @@ end run
 --------------------
 
 on fmGUI_TextFieldSet(textfieldObject, textfieldValue)
-	-- version 1.0, Daniel A. Shockley
+	-- version 1.0
 	
 	using terms from application "System Events"
 		try

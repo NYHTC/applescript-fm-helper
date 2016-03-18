@@ -28,11 +28,11 @@ end run
 --------------------
 
 on fmGUI_ManageDb_FieldListFocus(prefs)
-	-- version 1.1, Daniel A. Shockley
-
+	-- version 1.1
+	
 	try
 		fmGUI_ManageDb_FieldsTab({})
-
+		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
 				my fmGUI_AppFrontMost()
@@ -40,7 +40,7 @@ on fmGUI_ManageDb_FieldListFocus(prefs)
 				return true
 			end tell
 		end tell
-
+		
 	on error errMsg number errNum
 		error "Couldn't focus on Field list - " & errMsg number errNum
 	end try

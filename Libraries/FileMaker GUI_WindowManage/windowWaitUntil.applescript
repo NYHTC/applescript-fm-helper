@@ -21,7 +21,7 @@ end run
 --------------------
 
 on windowWaitUntil(prefs)
-	-- version 1.2, Erik Shagdar, NYHTC
+	-- version 1.2
 	
 	set defaultPrefs to {windowName:null, windowNameTest:"contains", whichWindow:"any", waitCycleDelaySeconds:0.5, waitCycleMax:20}
 	set prefs to prefs & defaultPrefs

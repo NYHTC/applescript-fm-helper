@@ -28,7 +28,7 @@ end run
 --------------------
 
 on fmGUI_Inspector_Close()
-	-- version 1.0, Dan Shockley
+	-- version 1.0
 	
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"

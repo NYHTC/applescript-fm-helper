@@ -23,7 +23,7 @@ end run
 --------------------
 
 on replaceSimple(prefs)
-	-- version 1.4, Daniel A. Shockley http://www.danshockley.com
+	-- version 1.4
 	
 	set defaultPrefs to {considerCase:true}
 	

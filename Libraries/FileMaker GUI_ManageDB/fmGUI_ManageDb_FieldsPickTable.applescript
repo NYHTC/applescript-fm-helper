@@ -42,7 +42,7 @@ on fmGUI_ManageDb_FieldsPickTable(baseTableName)
 	on error errMsg number errNum
 		error "Couldn't select table '" & baseTableName & "' - " & errMsg number errNum
 	end try
-
+	
 end fmGUI_ManageDb_FieldsPickTable
 
 --------------------

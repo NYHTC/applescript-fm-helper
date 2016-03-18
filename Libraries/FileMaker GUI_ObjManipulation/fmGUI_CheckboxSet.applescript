@@ -26,7 +26,7 @@ end run
 --------------------
 
 on fmGUI_CheckboxSet(checkboxObject, checkboxValue)
-	-- version 1.0, Dan Shockley
+	-- version 1.0
 	
 	using terms from application "System Events"
 		try

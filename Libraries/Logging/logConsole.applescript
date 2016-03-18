@@ -33,7 +33,7 @@ end run
 --------------------
 
 on logConsole(processName, consoleMsg)
-	-- version 2.0 - Daniel A. Shockley, http://www.danshockley.com	
+	-- version 2.0
 	
 	set consoleMsg to coerceToString(consoleMsg)
 	set consoleMsg to replaceSimple({consoleMsg, ASCII character 0, ""}) -- ASCII 0 breaks shell scripting

@@ -20,7 +20,7 @@ end run
 --------------------
 
 on parseChars(prefs)
-	-- version 1.3, Daniel A. Shockley, http://www.danshockley.com
+	-- version 1.3
 	
 	set defaultPrefs to {considerCase:true}
 	

@@ -27,7 +27,7 @@ end run
 --------------------
 
 on encodeTextForURL(this_text, encode_URL_A, encode_URL_B)
-	-- version 1.0, Daniel A. Shockley
+	-- version 1.0
 	
 	-- this sub-routine is used to encode text 
 	set the standard_characters to "abcdefghijklmnopqrstuvwxyz0123456789"

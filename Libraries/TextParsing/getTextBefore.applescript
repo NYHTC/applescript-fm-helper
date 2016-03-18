@@ -20,7 +20,7 @@ end run
 --------------------
 
 on getTextBefore(sourceTEXT, stopHere)
-	-- version 1.1, Daniel A. Shockley, http://www.danshockley.com
+	-- version 1.1
 	
 	try
 		set {oldDelims, AppleScript's text item delimiters} to {AppleScript's text item delimiters, stopHere}

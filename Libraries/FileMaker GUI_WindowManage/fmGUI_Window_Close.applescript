@@ -20,7 +20,7 @@ end run
 --------------------
 
 on fmGUI_Window_Close(someWindowName)
-	-- version 1.1, Daniel A. Shockley, NYHTC
+	-- version 1.1
 	
 	tell application id "com.filemaker.client.advanced12"
 		

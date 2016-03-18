@@ -23,7 +23,7 @@ end run
 --------------------
 
 on sendToFMP(someData)
-	-- version 1.6, Daniel A. Shockley 
+	-- version 1.6
 	
 	try
 		-- someData MIGHT be a record that looks like this: {fmType:"Adv", someData:"BLAH BLAH BLAH"} 

@@ -27,6 +27,8 @@ end run
 --------------------
 
 on logMAIN(someMsg)
+	-- version 1.0
+	
 	logLEVEL(0, someMsg) -- log at highest importance
 end logMAIN
 

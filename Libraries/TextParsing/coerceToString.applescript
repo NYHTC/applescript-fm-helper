@@ -28,7 +28,7 @@ end run
 --------------------
 
 on coerceToString(incomingObject)
-	-- version 2.2, Daniel A. Shockley, Erik Shagdar
+	-- version 2.2
 	
 	if class of incomingObject is string then
 		set {text:incomingObject} to (incomingObject as string)

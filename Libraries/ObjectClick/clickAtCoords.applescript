@@ -26,7 +26,7 @@ end run
 --------------------
 
 on clickAtCoords(xClick, yClick)
-	-- version 1.0, Dan Shockley
+	-- version 1.0
 	
 	set xClick to round xClick rounding down
 	set yClick to round yClick rounding down

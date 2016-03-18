@@ -27,7 +27,7 @@ end run
 --------------------
 
 on getTextBetween(prefs)
-	-- version 1.6, Daniel A. Shockley <http://www.danshockley.com>
+	-- version 1.6
 	
 	set defaultPrefs to {textItemNum:2, includeMarkers:false}
 	

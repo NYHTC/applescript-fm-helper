@@ -29,7 +29,7 @@ end run
 --------------------
 
 on fmGUI_ManageDb_Open(prefs)
-	-- version 1.2, NYHTC
+	-- version 1.2
 	
 	try
 		tell application "System Events"

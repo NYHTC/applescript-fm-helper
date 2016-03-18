@@ -29,7 +29,7 @@ end run
 --------------------
 
 on SFR_DictItem(itemName, itemValue)
-	-- version 1.0, Daniel A. Shockley	
+	-- version 1.0
 	
 	return "<:" & SFR_Escape(itemName) & ":=" & SFR_Escape(itemValue) & ":>"
 end SFR_DictItem

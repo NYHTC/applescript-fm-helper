@@ -13,6 +13,9 @@ HISTORY:
 
 
 property helper : ""
+property debugMode : true
+property ScriptName : "openFileMakerDatabase_TEST"
+
 
 on run
 	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
@@ -31,7 +34,7 @@ end run
 --------------------
 
 on openFileMakerDatabase(prefs)
-	-- version 1.3, Daniel A. Shockley
+	-- version 1.3
 	
 	try
 		set customURL to "htclink://AccessFile?FileName=" & dbName of prefs & "&Command=Open&SilentOpen=1&ShowWindow=1"
@@ -43,6 +46,8 @@ on openFileMakerDatabase(prefs)
 			-- we must double-encode equals (%3D) and ampersand (%26) to work-around FileMaker bug:
 			set fmpURL to my replaceSimple({fmpURL, "%3D", "%253D"})
 			set fmpURL to my replaceSimple({fmpURL, "%26", "%2526"})
+			
+			if debugMode then my logConsole(ScriptName, "openFileMakerDatabase fmpURL: " & fmpURL)
 			
 			open location fmpURL
 			
@@ -67,3 +72,7 @@ end openFileMakerDatabase
 on replaceSimple(prefs)
 	tell helper to replaceSimple(prefs)
 end replaceSimple
+
+on logConsole(processName, consoleMsg)
+	tell helper to logConsole(processName, consoleMsg)
+end logConsole

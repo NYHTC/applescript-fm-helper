@@ -20,7 +20,7 @@ end run
 --------------------
 
 on unParseChars(thisList, newDelim)
-	-- version 1.2, Daniel A. Shockley, http://www.danshockley.com
+	-- version 1.2
 	
 	set oldDelims to AppleScript's text item delimiters
 	try

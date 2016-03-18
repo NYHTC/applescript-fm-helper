@@ -34,7 +34,7 @@ end run
 --------------------
 
 on clickObjectByCoords(someObject)
-	-- version 1.0, Daniel A. Shockley
+	-- version 1.0
 	
 	using terms from application "System Events"
 		set {xCoord, yCoord} to position of someObject

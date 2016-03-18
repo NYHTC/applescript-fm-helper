@@ -32,7 +32,7 @@ end run
 --------------------
 
 on windowWaitUntil_FrontIS(prefs)
-	-- version 1.0, Daniel Shockley
+	-- version 1.0
 	
 	set defaultPrefs to {windowName:null, windowNameTest:"is", whichWindow:"front", waitCycleDelaySeconds:0.1, waitCycleMax:100}
 	set prefs to prefs & defaultPrefs
