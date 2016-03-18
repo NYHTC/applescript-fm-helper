@@ -2,12 +2,26 @@
 -- Daniel A. Shockley, http://www.danshockley.com
 -- takes a list and a delimiter and returns a string.
 
+
+(*
+HISTORY:
+	1.2 - 
+	1.0 - created
+*)
+
+
+on run
+	unParseChars({"one", "two", "three"}, "-")
+end run
+
+
 --------------------
 -- START OF CODE
 --------------------
 
 on unParseChars(thisList, newDelim)
 	-- version 1.2, Daniel A. Shockley, http://www.danshockley.com
+	
 	set oldDelims to AppleScript's text item delimiters
 	try
 		set AppleScript's text item delimiters to the {newDelim as string}
@@ -26,6 +40,3 @@ end unParseChars
 --------------------
 -- END OF CODE
 --------------------
-on run
-	unParseChars({"one", "two", "three"}, "-")
-end run

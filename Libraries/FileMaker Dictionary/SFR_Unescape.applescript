@@ -1,6 +1,6 @@
--- fmGUI_ModeEnsure_Find()
--- Dan Shockley, NYHTC
--- Go to 'Find' mode
+-- SFR_Unescape(someString)
+-- Daniel A. Shockley, NYHTC
+-- Unescapes strings from a SixFriedRice.com-style dictionary string for use in FileMaker.
 
 
 (*
@@ -18,7 +18,7 @@ on run
 	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
 	set helper to load script file pathHelper
 	
-	fmGUI_ModeEnsure_Find()
+	SFR_Unescape("/</:foo/:/=bar/:/>")
 end run
 
 
@@ -26,25 +26,25 @@ end run
 -- START OF CODE
 --------------------
 
-on fmGUI_ModeEnsure_Find()
-	-- version 1.0
+on SFR_Unescape(someString)
+	-- version 1.0, Daniel A. Shockley
 	
-	try
-		fmGUI_ModeSelect("Find")
+	set escapeCharList to {"=", ":", "<", ">"}
+	
+	repeat with oneChar in escapeCharList
+		set someString to replaceSimple({someString, "/" & oneChar, oneChar})
 		
-	on error errMsg number errNum
-		error "Couldn't ensure in Browse Mode - " & errMsg number errNum
-	end try
+	end repeat
 	
+	return someString
 	
-end fmGUI_ModeEnsure_Find
-
+end SFR_Unescape
 
 
 --------------------
 -- END OF CODE
 --------------------
 
-on fmGUI_ModeSelect(modeToSelect)
-	tell helper to fmGUI_ModeSelect(modeToSelect)
-end fmGUI_ModeSelect
+on replaceSimple(prefs)
+	tell helper to replaceSimple(prefs)
+end encodeCharForURL

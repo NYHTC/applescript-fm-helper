@@ -3,14 +3,24 @@
 -- makes a list from a sourceTEXT based on some paseString delimiter
 
 
+(*
+HISTORY:
+	1.3 - default is to consider case; single-param instead of two 
+	1.0 - created
+*)
+
+
+on run
+	parseChars({sourceTEXT:"bob is here. He is ready.", parseString:"is"})
+end run
+
+
 --------------------
 -- START OF CODE
 --------------------
 
 on parseChars(prefs)
 	-- version 1.3, Daniel A. Shockley, http://www.danshockley.com
-	
-	-- 1.3 - default is to consider case; single-param instead of two
 	
 	set defaultPrefs to {considerCase:true}
 	
@@ -67,6 +77,3 @@ end parseChars
 --------------------
 -- END OF CODE
 --------------------
-on run
-	parseChars({sourceTEXT:"bob is here. He is ready.", parseString:"is"})
-end run

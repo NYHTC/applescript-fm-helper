@@ -2,18 +2,28 @@
 -- Daniel A. Shockley http://www.danshockley.com
 -- takes some string and replaces every instance of oldChars with newChars. Optionally considers case.
 
+
+(*
+HISTORY:
+	1.4 - Convert sourceText to string, since the previous version failed on numbers. 
+	1.3 - The class record is specified into a variable to avoid a namespace conflict when run within FileMaker. 
+	1.2 - changes parameters to a record to add option to CONSIDER CASE, since the default changed to ignoring case with Snow Leopard. This handler defaults to CONSIDER CASE = true, since that was what older code expected. 
+	1.1 - coerces the newChars to a STRING, since other data types do not always coerce (example, replacing "nine" with 9 as number replaces with "")
+	1.0 - created
+*)
+
+
+on run
+	replaceSimple({sourceTEXT:"hello", oldChars:"l", newChars:"r"})
+end run
+
+
 --------------------
 -- START OF CODE
 --------------------
 
 on replaceSimple(prefs)
 	-- version 1.4, Daniel A. Shockley http://www.danshockley.com
-	
-	-- 1.4 - Convert sourceText to string, since the previous version failed on numbers. 
-	-- 1.3 - The class record is specified into a variable to avoid a namespace conflict when run within FileMaker. 
-	-- 1.2 - changes parameters to a record to add option to CONSIDER CASE, since the default changed to ignoring case with Snow Leopard. This handler defaults to CONSIDER CASE = true, since that was what older code expected. 
-	-- 1.1 - coerces the newChars to a STRING, since other data types do not always coerce
-	--     (example, replacing "nine" with 9 as number replaces with "")
 	
 	set defaultPrefs to {considerCase:true}
 	
@@ -66,6 +76,3 @@ end replaceSimple
 --------------------
 -- END OF CODE
 --------------------
-on run
-	replaceSimple({sourceTEXT:"hello", oldChars:"l", newChars:"r"})
-end run

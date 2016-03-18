@@ -1,6 +1,26 @@
 -- getTextBetween({sourceTEXT:"", beforeText:"", afterText:"", textItemNum:"", includeMarkers:""})
 -- Daniel A. Shockley, http://www.danshockley.com
--- returns text between 2 delimiters
+-- gets the text between specified occurrence of beforeText and afterText in sourceText. The default textItemNum should be 2
+
+
+(*
+HISTORY:
+	1.6 - option to INCLUDE the before and after strings. Default is FALSE. Must use record parameter to use this feature. 
+	1.5 - use 'class of prefs as string' to test, since FileMaker wrecks the term record
+	1.1 - 
+	1.0 - created
+	
+
+USAGE:
+	getTextBetween({sourceTEXT, beforeTEXT, afterTEXT})
+	getTextBetween({sourceText:sourceTEXT, beforeText:beforeTEXT, afterText:afterTEXT})
+*)
+
+
+on run
+	getTextBetween({"one-two&three", "-", "&"})
+end run
+
 
 --------------------
 -- START OF CODE
@@ -8,16 +28,6 @@
 
 on getTextBetween(prefs)
 	-- version 1.6, Daniel A. Shockley <http://www.danshockley.com>
-	
-	-- gets the text between specified occurrence of beforeText and afterText in sourceText
-	-- the default textItemNum should be 2
-	
-	-- 1.6 - option to INCLUDE the before and after strings. Default is FALSE. Must use record parameter to use this feature. 
-	-- 1.5 - use 'class of prefs as string' to test, since FileMaker wrecks the term record
-	
-	-- USAGE1: getTextBetween({sourceTEXT, beforeTEXT, afterTEXT})
-	-- USAGE2: getTextBetween({sourceText:sourceTEXT, beforeText:beforeTEXT, afterText:afterTEXT})
-	
 	
 	set defaultPrefs to {textItemNum:2, includeMarkers:false}
 	
@@ -61,6 +71,3 @@ end getTextBetween
 --------------------
 -- END OF CODE
 --------------------
-on run
-	getTextBetween({"one-two&three", "-", "&"})
-end run

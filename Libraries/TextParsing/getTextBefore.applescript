@@ -1,6 +1,19 @@
--- getTextBetween(sourceTEXT, stopHere)
+-- getTextBefore(sourceTEXT, stopHere)
 -- Daniel A. Shockley, http://www.danshockley.com
--- returns text before some delimiter
+-- gets the text before the first occurrence stopHere
+
+
+(*
+HISTORY:
+	1.1 - 
+	1.0 - created
+*)
+
+
+on run
+	getTextBefore("one-two&three", "&")
+end run
+
 
 --------------------
 -- START OF CODE
@@ -8,7 +21,7 @@
 
 on getTextBefore(sourceTEXT, stopHere)
 	-- version 1.1, Daniel A. Shockley, http://www.danshockley.com
-	-- gets the text before the first occurrence stopHere
+	
 	try
 		set {oldDelims, AppleScript's text item delimiters} to {AppleScript's text item delimiters, stopHere}
 		if (count of text items of sourceTEXT) is 1 then
@@ -29,6 +42,3 @@ end getTextBefore
 --------------------
 -- END OF CODE
 --------------------
-on run
-	getTextBefore("one-two&three", "&")
-end run

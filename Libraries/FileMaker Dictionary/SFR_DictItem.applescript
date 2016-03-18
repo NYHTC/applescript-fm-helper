@@ -1,6 +1,6 @@
--- fmGUI_ModeEnsure_Find()
--- Dan Shockley, NYHTC
--- Go to 'Find' mode
+-- SFR_DictItem(itemName, itemValue)
+-- Daniel A. Shockley, NYHTC
+-- Creates a SixFriedRice.com-style dictionary string for use in FileMaker.
 
 
 (*
@@ -18,33 +18,27 @@ on run
 	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
 	set helper to load script file pathHelper
 	
-	fmGUI_ModeEnsure_Find()
+	SFR_DictItem("foo", "bar")
 end run
+
+
 
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_ModeEnsure_Find()
-	-- version 1.0
+on SFR_DictItem(itemName, itemValue)
+	-- version 1.0, Daniel A. Shockley	
 	
-	try
-		fmGUI_ModeSelect("Find")
-		
-	on error errMsg number errNum
-		error "Couldn't ensure in Browse Mode - " & errMsg number errNum
-	end try
-	
-	
-end fmGUI_ModeEnsure_Find
-
+	return "<:" & SFR_Escape(itemName) & ":=" & SFR_Escape(itemValue) & ":>"
+end SFR_DictItem
 
 
 --------------------
 -- END OF CODE
 --------------------
 
-on fmGUI_ModeSelect(modeToSelect)
-	tell helper to fmGUI_ModeSelect(modeToSelect)
-end fmGUI_ModeSelect
+on SFR_Escape(someString)
+	tell helper to SFR_Escape(someString)
+end SFR_Escape

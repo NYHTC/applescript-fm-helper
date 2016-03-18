@@ -1,7 +1,6 @@
--- fmGUI_ModeEnsure_Find()
--- Dan Shockley, NYHTC
--- Go to 'Find' mode
-
+-- clickAtCoords(xClick, yClick)
+-- Daniel A. Shockley, NYHTC
+-- Click at the specifeid coordinates
 
 (*
 HISTORY:
@@ -18,7 +17,7 @@ on run
 	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
 	set helper to load script file pathHelper
 	
-	fmGUI_ModeEnsure_Find()
+	clickAtCoords(50, 50)
 end run
 
 
@@ -26,25 +25,15 @@ end run
 -- START OF CODE
 --------------------
 
-on fmGUI_ModeEnsure_Find()
-	-- version 1.0
+on clickAtCoords(xClick, yClick)
+	-- version 1.0, Dan Shockley
 	
-	try
-		fmGUI_ModeSelect("Find")
-		
-	on error errMsg number errNum
-		error "Couldn't ensure in Browse Mode - " & errMsg number errNum
-	end try
-	
-	
-end fmGUI_ModeEnsure_Find
-
-
+	set xClick to round xClick rounding down
+	set yClick to round yClick rounding down
+	do shell script quoted form of clickCommandPosix & " -r " & xClick & space & yClick
+	return ((xClick as string) & "," & yClick)
+end clickAtCoords
 
 --------------------
 -- END OF CODE
 --------------------
-
-on fmGUI_ModeSelect(modeToSelect)
-	tell helper to fmGUI_ModeSelect(modeToSelect)
-end fmGUI_ModeSelect

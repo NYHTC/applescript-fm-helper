@@ -1,10 +1,11 @@
--- fmGUI_Inspector_Ensure()
--- Dan Shockley, NYHTC
--- Opens FileMaker's Inspector window
+-- fmGUI_ManageDb_RelationshipsTab({})
+-- Daniel A. Shockley, NYHTC
+-- Go to the "Relationship" tab of manage database
 
 
 (*
 HISTORY:
+	1.2 - only click if needed
 	1.1 - 
 	1.0 - created
 *)
@@ -19,7 +20,7 @@ on run
 	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
 	set helper to load script file pathHelper
 	
-	fmGUI_Inspector_Ensure()
+	fmGUI_ManageDb_RelationshipsTab({})
 end run
 	
 
@@ -28,27 +29,26 @@ end run
 -- START OF CODE
 --------------------
 
-on fmGUI_Inspector_Ensure()
-	-- version 1.1
+on fmGUI_ManageDb_RelationshipsTab(prefs)
+	-- version 1.2
 	
 	try
-		fmGUI_ModeEnsure_Layout()
+		fmGUI_ManageDb_Open({})
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				
 				my fmGUI_AppFrontMost()
-				
-				if not (exists (first window whose name contains "Inspector")) then
-					click (first menu item of menu 1 of menu bar item "View" of menu bar 1 whose name is "Inspector")
+				set fieldsTabObject to first radio button of tab group 1 of window 1 whose title contains "Relationship"
+				if value of fieldsTabObject is not 1 then
+					click fieldsTabObject
 				end if
 				return true
 			end tell
 		end tell
 	on error errMsg number errNum
-		error "Couldn't open Inspector - " & errMsg number errNum
+		error "Couldn't go to the Relationships tab - " & errMsg number errNum
 	end try
 	
-end fmGUI_Inspector_Ensure
+end fmGUI_ManageDb_RelationshipsTab
 
 --------------------
 -- END OF CODE
@@ -58,6 +58,6 @@ on fmGUI_AppFrontMost()
 	tell helper to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_ModeEnsure_Layout()
-	tell helper to fmGUI_ModeEnsure_Layout()
-end fmGUI_ModeEnsure_Layout
+on fmGUI_ManageDb_Open(prefs)
+	tell helper to fmGUI_ManageDb_Open(prefs)
+end fmGUI_Inspector_Close

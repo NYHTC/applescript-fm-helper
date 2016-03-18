@@ -3,12 +3,24 @@
 -- Ensures FileMaker Advanced is the frontmost window. Closes 2empowerFM Toolbox window if it is visible
 
 
+(*
+HISTORY:
+	1.1 - 2015-04-14 ( eshagdar ): close FMEmpower window if open
+	1.0 - created
+*)
+	
+
+on run
+	fmGUI_AppFrontMost()
+end run
+
+
 --------------------
 -- START OF CODE
 --------------------
 
 on fmGUI_AppFrontMost()
-	-- 1.1 - 2015-04-14 ( eshagdar ): close FMEmpower window if open
+	-- 1.1 - Erik Shagdar, NYHTC
 	
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"
@@ -29,9 +41,3 @@ end fmGUI_AppFrontMost
 --------------------
 -- END OF CODE
 --------------------
-
-on run
-	fmGUI_AppFrontMost()
-end run
-
-

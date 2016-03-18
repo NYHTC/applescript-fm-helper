@@ -1,6 +1,18 @@
--- fmGUI_AppFrontMost()
+-- fmGUI_Window_Close(someWindowName)
 -- Daniel A. Shockley, NYHTC
 -- Closes specify window name
+
+
+(*
+HISTORY:
+	1.1 - 
+	1.0 - created
+*)
+
+
+on run
+	fmGUI_Window_Close("NameOfWindowToClose")
+end run
 
 
 --------------------
@@ -8,7 +20,7 @@
 --------------------
 
 on fmGUI_Window_Close(someWindowName)
-	-- version 1.1	
+	-- version 1.1, Daniel A. Shockley, NYHTC
 	
 	tell application id "com.filemaker.client.advanced12"
 		
@@ -23,9 +35,3 @@ end fmGUI_Window_Close
 --------------------
 -- END OF CODE
 --------------------
-
-on run
-	fmGUI_Window_Close("NameOfWindowToClose")
-end run
-
-

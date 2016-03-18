@@ -1,11 +1,11 @@
--- fmGUI_Inspector_Ensure()
--- Dan Shockley, NYHTC
--- Opens FileMaker's Inspector window
+-- fmGUI_ManageDb_FieldsPickTable(baseTableName)
+-- Erik Shagdar, NYHTC
+-- on the Fields tab, select the specified base table, if not already selected.
 
 
 (*
 HISTORY:
-	1.1 - 
+	1.3 - 
 	1.0 - created
 *)
 
@@ -19,36 +19,31 @@ on run
 	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
 	set helper to load script file pathHelper
 	
-	fmGUI_Inspector_Ensure()
+	fmGUI_ManageDb_FieldsPickTable("ZZ_GLOBALS")
 end run
-	
 
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_Inspector_Ensure()
-	-- version 1.1
+on fmGUI_ManageDb_FieldsPickTable(baseTableName)
+	-- version 1.3
 	
 	try
-		fmGUI_ModeEnsure_Layout()
+		fmGUI_ManageDb_FieldsTab({})
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				
 				my fmGUI_AppFrontMost()
-				
-				if not (exists (first window whose name contains "Inspector")) then
-					click (first menu item of menu 1 of menu bar item "View" of menu bar 1 whose name is "Inspector")
-				end if
+				my fmGUI_PopupSet(pop up button "Table:" of tab group 1 of window 1, baseTableName)
 				return true
 			end tell
 		end tell
 	on error errMsg number errNum
-		error "Couldn't open Inspector - " & errMsg number errNum
+		error "Couldn't select table '" & baseTableName & "' - " & errMsg number errNum
 	end try
-	
-end fmGUI_Inspector_Ensure
+
+end fmGUI_ManageDb_FieldsPickTable
 
 --------------------
 -- END OF CODE
@@ -58,6 +53,10 @@ on fmGUI_AppFrontMost()
 	tell helper to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_ModeEnsure_Layout()
-	tell helper to fmGUI_ModeEnsure_Layout()
-end fmGUI_ModeEnsure_Layout
+on fmGUI_ManageDb_FieldsTab(prefs)
+	tell helper to fmGUI_ManageDb_FieldsTab(prefs)
+end fmGUI_ManageDb_FieldsTab
+
+on fmGUI_PopupSet(popupObject, popupChoice)
+	tell helper to fmGUI_PopupSet(popupObject, popupChoice)
+end fmGUI_PopupSet

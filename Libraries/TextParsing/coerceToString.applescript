@@ -2,23 +2,33 @@
 -- Daniel A. Shockley & Erik Shagdar, NYHTC
 -- string-ifies an object
 
+
+(*
+HISTORY:
+	2.2 - handle other object references?
+	2.1 - Special handling of XML element references - probably need to handle other object references
+	2.0 - Fixed a horrifying bug that could modify incoming data by reference; re-worked to use getting a definitely non-existent key instead of trying 'as number' since the old method would fail on lists of numbers (or lists of items that could be coerced to number). Sometimes returns an ellipses, but the error occurs randomly ( returns a 'stack overflow' for references, etc. if that we hit the error ).
+	1.9 - needs special handling for single item lists where that item could be gotten 'as number'
+	1.8 - instead of trying to store the error message use, generate it
+	1.7 -  added "Can't make " with a curly single-quote. 
+	1.6 -  can add additional errMsg parts (just add to lists to handle other languages. Currently handles English in both 10.3 and 10.4 (10.3 uses " into a number." while 10.4 uses " into type number.")
+	1.5 -  added Unicode Text
+*)
+
+
+on run
+	tell application "System Events" to set someElement to window 1 of application process "Script Editor"
+	
+	coerceToString(someElement)
+end run
+
+
 --------------------
 -- START OF CODE
 --------------------
 
 on coerceToString(incomingObject)
 	-- version 2.2, Daniel A. Shockley, Erik Shagdar
-	
-	-- 2.2 - handle other object references?
-	-- 2.1 - Special handling of XML element references - probably need to handle other object references
-	-- 2.0 - Fixed a horrifying bug that could modify incoming data by reference; re-worked to use getting a definitely non-existent key instead of trying 'as number' since the old method would fail on lists of numbers (or lists of items that could be coerced to number). Sometimes returns an ellipses, but the error occurs randomly ( returns a 'stack overflow' for references, etc. if that we hit the error ).
-	-- 1.9 - needs special handling for single item lists where that item could be gotten 'as number'
-	-- 1.8 - instead of trying to store the error message use, generate it
-	-- 1.7 -  added "Can't make " with a curly single-quote. 
-	-- 1.6 -  can add additional errMsg parts (just add to lists to handle other languages. 
-	--             Currently handles English in both 10.3 and 10.4 (10.3 uses " into a number." 
-	--             while 10.4 uses " into type number.")
-	-- 1.5 -  added Unicode Text
 	
 	if class of incomingObject is string then
 		set {text:incomingObject} to (incomingObject as string)
@@ -93,10 +103,3 @@ end coerceToString
 --------------------
 -- END OF CODE
 --------------------
-on run
-	tell application "System Events"
-		set someElement to window 1 of application process "Script Editor"
-	end tell
-	
-	coerceToString(someElement)
-end run
