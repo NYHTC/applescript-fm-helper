@@ -19,7 +19,7 @@ property mainFileName : "main.scpt"
 
 on run
 	set tempCode to ""
-	set folderName_library to "Libraries:"
+	set folderName_library to "library:"
 	set commentBreaker to "--------------------"
 	
 	set codeStart to commentBreaker & LF & "-- START OF CODE" & LF & commentBreaker
@@ -29,6 +29,7 @@ on run
 		set pathDirRoot to (folder of (path to me)) as string
 		set thisFileName to name of (path to me)
 	end tell
+	
 	set pathTempCode to pathDirRoot & tempFileName
 	set pathMain to pathDirRoot & mainFileName
 	set pathDirLibraries to pathDirRoot & folderName_library
@@ -65,10 +66,11 @@ on run
 	set docCode to docCode & LF
 	set docCode to docCode & LF & "-- Generated: " & (do shell script "date '+%Y-%m-%d %T'")
 	set docCode to docCode & LF & "-- Run " & quoted form of thisFileName & " to after making changes in any .applescript file and after each git pull."
+	set docCode to docCode & LF & "-- Assumes file is located at '~/Code/applescript-fm-helper/'. If it does not, make sure to update clickCommandPosix property and 'vendor.sh' script."
 	set docCode to docCode & LF
 	set docCode to docCode & LF & "property DebugMode : false"
 	set docCode to docCode & LF & "property ScriptName : \"" & mainFileName & "\""
-	set docCode to docCode & LF & "property clickCommandPosix : POSIX path of (((path to home folder) as string) & \"Code:applescript-fm-helper:cliclick\")"
+	set docCode to docCode & LF & "property clickCommandPosix : POSIX path of (((path to home folder) as string) & \"Code/applescript-fm-helper/vendor/cliclick/cliclick\")"
 	
 	set tempCode to docCode & LF & LF & LF & tempCode
 	
@@ -76,6 +78,9 @@ on run
 	-- create a temp file of all libaries, then create a compiled version of it.
 	do shell script "echo " & quoted form of tempCode & " > " & quoted form of POSIX path of pathTempCode
 	do shell script "osacompile " & " -o " & quoted form of POSIX path of pathMain & " " & quoted form of POSIX path of pathTempCode
+	do shell script "pwd"
+	do shell script "sh " & quoted form of (POSIX path of (pathDirRoot & "vendor.sh"))
+	if result does not contain "SUCCESS" then return "Error: unable to run vendor.sh"
 	
 	-- remove the temp file
 	tell application "Finder"
