@@ -4,6 +4,7 @@
 
 (*
 HISTORY:
+	1.1 - 2016-04-21 ( eshagdar ): updated how coords are passed in to be compatible with cliClick version 3.2, 02/17/2016
 	1.0 - created
 *)
 
@@ -30,7 +31,7 @@ on clickAtCoords(xClick, yClick)
 	
 	set xClick to round xClick rounding down
 	set yClick to round yClick rounding down
-	do shell script quoted form of clickCommandPosix & " -r " & xClick & space & yClick
+	do shell script quoted form of clickCommandPosix & " -r c:" & xClick & "," & yClick
 	return ((xClick as string) & "," & yClick)
 end clickAtCoords
 

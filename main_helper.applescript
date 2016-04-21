@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2016-04-21 ( eshagdar ): Updated clickCommandPosix path.
 	2016-03-17 ( eshagdar ): Added DebugMode and clickCommandPosix properties
 	2016-03-15 ( eshagdar ): added documentation to main script. Separated individual functions into library directories and updated run code to loop over files in sub-directories.
 	2016-03-14 ( eshagdar ): first created
@@ -66,11 +67,11 @@ on run
 	set docCode to docCode & LF
 	set docCode to docCode & LF & "-- Generated: " & (do shell script "date '+%Y-%m-%d %T'")
 	set docCode to docCode & LF & "-- Run " & quoted form of thisFileName & " to after making changes in any .applescript file and after each git pull."
-	set docCode to docCode & LF & "-- Assumes file is located at '~/Code/applescript-fm-helper/'. If it does not, make sure to update clickCommandPosix property and 'vendor.sh' script."
+	set docCode to docCode & LF & "-- Assumes file is located at '~/Code/applescript-fm-helper/'. If it is not, make sure to update clickCommandPosix property and 'vendor.sh' script."
 	set docCode to docCode & LF
 	set docCode to docCode & LF & "property DebugMode : false"
 	set docCode to docCode & LF & "property ScriptName : \"" & mainFileName & "\""
-	set docCode to docCode & LF & "property clickCommandPosix : POSIX path of (((path to home folder) as string) & \"Code/applescript-fm-helper/vendor/cliclick/cliclick\")"
+	set docCode to docCode & LF & "property clickCommandPosix : POSIX path of (((path to home folder) as string)) & \"Code/applescript-fm-helper/vendor/cliclick/cliclick\""
 	
 	set tempCode to docCode & LF & LF & LF & tempCode
 	
