@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4 - 2016-04-25 ( eshagdar ): added option to NOT change any of the checkboxes when tweaking a field.
 	1.3 - 2016-03-18 ( eshagdar ): updated storage tab to text that autoIndex is not null
 	1.2 - specifying an autoEnterCalcCode turns on autoEnterIsCalculation; if validationCalcCode is an empty string instead of null, force an error; if autoEnterCalcCode is an empty string instead of null, force an error
 	1.1 - added minimal validation settings; added editMode param to switch between "CONFORM" and "TWEAK" 
@@ -89,7 +90,6 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 						set fieldType of prefs to "Normal"
 					end if
 				end if
-				
 				
 				if fieldType of prefs is null then
 					error "Parameter missing: fieldType" number 1024
@@ -493,6 +493,8 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 							my fmGUI_CheckboxSet(first checkbox of workingArea whose title is "Modification", 0)
 							my fmGUI_CheckboxSet(first checkbox of workingArea whose name contains "last visited", 0)
 							
+						else if autoEnterSpecialValue of prefs is equal to null then
+							-- do not change any of the checkboxes
 						end if
 						
 						
