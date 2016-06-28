@@ -27,10 +27,13 @@ end run
 on fmGUI_SelectAllAndCopy(prefs)
 	-- version 1.0, Erik Shagdar
 	
-	my fmGUI_AppFrontMost()
+	set the clipboard to ""
+	set clipboardChanged to false
 	
 	tell application "System Events"
-		tell process "FileMaker Pro"
+		tell application process "FileMaker Pro Advanced"
+			
+			my fmGUI_AppFrontMost()
 			
 			try
 				click (first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Select All")
@@ -43,10 +46,27 @@ on fmGUI_SelectAllAndCopy(prefs)
 			on error errMsg number errNum
 				error "Unable to click 'Copy' menu item - " & errMsg number errNum
 			end try
+			
+			
+			repeat 10 times
+				try
+					-- We set the clipboard to an empty string. Once utf8 is no longer in it (or isn't empty), we must have picked up the objects copied above.
+					get the clipboard as Çclass utf8È
+					if length of result is greater than 0 then
+						set clipboardChanged to true
+						exit repeat
+					end if
+				on error
+					set clipboardChanged to true
+					exit repeat
+				end try
+				delay 1
+			end repeat
+			
 		end tell
 	end tell
 	
-	return true
+	return clipboardChanged
 	
 end fmGUI_SelectAllAndCopy
 
