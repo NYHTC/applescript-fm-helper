@@ -1,14 +1,11 @@
--- fmGUI_ManageDb_RelationshipsTab({})
--- Daniel A. Shockley, NYHTC
--- Go to the "Relationship" tab of manage database
+-- fmGUI_ManageDb_GoToTab({tabName:null})
+-- Erik Shagdar, NYHTC
+-- Go to the "Fields" tab of manage database
 
 
 (*
 HISTORY:
-	1.3 - 2016-03-18 ( eshagdar ): use reference to tab control object to deal with different FM app types running concurrently.
-	1.2 - only click if needed
-	1.1 - 
-	1.0 - created
+	1.0 - 2016-06-30 ( eshagdar ): first created. Modeled from fmGUI_ManageDb_GoToTab_Fields version 1.3
 *)
 
 
@@ -21,35 +18,37 @@ on run
 	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
 	set helper to load script file pathHelper
 	
-	fmGUI_ManageDb_RelationshipsTab({})
+	fmGUI_ManageDb_GoToTab({tabName:"Tables"})
 end run
-
 
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_ManageDb_RelationshipsTab(prefs)
-	-- version 1.3
+on fmGUI_ManageDb_GoToTab(prefs)
+	-- version 1.0
+	
+	set defaultPrefs to {tabName:"Tables"}
+	set prefs to prefs & defaultPrefs
 	
 	try
 		fmGUI_AppFrontMost()
-		--fmGUI_ManageDb_Open({})
+		fmGUI_ManageDb_Open({})
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				set fieldsTabObject to a reference to (first radio button of tab group 1 of window 1 whose title contains "Relationship")
-				if value of fieldsTabObject is not 1 then
-					click fieldsTabObject
+				set tabObject to a reference to (first radio button of tab group 1 of window 1 whose title contains tabName of prefs)
+				if value of tabObject is not 1 then
+					click tabObject
 				end if
 				return true
 			end tell
 		end tell
 	on error errMsg number errNum
-		error "Couldn't go to the Relationships tab - " & errMsg number errNum
+		error "Couldn't go to the '" & tabName of prefs & "' tab - " & errMsg number errNum
 	end try
 	
-end fmGUI_ManageDb_RelationshipsTab
+end fmGUI_ManageDb_GoToTab
 
 --------------------
 -- END OF CODE

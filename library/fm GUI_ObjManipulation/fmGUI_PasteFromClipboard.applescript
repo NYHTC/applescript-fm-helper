@@ -1,6 +1,6 @@
--- fmGUI_SelectAllAndCopy()
+-- fmGUI_PasteFromClipboard()
 -- Erik Shagdar, NYHTC
--- select all and copy in whatever the context is
+-- Paste FileMaker object into the current context. Assumes the focus is already set and there is an object in the clipboard
 
 (*
 HISTORY:
@@ -16,7 +16,7 @@ on run
 	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
 	set helper to load script file pathHelper
 	
-	fmGUI_SelectAllAndCopy()
+	fmGUI_PasteFromClipboard({})
 end run
 
 
@@ -24,51 +24,40 @@ end run
 -- START OF CODE
 --------------------
 
-on fmGUI_SelectAllAndCopy()
+on fmGUI_PasteFromClipboard()
 	-- version 1.0, Erik Shagdar
 	
-	set the clipboard to ""
-	set clipboardChanged to false
+	set paseMenuItemExists to false
 	
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"
 			
 			my fmGUI_AppFrontMost()
 			
+			set pasteMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Paste"
 			try
-				click (first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Select All")
+				click pasteMenuItem
 			on error errMsg number errNum
 				error "Unable to click 'Select All' menu item - " & errMsg number errNum
 			end try
 			
-			try
-				click (menu item "Copy" of menu 1 of menu bar item "Edit" of menu bar 1)
-			on error errMsg number errNum
-				error "Unable to click 'Copy' menu item - " & errMsg number errNum
-			end try
 			
-			
-			repeat 10 times
+			-- waiting until the paste item exists suggests the paste completed
+			repeat 20 times
 				try
-					-- We set the clipboard to an empty string. Once utf8 is no longer in it (or isn't empty), we must have picked up the objects copied above.
-					get the clipboard as Çclass utf8È
-					if length of result is greater than 0 then
-						set clipboardChanged to true
+					if exists pasteMenuItem then
+						set paseMenuItemExists to true
 						exit repeat
 					end if
-				on error
-					set clipboardChanged to true
-					exit repeat
 				end try
-				delay 1
+				delay 0.5
 			end repeat
-			
 		end tell
 	end tell
 	
-	return clipboardChanged
+	return paseMenuItemExists
 	
-end fmGUI_SelectAllAndCopy
+end fmGUI_PasteFromClipboard
 
 --------------------
 -- END OF CODE

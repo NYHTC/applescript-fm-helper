@@ -56,7 +56,7 @@ on run
 			set oneCodeToAdd to removeLF(oneCodeToAdd)
 			
 			-- now append
-			if (length of tempCode) is greater than 0 then set tempCode to tempCode & return & return
+			if (length of tempCode) is greater than 0 then set tempCode to tempCode & return & return & return
 			set tempCode to tempCode & oneCodeToAdd
 		end repeat
 	end repeat
