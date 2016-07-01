@@ -5,8 +5,16 @@
 
 (*
 HISTORY:
-	1.4 - 
+	1.4 - 2016-06-29 ( eshagdar ): wait until the close/save is complete
+	1.3 - 
+	1.2 - 
+	1.1 - 
 	1.0 - created
+
+
+REQUIRES:
+	fmGUI_AppFrontMost
+	fmGUI_ManageDb_RelationshipsTab
 *)
 
 

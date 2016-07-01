@@ -5,8 +5,14 @@
 
 (*
 HISTORY:
-	1.2 added xDBC connection error trapping
+	1.2 - added xDBC connection error trapping
+	1.1 - 
 	1.0 - created
+
+
+REQUIRES:
+	fmGUI_AppFrontMost
+	fmGUI_ManageDb_RelationshipsTab
 *)
 
 

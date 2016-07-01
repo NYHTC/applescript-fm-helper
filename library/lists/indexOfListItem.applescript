@@ -19,7 +19,7 @@ end run
 --------------------
 
 on indexOfListItem(someList, someListItem)
-	-- version 1.0, Daniel A. Shockley
+	-- version 1.0
 	
 	if someList does not contain someListItem then return -1
 	

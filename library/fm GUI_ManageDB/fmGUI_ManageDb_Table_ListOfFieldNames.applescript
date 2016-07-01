@@ -1,6 +1,6 @@
--- fmGUI_ManageDb_FieldListFocus({})
--- Erik Shagdar, NYHTC
--- Focus in the list of fields in the "Fields" tab of Manage Database
+-- fmGUI_ManageDb_Table_ListOfFieldNames(baseTableName)
+-- NYHTC
+-- Return the list of field names for the specified table name
 
 
 (*
@@ -10,8 +10,7 @@ HISTORY:
 
 
 REQUIRES:
-	fmGUI_AppFrontMost
-	fmGUI_ManageDb_FieldsTab
+	fmGUI_ManageDb_FieldsPickTable
 *)
 
 
@@ -24,7 +23,7 @@ on run
 	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
 	set helper to load script file pathHelper
 	
-	fmGUI_ManageDb_FieldListFocus({})
+	fmGUI_ManageDb_Table_ListOfFieldNames("ZZ_GLOBALS")
 end run
 
 
@@ -32,34 +31,28 @@ end run
 -- START OF CODE
 --------------------
 
-on fmGUI_ManageDb_FieldListFocus(prefs)
+on fmGUI_ManageDb_Table_ListOfFieldNames(baseTableName)
 	-- version 1.1
 	
 	try
-		fmGUI_ManageDb_FieldsTab({})
+		fmGUI_ManageDb_FieldsPickTable(baseTableName)
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				my fmGUI_AppFrontMost()
-				set focused of (table 1 of scroll area 1 of tab group 1 of window 1) to true
-				return true
+				value of static text 1 of every row of table 1 of scroll area 1 of tab group 1 of window 1
+				return result
 			end tell
 		end tell
-		
 	on error errMsg number errNum
-		error "Couldn't focus on Field list - " & errMsg number errNum
+		error "Couldn't get list of field names for table '" & baseTableName & "' - " & errMsg number errNum
 	end try
 	
-end fmGUI_ManageDb_FieldListFocus
+end fmGUI_ManageDb_Table_ListOfFieldNames
 
 --------------------
 -- END OF CODE
 --------------------
 
-on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
-end fmGUI_AppFrontMost
-
-on fmGUI_ManageDb_FieldsTab(prefs)
-	tell helper to fmGUI_ManageDb_FieldsTab(prefs)
-end fmGUI_ManageDb_FieldsTab
+on fmGUI_ManageDb_FieldsPickTable(baseTableName)
+	tell helper to fmGUI_ManageDb_FieldsPickTable(baseTableName)
+end fmGUI_ManageDb_FieldsPickTable

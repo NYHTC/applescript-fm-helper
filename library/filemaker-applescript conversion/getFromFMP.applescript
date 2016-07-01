@@ -9,6 +9,11 @@ HISTORY:
 	1.7 - fixed the bug where 'prefs' is passed as a paramater, but the fmType and someData was picking up values of 'someData' 
 	1.6 - switch to 'path to me' since Mavericks BROKE 'name of me' completely 
 	1.5 - allow specification of which FileMaker: Pro/Adv/Unk 
+	1.4 - 
+	1.3 - 
+	1.2 - 
+	1.1 -
+	1.0 - first created
 *)
 
 

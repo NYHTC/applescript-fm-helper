@@ -7,11 +7,15 @@
 HISTORY:
 	1.5 - added a time-out loop for dealing with delay in being able to get list of databases. 
 	1.4 - added error-handling
+	1.3 - 
+	1.2 - 
+	1.1 - 
 	1.0 - created
 
 
 REQUIRES:
-	fmGUI_AppFrontMost
+	coerceToString
+	logConsole
 *)
 
 

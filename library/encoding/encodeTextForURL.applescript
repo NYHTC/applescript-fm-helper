@@ -6,6 +6,10 @@
 (*
 HISTORY:
 	1.0 - created
+
+
+REQUIRES:
+	encodeCharForURL
 *)
 
 

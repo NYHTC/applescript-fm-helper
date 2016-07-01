@@ -1,12 +1,20 @@
 -- fmGUI_ManageDb_FieldsPickTable(baseTableName)
 -- Erik Shagdar, NYHTC
--- on the Fields tab, select the specified base table, if not already selected.
+-- select the specified ( if not already selected ) base table on the Fields tab of Manage Database.
 
 
 (*
 HISTORY:
 	1.3 - 
+	1.2 - 
+	1.1 - 
 	1.0 - created
+
+
+REQUIRES:
+	fmGUI_AppFrontMost
+	fmGUI_ManageDb_FieldsTab
+	fmGUI_PopupSet
 *)
 
 
@@ -34,7 +42,6 @@ on fmGUI_ManageDb_FieldsPickTable(baseTableName)
 		fmGUI_ManageDb_FieldsTab({})
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				my fmGUI_AppFrontMost()
 				my fmGUI_PopupSet(pop up button "Table:" of tab group 1 of window 1, baseTableName)
 				return true
 			end tell

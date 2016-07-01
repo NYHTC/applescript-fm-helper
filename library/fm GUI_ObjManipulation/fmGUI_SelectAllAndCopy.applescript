@@ -25,7 +25,7 @@ end run
 --------------------
 
 on fmGUI_SelectAllAndCopy()
-	-- version 1.0, Erik Shagdar
+	-- version 1.0
 	
 	set the clipboard to ""
 	set clipboardChanged to false

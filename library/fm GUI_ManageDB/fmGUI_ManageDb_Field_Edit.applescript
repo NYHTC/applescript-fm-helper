@@ -10,6 +10,19 @@ HISTORY:
 	1.2 - specifying an autoEnterCalcCode turns on autoEnterIsCalculation; if validationCalcCode is an empty string instead of null, force an error; if autoEnterCalcCode is an empty string instead of null, force an error
 	1.1 - added minimal validation settings; added editMode param to switch between "CONFORM" and "TWEAK" 
 	1.0 - created
+
+
+REQUIRES:
+	fmGUI_AppFrontMost
+	fmGUI_CheckboxSet
+	fmGUI_ManageDb_Field_Select
+	fmGUI_ObjectClick_AffectsWindow
+	fmGUI_PopupSet
+	fmGUI_TextFieldSet
+	clickObjectByCoords
+	coerceToString
+	windowWaitUntil
+	windowWaitUntil_FrontIS
 *)
 
 

@@ -9,6 +9,11 @@ HISTORY:
 	1.2 - be sure to send the ShowWindow param.
 	1.1 - 
 	1.0 - created
+
+
+REQUIRES:
+	logConsole
+	replaceSimple
 *)
 
 

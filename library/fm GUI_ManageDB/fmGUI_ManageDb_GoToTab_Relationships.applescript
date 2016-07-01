@@ -10,6 +10,10 @@ HISTORY:
 	1.2 - only click if needed
 	1.1 - 
 	1.0 - created
+
+
+REQUIRES:
+	fmGUI_ManageDb_GoToTab
 *)
 
 

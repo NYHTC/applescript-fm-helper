@@ -10,6 +10,8 @@ HISTORY:
 	1.4 - store the backslash character for escaping to avoid getting mangled 
 	1.3 - can handle when someData is numeric (or anything coercible to string) 
 	1.2 - fixes issues with double-quote and backslashes in the data 
+	1.1 - 
+	1.0 - first created
 *)
 
 

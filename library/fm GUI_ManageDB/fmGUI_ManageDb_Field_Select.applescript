@@ -16,6 +16,12 @@ EXAMPLE:
 		{pattern:{{testType:"startsWith", testMatch:"z"},{testType:"endsWith", testMatch:"_Auto1"}}}Â
 		}
 
+
+REQURIES:
+	coerceToString
+	fmGUI_AppFrontMost
+	fmGUI_ManageDb_FieldListFocus
+	fmGUI_ManageDb_FieldsPickTable
 *)
 
 

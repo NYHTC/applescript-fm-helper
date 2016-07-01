@@ -6,6 +6,11 @@
 (*
 HISTORY:
 	1.0 - 2016-06-30 ( eshagdar ): first created. Modeled from fmGUI_ManageDb_GoToTab_Fields version 1.3
+
+
+REQUIRES:
+	fmGUI_AppFrontMost
+	fmGUI_ManageDb_Open
 *)
 
 

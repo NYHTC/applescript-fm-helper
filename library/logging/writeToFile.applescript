@@ -1,5 +1,5 @@
 -- writeToFile(prefs)
--- Erik Shagdar
+-- Erik Shagdar, NYHTC
 -- Write some text to a file
 
 
@@ -21,7 +21,7 @@ end run
 --------------------
 
 on writeToFile(prefs)
-	-- version 1.0, Erik Shagdar
+	-- version 1.0
 	
 	set defaultPrefs to {fullFilePath:null, fileName:null, fileDirectory:(path to desktop) as string, outputText:null}
 	set prefs to prefs & defaultPrefs

@@ -6,6 +6,11 @@
 (*
 HISTORY:
 	1.0 - created
+
+
+REQUIRES:
+	SFR_Escape
+	SFR_Unescape
 *)
 
 

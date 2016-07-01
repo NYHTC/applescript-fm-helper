@@ -6,7 +6,15 @@
 (*
 HISTORY:
 	1.3 - record param: {serverIP:, mainDbName:, customLinkReceiverScriptName:, dbName: }
+	1.2 - 
+	1.1 - 
 	1.0 - created
+
+
+REQUIRES:
+	displayFileMakerDatabase
+	logConsole
+	openFileMakerDatabase
 *)
 
 
