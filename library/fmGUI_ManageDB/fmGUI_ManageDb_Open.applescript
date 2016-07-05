@@ -10,6 +10,10 @@ HISTORY:
 	1.0 - created
 
 
+TODO:
+	- 2015-06-03 ( eshagdar ): probably going to need to open manageDB via openManageDB script if the menu item fails
+
+
 REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_ManageDb_RelationshipsTab
@@ -40,19 +44,13 @@ on fmGUI_ManageDb_Open(prefs)
 	try
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				
 				my fmGUI_AppFrontMost()
-				
+
 				-- try to open Manage DB
 				if name of window 1 starts with "Manage Database for" then
 					return true
 				else
 					click (first menu item of menu 1 of menu item "Manage" of menu 1 of menu bar item "File" of menu bar 1 whose name starts with "Database")
-					
-					-- TO DO
-					-- TO DO
-					-- TO DO
-					-- 2015-06-03 ( eshagdar ): probably going to need to open manageDB via openManageDB script if the menu item fails
 					
 					-- do this in case already on relationships tab
 					delay 1 -- seconds
@@ -67,7 +65,7 @@ on fmGUI_ManageDb_Open(prefs)
 					end repeat
 					
 					-- to to the TOs tab and dismiss any xDBC connections that failed to connect
-					my fmGUI_ManageDb_RelationshipsTab({})
+					my fmGUI_ManageDb_GoToTab_Relationships({})
 					delay 1 -- seconds
 					set lookingForXDBCError to true
 					repeat while lookingForXDBCError

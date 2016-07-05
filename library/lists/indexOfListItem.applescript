@@ -6,6 +6,10 @@
 (*
 HISTORY:
 	1.0 - created
+
+
+TODO:
+	- 2016-07-05 ( eshagdar ): convert params to record
 *)
 
 
@@ -29,7 +33,6 @@ on indexOfListItem(someList, someListItem)
 		if oneListItem is someListItem then return i
 		
 	end repeat
-	
 	
 end indexOfListItem
 --------------------

@@ -32,7 +32,6 @@ on fmGUI_SelectAllAndCopy()
 	
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"
-			
 			my fmGUI_AppFrontMost()
 			
 			try

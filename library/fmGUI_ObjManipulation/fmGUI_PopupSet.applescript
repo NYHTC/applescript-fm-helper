@@ -6,6 +6,10 @@
 (*
 HISTORY:
 	1.0 - created
+
+
+TODO:
+	- convert params to a record
 *)
 
 
@@ -26,6 +30,7 @@ on run
 	end tell
 	
 	fmGUI_PopupSet(TablePopupOnFieldTabOfManageDatabase, "ZZ_GLOBALS")
+	
 end run
 
 
@@ -39,8 +44,7 @@ on fmGUI_PopupSet(popupObject, popupChoice)
 	
 	using terms from application "System Events"
 		try
-			
-			fmGUI_Popup_SelectByCommand({popupObject:popupObject, popupChoice:popupChoice})
+			fmGUI_Popup_SelectByCommand({popupObject:popupObject, popupChoice:popupChoice, selectCommand:"contains"})
 			return result
 			
 		on error errMsg number errNum
