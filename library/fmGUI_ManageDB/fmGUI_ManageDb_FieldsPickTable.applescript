@@ -13,7 +13,7 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_ManageDb_FieldsTab
+	fmGUI_ManageDb_GoToTab_Fields
 	fmGUI_PopupSet
 *)
 
@@ -39,7 +39,7 @@ on fmGUI_ManageDb_FieldsPickTable(baseTableName)
 	-- version 1.3
 	
 	try
-		fmGUI_ManageDb_FieldsTab({})
+		fmGUI_ManageDb_GoToTab_Fields({})
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
 				my fmGUI_PopupSet(pop up button "Table:" of tab group 1 of window 1, baseTableName)
@@ -60,9 +60,9 @@ on fmGUI_AppFrontMost()
 	tell helper to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_ManageDb_FieldsTab(prefs)
-	tell helper to fmGUI_ManageDb_FieldsTab(prefs)
-end fmGUI_ManageDb_FieldsTab
+on fmGUI_ManageDb_GoToTab_Fields(prefs)
+	tell helper to fmGUI_ManageDb_GoToTab_Fields(prefs)
+end fmGUI_ManageDb_GoToTab_Fields
 
 on fmGUI_PopupSet(popupObject, popupChoice)
 	tell helper to fmGUI_PopupSet(popupObject, popupChoice)

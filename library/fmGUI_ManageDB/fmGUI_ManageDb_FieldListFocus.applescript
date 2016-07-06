@@ -11,7 +11,7 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_ManageDb_FieldsTab
+	fmGUI_ManageDb_GoToTab_Fields
 *)
 
 
@@ -36,7 +36,7 @@ on fmGUI_ManageDb_FieldListFocus(prefs)
 	-- version 1.1
 	
 	try
-		fmGUI_ManageDb_FieldsTab({})
+		fmGUI_ManageDb_GoToTab_Fields({})
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
@@ -60,6 +60,6 @@ on fmGUI_AppFrontMost()
 	tell helper to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_ManageDb_FieldsTab(prefs)
-	tell helper to fmGUI_ManageDb_FieldsTab(prefs)
-end fmGUI_ManageDb_FieldsTab
+on fmGUI_ManageDb_GoToTab_Fields(prefs)
+	tell helper to fmGUI_ManageDb_GoToTab_Fields(prefs)
+end fmGUI_ManageDb_GoToTab_Fields

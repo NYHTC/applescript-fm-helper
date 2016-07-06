@@ -10,7 +10,7 @@ HISTORY:
 
 
 REQUIRES:
-	fmGUI_ManageDb_FieldsTab
+	fmGUI_ManageDb_GoToTab_Fields
 *)
 
 
@@ -54,6 +54,6 @@ end fmGUI_ManageDb_TableListFocus
 -- END OF CODE
 --------------------
 
-on fmGUI_ManageDb_FieldsTab(prefs)
-	tell helper to fmGUI_ManageDb_FieldsTab(prefs)
-end fmGUI_ManageDb_FieldsTab
+on fmGUI_ManageDb_GoToTab_Fields(prefs)
+	tell helper to fmGUI_ManageDb_GoToTab_Fields(prefs)
+end fmGUI_ManageDb_GoToTab_Fields
