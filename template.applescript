@@ -5,8 +5,8 @@
 
 (*
 HISTORY:
-	1.1 - «ISO8601 date» ( «author» ) - «version changes»
-	1.0 - «ISO8601 date» ( «author» ) - first created
+	1.1 - «ISO8601 date» ( «author» ): «version changes»
+	1.0 - «ISO8601 date» ( «author» ): first created
 
 
 TODO:
