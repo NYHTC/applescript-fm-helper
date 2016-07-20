@@ -47,6 +47,6 @@ end fmGUI_ManageDb_GoToTab_Relationships
 -- END OF CODE
 --------------------
 
-on fmGUI_ManageDb_GoToTab({tabName:null})
-	tell helper to fmGUI_ManageDb_GoToTab({tabName:null})
+on fmGUI_ManageDb_GoToTab(prefs)
+	tell helper to fmGUI_ManageDb_GoToTab(prefs)
 end fmGUI_ManageDb_GoToTab

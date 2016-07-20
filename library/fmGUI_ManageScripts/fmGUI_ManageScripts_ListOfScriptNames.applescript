@@ -1,11 +1,11 @@
--- ManageScripts_ListOfScriptNames(someDbName)
+-- fmGUI_ManageScripts_ListOfScriptNames(someDbName)
 -- Daniel A. Shockley, NYHTC
 -- Return the list of all script names
 
 
 (*
 HISTORY:
-	1.2 - 2016-07-08 ( eshagdar ): Renamed from 'namesOfScriptsOfDatabase' to 'ManageScripts_ListOfScriptNames'
+	1.2 - 2016-07-08 ( eshagdar ): Renamed from 'namesOfScriptsOfDatabase' to 'fmGUI_ManageScripts_ListOfScriptNames'
 	1.1 - handles when there are NO script, even though db exists. 
 	1.0 - 201x-xx-xx ( dshcokley ): first created
 
@@ -19,7 +19,7 @@ REQUIRES:
 property helper : ""
 
 on run
-	ManageScripts_ListOfScriptNames("WUSHOP")
+	fmGUI_ManageScripts_ListOfScriptNames("WUSHOP")
 end run
 
 
@@ -27,7 +27,7 @@ end run
 -- START OF CODE
 --------------------
 
-on ManageScripts_ListOfScriptNames(someDbName)
+on fmGUI_ManageScripts_ListOfScriptNames(someDbName)
 	-- version 1.2
 	
 	tell application id "com.filemaker.client.advanced12"
