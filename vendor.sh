@@ -6,20 +6,20 @@ vendor_cliclick=cliclick
 
 
 if [ ! -d $vendor_dir ]; then
-	# crete /vendor directory
-	mkdir vendor
+	# create /vendor directory
+	mkdir $vendor_dir
 fi
 
 
 if [ ! -d $vendor_dir_cliclick ]; then
 	# get cliclick repo
 	cd $vendor_dir
-	git clone https://github.com/BlueM/cliclick
+	git clone 'https://github.com/BlueM/cliclick'
 fi
 
 
 if [ ! -f $vendor_dir_cliclick/$vendor_cliclick ]; then
-	# make the cliclick executable
+	# make the cliclick binary
 	cd $vendor_dir_cliclick
 	make
 fi
