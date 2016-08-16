@@ -9,7 +9,7 @@ Although some of the FileMaker-specific handlers are written to work with both P
 
 
 ### Usage
-Once the repository is saved, `main.scpt` script needs to be loaded to be used. Assuming the save path of this repository is `~/Code/applescript-fm-helper/`, any file that needs access needs to load script with the following code:
+Once the repository is saved, be sure to execute the make.sh, which will install dependencies and compile main.scpt. Assuming the save path of this repository is `~/Code/applescript-fm-helper/`, any file that needs access needs to load script with the following code:
 
 ```applescript
 set helperPath to ((path to home folder) & "Code:applescript-fm-helper:main.scpt") as string
@@ -29,10 +29,10 @@ end tell
 
 
 
-### Dependancy
-This package assumes that cliclick ([github](https://github.com/BlueM/cliclick)) exists. Once compiled, update `main.scpt` with its location. By default, it is set to be at REPOSITORY/vendor/cliclick/cliclick
+### Dependency
+This package assumes that cliclick ([github](https://github.com/BlueM/cliclick)) exists. Once compiled, update `main.scpt` with its location IFF you installed it elsewhere. By default, it is set to be at REPOSITORY/vendor/cliclick/cliclick 
 
 
 
 ### Helpful Tools
-[RCDefaultApp](http://www.rubicode.com/Software/RCDefaultApp/) is a helpful system prefenreces utility used for setting up the default app for opening FMP URLs. This tools is especially useful when both Pro and Advanced is installed.
+[RCDefaultApp](http://www.rubicode.com/Software/RCDefaultApp/) is a helpful system preferences utility used for setting up the default app for opening FMP URLs. This tools is especially useful when both Pro and Advanced is installed.
