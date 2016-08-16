@@ -6,10 +6,12 @@ applescript-fm-helper is applescript script designed for assisting with GUI scri
 Although some of the FileMaker-specific handlers are written to work with both Pro and Advanced, the latter is the favored.
 
 
+### Install
+Once the repository is saved, be sure to execute the make.sh, which will install dependencies (cliclick) and compile main.scpt. 
 
 
 ### Usage
-Once the repository is saved, be sure to execute the make.sh, which will install dependencies and compile main.scpt. Assuming the save path of this repository is `~/Code/applescript-fm-helper/`, any file that needs access needs to load script with the following code:
+Assuming the save path of this repository is `~/Code/applescript-fm-helper/`, any file that needs access needs to load script with the following code:
 
 ```applescript
 set helperPath to ((path to home folder) & "Code:applescript-fm-helper:main.scpt") as string
