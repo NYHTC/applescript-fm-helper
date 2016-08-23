@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4 - 2016-08-23 ( eshagdar ): declare all params. fixed error message.
 	1.3 - 2015-04-24 ( eshagdar ): creates a data source if needed
 	1.2 - 
 	1.1 - 
@@ -39,12 +40,14 @@ end run
 --------------------
 
 on fmGUI_ManageDb_TO_Add(prefs)
-	-- version 1.3
+	-- version 1.4
 	
-	set defaultPrefs to {tocName:null, dbName:null, doNotChangeExisting:false, baseTableName:null}
+	set defaultPrefs to {TOName:null, dbName:null, doNotChangeExisting:false, baseTableName:null}
 	
 	set prefs to prefs & defaultPrefs
-	
+	set dbName to dbName of prefs
+	set baseTableName to baseTableName of prefs
+	set TOName to TOName of prefs
 	
 	
 	try
@@ -55,32 +58,34 @@ on fmGUI_ManageDb_TO_Add(prefs)
 				set addTocButton to first button of tab group 1 of window 1 whose description contains "Add a table"
 				my fmGUI_ObjectClick_AffectsWindow(addTocButton)
 				delay 1
+				set dataSourcePopUpButton to pop up button "Data Source:" of window 1
 				try
-					my fmGUI_PopupSet(pop up button "Data Source:" of window 1, dbName of prefs)
-					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is baseTableName of prefs)
+					my fmGUI_PopupSet(dataSourcePopUpButton, dbName)
+					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is baseTableName)
 				on error
 					--Not an existing data source, so create it
-					key code 53 -- Hit 'Esc' to close pop up.
-					
-					-- add data source from within adding a new TO window
-					my fmGUI_PopupSet(pop up button "Data Source:" of window 1, "Manage Data Sources…")
-					my fmGUI_ManageDataSources_EnsureExists({dataSourceName:dbName of prefs})
+					key code 53 -- Hit 'Esc'
+					my fmGUI_PopupSet(dataSourcePopUpButton, "Manage Data Sources…")
+					my fmGUI_ManageDataSources_EnsureExists({dataSourceName:dbName})
 					my fmGUI_ManageDataSources_Save({})
 					delay 1
 					
-					-- now that we've added the data source, try again...
-					my fmGUI_PopupSet(pop up button "Data Source:" of window 1, dbName of prefs)
-					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is baseTableName of prefs)
+					-- now that we've added the data source, try again
+					my fmGUI_PopupSet(dataSourcePopUpButton, dbName)
+					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is baseTableName)
 				end try
+				--if debugMode then my logLEVEL(5, "Add TO 003")
+				--if debugMode then my logLEVEL(5, "About to edit name")
+				set value of text field "Name" of window 1 to TOName
+				if debugMode then my logLEVEL(5, "TO added: '" & TOName & "'")
 				
-				set value of text field "Name" of window 1 to tocName of prefs
 				my fmGUI_ObjectClick_AffectsWindow(button "OK" of window 1)
 				
 				return true
 			end tell
 		end tell
 	on error errMsg number errNum
-		error "Couldn't add TO in Manage DB - " & errMsg number errNum
+		error "fmGUI_ManageDb_TO_Add - " & errMsg number errNum
 	end try
 	
 end fmGUI_ManageDb_TO_Add
