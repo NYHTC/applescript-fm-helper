@@ -1,11 +1,16 @@
 -- fmGUI_Inspector_Close()
--- Dan Shockley, NYHTC
+-- Daniel A. Shockley, NYHTC
 -- Closes FileMaker's Inspector window
 
 
 (*
 HISTORY:
-	1.0 - created
+	1.1 - 2016-08-29 ( eshagdar ): return a result. added documentation.
+	1.0 - 201x-xx-xx ( dshockley ): first created
+
+
+REQUIRES:
+	fmGUI_AppFrontMost
 *)
 
 
@@ -22,17 +27,16 @@ on run
 end run
 
 
-
 --------------------
 -- START OF CODE
 --------------------
 
 on fmGUI_Inspector_Close()
-	-- version 1.0
+	-- version 1.1
 	
+	fmGUI_AppFrontMost()
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"
-			my fmGUI_AppFrontMost()
 			-- try the click twice in case the first only brings window to front.
 			try
 				set index of (first window whose name is "Inspector") to 1
@@ -43,6 +47,7 @@ on fmGUI_Inspector_Close()
 			try
 				click button 1 of (first window whose name is "Inspector")
 			end try
+			return true
 		end tell
 	end tell
 end fmGUI_Inspector_Close

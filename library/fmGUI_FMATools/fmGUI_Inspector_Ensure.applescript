@@ -1,12 +1,17 @@
 -- fmGUI_Inspector_Ensure()
--- Dan Shockley, NYHTC
+-- Daniel A. Shockley, NYHTC
 -- Opens FileMaker's Inspector window
 
 
 (*
 HISTORY:
-	1.1 - 
-	1.0 - created
+	1.1 - 2016-08-29 ( eshagdar ): added documentation.
+	1.0 - 201x-xx-xx ( dshockley ): first created
+
+
+REQUIRES:
+	fmGUI_AppFrontMost
+	fmGUI_ModeEnsure_Layout
 *)
 
 
@@ -21,7 +26,6 @@ on run
 	
 	fmGUI_Inspector_Ensure()
 end run
-	
 
 
 --------------------
@@ -33,11 +37,9 @@ on fmGUI_Inspector_Ensure()
 	
 	try
 		fmGUI_ModeEnsure_Layout()
+		fmGUI_AppFrontMost()
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				
-				my fmGUI_AppFrontMost()
-				
 				if not (exists (first window whose name contains "Inspector")) then
 					click (first menu item of menu 1 of menu bar item "View" of menu bar 1 whose name is "Inspector")
 				end if

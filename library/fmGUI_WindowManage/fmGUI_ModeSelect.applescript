@@ -5,7 +5,8 @@
 
 (*
 HISTORY:
-	1.0 - created
+	1.1 - 2016-08-29 ( eshagdar ): wait until mode changes.
+	1.0 - 201x-xx-xx ( dshockley ): first created
 *)
 
 
@@ -28,7 +29,7 @@ end run
 --------------------
 
 on fmGUI_ModeSelect(modeToSelect)
-	-- version 1.0
+	-- version 1.1
 	
 	try
 		tell application "System Events"
@@ -37,15 +38,19 @@ on fmGUI_ModeSelect(modeToSelect)
 				my fmGUI_Inspector_Close()
 				
 				-- Need to click in upper-left corner of area before pasting
-				set modeWindow to window 1
-				set modeContentArea to first group of modeWindow whose description ends with "Mode Content Area"
-				set modeContentAreaDesc to description of modeContentArea
-				set currentMode to first word of modeContentAreaDesc
+				set currentMode to first word of ((description of first group of window 1) as string)
+				
 				
 				if currentMode is not equal to modeToSelect then
-					delay 0.5
 					set menuItemName to modeToSelect & " Mode"
 					click (menu item menuItemName of menu 1 of menu bar item "View" of menu bar 1)
+					
+					--wait until the mode is selected ( or we time out )
+					repeat 20 times
+						set newMode to first word of ((description of first group of window 1) as string)
+						if newMode is equal to modeToSelect then exit repeat
+						delay 0.5
+					end repeat
 				end if
 				
 				return true
