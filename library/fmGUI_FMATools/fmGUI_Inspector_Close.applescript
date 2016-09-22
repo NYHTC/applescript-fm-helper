@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.2 - 2016-09-16 ( eshagdar ): wait until the window no longer exists.
 	1.1 - 2016-08-29 ( eshagdar ): return a result. added documentation.
 	1.0 - 201x-xx-xx ( dshockley ): first created
 
@@ -32,7 +33,7 @@ end run
 --------------------
 
 on fmGUI_Inspector_Close()
-	-- version 1.1
+	-- version 1.2
 	
 	fmGUI_AppFrontMost()
 	tell application "System Events"
@@ -44,9 +45,17 @@ on fmGUI_Inspector_Close()
 			try
 				click button 1 of (first window whose name is "Inspector")
 			end try
-			try
-				click button 1 of (first window whose name is "Inspector")
-			end try
+			
+			--wait until the window no longer exists ( or we time out )
+			repeat 20 times
+				try
+					get first window whose name is "Inspector"
+				on error
+					exit repeat
+				end try
+				delay 0.5
+			end repeat
+			
 			return true
 		end tell
 	end tell
