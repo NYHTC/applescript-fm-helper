@@ -4,6 +4,7 @@
 
 (*
 HISTORY:
+	1.1 - 2016-09-29 ( eshagdar ): HTC is converting 'Paste' menu item to 'Paste Styled Text'. The default 'Paste' shortcut is pasting plain text. This tries the default 'Paste' command, and then uses 'Paste Styled Text' if needed.
 	1.0 - 2016-06-28 ( eshagdar ): first created
 *)
 
@@ -16,7 +17,7 @@ on run
 	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
 	set helper to load script file pathHelper
 	
-	fmGUI_PasteFromClipboard({})
+	fmGUI_PasteFromClipboard()
 end run
 
 
@@ -25,7 +26,7 @@ end run
 --------------------
 
 on fmGUI_PasteFromClipboard()
-	-- version 1.0, Erik Shagdar
+	-- version 1.1, Erik Shagdar
 	
 	set paseMenuItemExists to false
 	
@@ -34,7 +35,13 @@ on fmGUI_PasteFromClipboard()
 			
 			my fmGUI_AppFrontMost()
 			
-			set pasteMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Paste"
+			try
+				set pasteMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Paste"
+			on error
+				set pasteMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Paste Styled Text"
+			end try
+			
+			return pasteMenuItem
 			try
 				click pasteMenuItem
 			on error errMsg number errNum
