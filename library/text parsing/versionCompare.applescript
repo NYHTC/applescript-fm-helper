@@ -11,7 +11,7 @@ Returns:
 
 
 HISTORY:
-	1. 0 - 2016-05-02 ( eshagdar ): first created
+	1.0 - 2016-05-02 ( eshagdar ): first created
 
 *)
 

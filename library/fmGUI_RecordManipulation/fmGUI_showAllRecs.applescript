@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1 - 2016-10-18 ( eshagdar ): error out with a number
 	1.0 - 2016-08-12 ( eshagdar ): first created
 
 
@@ -32,7 +33,7 @@ end run
 --------------------
 
 on fmGUI_showAllRecs()
-	-- version 1.0
+	-- version 1.1
 	
 	try
 		fmGUI_ModeEnsure_Browse()
@@ -44,7 +45,7 @@ on fmGUI_showAllRecs()
 		
 		set numRecs to fmGUI_getRecCounts()
 		if recsTotal of numRecs is not equal to recsFound of numRecs then
-			error "record counts are not the same after running 'Show All Records' command."
+			error "record counts are not the same after running 'Show All Records' command." number -1024
 		end if
 		
 		if recsTotal of numRecs is equal to 0 then
