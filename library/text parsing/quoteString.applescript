@@ -1,24 +1,20 @@
--- someAwesomeHandlerName({«full_list_of_params_for_handler_with_default_values»})
--- «Original Author», «Organization/Company/creation location»
--- «description»
+-- quoteString(someString)
+-- Daniel A. Shockley, NYHTC
+-- Converts a string into an escaped string (so if evaluated, would become the original string).
 
 
 (*
 HISTORY:
-	1.1 - «ISO8601 date» ( «author» ): «version changes»
-	1.0 - «ISO8601 date» ( «author» ): first created
+	1.1 - 2016-10-21 ( dshockley ): properly escapes backslashes.
+	1.0 - 2013-xx-xx ( dshockley ): first created.
 
 
 TODO:
-	- «improvements or things to fix»
-	- «another improvements or things to fix»
 
 
 REQUIRES:
-	«list of handlers required»
-	«list of handlers required»
+	replaceSimple
 *)
-
 
 property helper : ""
 
@@ -38,7 +34,8 @@ on run
 	
 	-- SAMPLE CALL TO THIS FUNCTION:
 	
-	someAwesomeHandlerName({someAmazingParamName:"sample value", anotherDescriptiveParamName:"value"})
+	run script (quoteString("Bob\\Jeff is \"my\" name."))
+	
 	
 end run
 
@@ -47,22 +44,27 @@ end run
 -- START OF CODE
 --------------------
 
-on someAwesomeHandlerName(prefs)
-	-- version «current_version»
+
+on quoteString(someString)
+	-- version 1.1, Daniel A. Shockley
 	
-	set defaultPrefs to {someAmazingParamName:null, anotherDescriptiveParamName:null}
-	set prefs to prefs & defaultPrefs
+	set charDQ to ASCII character 34 -- double-quote character
+	set charBS to ASCII character 92 -- backslash character
+	set escapedDQ to charBS & charDQ
+	set escapedBS to charBS & charBS
+	set someString to replaceSimple({someString, charBS, escapedBS})
+	set someString to replaceSimple({someString, charDQ, escapedDQ})
+	set someString to charDQ & someString & charDQ
 	
-	(* «handler logic goes here» *)
+	return someString
 	
-	return true
-	
-end someAwesomeHandlerName
+end quoteString
+
 
 --------------------
 -- END OF CODE
 --------------------
 
-on someRequiredHandler(prefs)
-	return "helper code goes here. Generally this is just a slug that calls the same function in main.scpt"
-end someRequiredHandler
+on replaceSimple(prefs)
+	tell helper to replaceSimple(prefs)
+end replaceSimple
