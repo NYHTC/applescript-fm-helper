@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3 - 2016-10-28 ( eshagdar ): delay a bit more before exiting
 	1.2 - 2016-09-16 ( eshagdar ): wait until the window no longer exists.
 	1.1 - 2016-08-29 ( eshagdar ): return a result. added documentation.
 	1.0 - 201x-xx-xx ( dshockley ): first created
@@ -33,7 +34,7 @@ end run
 --------------------
 
 on fmGUI_Inspector_Close()
-	-- version 1.2
+	-- version 1.3
 	
 	fmGUI_AppFrontMost()
 	tell application "System Events"
@@ -51,6 +52,7 @@ on fmGUI_Inspector_Close()
 				try
 					get first window whose name is "Inspector"
 				on error
+					delay 0.5
 					exit repeat
 				end try
 				delay 0.5

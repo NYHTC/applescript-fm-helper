@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4 - 2016-10-28 ( eshagdar ): ensure app is frontmost
 	1.3 - 
 	1.2 - 
 	1.1 - 
@@ -36,9 +37,10 @@ end run
 --------------------
 
 on fmGUI_ManageDb_FieldsPickTable(baseTableName)
-	-- version 1.3
+	-- version 1.4
 	
 	try
+		fmGUI_AppFrontMost()
 		fmGUI_ManageDb_GoToTab_Fields({})
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
