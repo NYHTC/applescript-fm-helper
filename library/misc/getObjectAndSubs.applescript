@@ -9,8 +9,8 @@ HISTORY:
 
 
 TODO:
-	- Çimprovements or things to fixÈ
-	- Çanother improvements or things to fixÈ
+	2017-01-12 ( dshockley ): Try to figure out a way to preseve human-friendly class names (without the chevrons)
+
 
 
 REQUIRES:
@@ -114,7 +114,7 @@ on getObjectAndSubs(prefs)
 					display dialog (length of indentString) as string
 					error -128
 				end if
-*)
+				*)
 				
 				
 				
@@ -204,6 +204,7 @@ on getObjectAndSubs(prefs)
 					set resultString to resultString & return & Â
 					indentString & "subObjList: Â" & return & thisSubObjectList & " Â"
 				*)
+				
 			end if
 			
 			set resultString to resultString & return & indentString & "}"
