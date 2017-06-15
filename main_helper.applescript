@@ -16,7 +16,7 @@
 property LF : ASCII character 10
 property tempFileName : "temp.applescript"
 property mainFileName : "main.scpt"
-property appName : "as-helper.app"
+property appName : "htcLib.app"
 
 
 
@@ -86,15 +86,20 @@ on run
 	do shell script "sh " & quoted form of (POSIX path of (pathDirRoot & "vendor.sh"))
 	if result does not contain "SUCCESS" then return "Error: unable to run vendor.sh"
 	
-	-- remove the temp file
+	
+	-- remove pre-existing app file
 	tell application "Finder"
-		if exists pathTempCode then
-			delete file pathTempCode
-		end if
+		if exists pathApp then delete file pathApp
 	end tell
 	
 	-- now make it into an app
-	do shell script "osacompile -o " & quoted form of POSIX path of pathApp & " " & quoted form of POSIX path of pathMain
+	do shell script "osacompile -s -o " & quoted form of POSIX path of pathApp & " " & quoted form of POSIX path of pathTempCode
+	
+	
+	-- remove the temp file
+	tell application "Finder"
+		if exists pathTempCode then delete file pathTempCode
+	end tell
 	
 	return true
 end run
