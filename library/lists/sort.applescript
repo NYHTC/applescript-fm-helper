@@ -8,7 +8,7 @@ HISTORY:
 	1.0 - created
 *)
 
-	
+
 on run
 	sort({"a", "d", "c", "b"})
 end run

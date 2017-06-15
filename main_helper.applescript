@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2017-06-14 ( eshagdar ): also make an app
 	2016-04-21 ( eshagdar ): Updated clickCommandPosix path.
 	2016-03-17 ( eshagdar ): Added DebugMode and clickCommandPosix properties
 	2016-03-15 ( eshagdar ): added documentation to main script. Separated individual functions into library directories and updated run code to loop over files in sub-directories.
@@ -15,6 +16,7 @@
 property LF : ASCII character 10
 property tempFileName : "temp.applescript"
 property mainFileName : "main.scpt"
+property appName : "as-helper.app"
 
 
 
@@ -33,6 +35,7 @@ on run
 	
 	set pathTempCode to pathDirRoot & tempFileName
 	set pathMain to pathDirRoot & mainFileName
+	set pathApp to pathDirRoot & appName
 	set pathDirLibraries to pathDirRoot & folderName_library
 	set librariesSubDir to list folder (pathDirLibraries) without invisibles
 	
@@ -78,7 +81,7 @@ on run
 	
 	-- create a temp file of all libaries, then create a compiled version of it.
 	do shell script "echo " & quoted form of tempCode & " > " & quoted form of POSIX path of pathTempCode
-	do shell script "osacompile " & " -o " & quoted form of POSIX path of pathMain & " " & quoted form of POSIX path of pathTempCode
+	do shell script "osacompile -o " & quoted form of POSIX path of pathMain & " " & quoted form of POSIX path of pathTempCode
 	do shell script "pwd"
 	do shell script "sh " & quoted form of (POSIX path of (pathDirRoot & "vendor.sh"))
 	if result does not contain "SUCCESS" then return "Error: unable to run vendor.sh"
@@ -89,6 +92,9 @@ on run
 			delete file pathTempCode
 		end if
 	end tell
+	
+	-- now make it into an app
+	do shell script "osacompile -o " & quoted form of POSIX path of pathApp & " " & quoted form of POSIX path of pathMain
 	
 	return true
 end run
