@@ -27,17 +27,10 @@ on listContains(someList, someComplexItem)
 	
 	repeat with oneItem in someList
 		set oneItem to contents of oneItem
-		if oneItem is equal to someComplexItem then
-			
-			return true
-			
-		end if
-		
-		
+		if oneItem is equal to someComplexItem then return true
 	end repeat
 	
 	return false
-	
 end listContains
 
 --------------------

@@ -1,36 +1,36 @@
 root_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-vendor_dir=$root_dir/vendor
+vendor_dir="$root_dir"/vendor
 
-vendor_dir_cliclick=$vendor_dir/cliclick
-vendor_cliclick=cliclick
+dir_cliclick="$vendor_dir"/cliclick
+exec_cliclick=cliclick
 
 
-if [ ! -d $vendor_dir ]; then
+if [ ! -d "$vendor_dir" ]; then
 	# create /vendor directory
-	mkdir $vendor_dir
+	mkdir "$vendor_dir"
 fi
 
 
-if [ ! -d $vendor_dir_cliclick ]; then
+if [ ! -d "$dir_cliclick" ]; then
 	# get cliclick repo
-	cd $vendor_dir
-	git clone 'https://github.com/BlueM/cliclick'
+	cd "$vendor_dir"
+	git clone https://github.com/BlueM/cliclick.git
 fi
 
 
-if [ ! -f $vendor_dir_cliclick/$vendor_cliclick ]; then
+if [ ! -f "$dir_cliclick"/"$exec_cliclick" ]; then
 	# make the cliclick binary
-	cd $vendor_dir_cliclick
+	cd "$dir_cliclick"
 	make
 fi
 
 
 # check if the executable exists
-if [ -f $vendor_dir_cliclick/$vendor_cliclick ]
+if [ -f "$dir_cliclick"/"$exec_cliclick" ]
 then
-	echo 'SUCCESS:' $vendor_cliclick 'exists'
+	echo 'SUCCESS:' "$exec_cliclick" 'exists'
 else
-	echo 'ERROR: unable to find' $vendor_cliclick
+	echo 'ERROR: unable to find' "$exec_cliclick"
 fi
 
-cd $root_dir
+cd "$root_dir"
