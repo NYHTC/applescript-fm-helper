@@ -1,20 +1,17 @@
--- indexOfListItem(someList, someListItem)
+-- indexOfListItem(prefs)
 -- Daniel A. Shockley http://www.danshockley.com
--- Sorts a list in ascending order
+-- Returns the index of the first intance of an item in the list
 
 
 (*
 HISTORY:
+	1.1 - 2017-06-21 ( eshagdar ): convert params to record
 	1.0 - created
-
-
-TODO:
-	- 2016-07-05 ( eshagdar ): convert params to record
 *)
 
 
 on run
-	indexOfListItem({"a", "d", "c", "b"}, "c")
+	indexOfListItem({someList:{"a", "c", "d", "c", "b"}, someListItem:"c"})
 end run
 
 
@@ -22,15 +19,18 @@ end run
 -- START OF CODE
 --------------------
 
-on indexOfListItem(someList, someListItem)
-	-- version 1.0
+on indexOfListItem(prefs)
+	-- version 1.1
 	
-	if someList does not contain someListItem then return -1
+	set defaultPrefs to {someList:null, someListItem:null}
+	set prefs to prefs & defaultPrefs
 	
-	repeat with i from 1 to count of someList
-		set oneListItem to item i of someList
+	if someList of prefs does not contain someListItem of prefs then return -1
+	
+	repeat with i from 1 to count of someList of prefs
+		set oneListItem to item i of someList of prefs
 		
-		if oneListItem is someListItem then return i
+		if oneListItem is someListItem of prefs then return i
 		
 	end repeat
 	
