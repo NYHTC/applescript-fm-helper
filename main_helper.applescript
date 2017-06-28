@@ -4,11 +4,12 @@
 
 
 (* HISTORY:
-	2017-06-14 ( eshagdar ): also make an app
+	2017-06-26 ( eshagdar ): quit the app before deleting it.
+	2017-06-14 ( eshagdar ): also make an app.
 	2016-04-21 ( eshagdar ): Updated clickCommandPosix path.
-	2016-03-17 ( eshagdar ): Added DebugMode and clickCommandPosix properties
+	2016-03-17 ( eshagdar ): Added DebugMode and clickCommandPosix properties.
 	2016-03-15 ( eshagdar ): added documentation to main script. Separated individual functions into library directories and updated run code to loop over files in sub-directories.
-	2016-03-14 ( eshagdar ): first created
+	2016-03-14 ( eshagdar ): first created.
 *)
 
 
@@ -16,7 +17,8 @@
 property LF : ASCII character 10
 property tempFileName : "temp.applescript"
 property mainFileName : "main.scpt"
-property appName : "htcLib.app"
+property appName : "htcLib"
+property appExtension : ".app"
 
 
 
@@ -35,7 +37,7 @@ on run
 	
 	set pathTempCode to pathDirRoot & tempFileName
 	set pathMain to pathDirRoot & mainFileName
-	set pathApp to pathDirRoot & appName
+	set pathApp to pathDirRoot & appName & appExtension
 	set pathDirLibraries to pathDirRoot & folderName_library
 	set librariesSubDir to list folder (pathDirLibraries) without invisibles
 	
@@ -86,6 +88,11 @@ on run
 	do shell script "sh " & quoted form of (POSIX path of (pathDirRoot & "vendor.sh"))
 	if result does not contain "SUCCESS" then return "Error: unable to run vendor.sh"
 	
+	
+	--quit the pre-existing app
+	try
+		tell application appName to quit
+	end try
 	
 	-- remove pre-existing app file
 	tell application "Finder"

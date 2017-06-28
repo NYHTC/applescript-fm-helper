@@ -9,18 +9,9 @@ HISTORY:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ModeCurrent({})
 end run
-
 
 --------------------
 -- START OF CODE
@@ -48,5 +39,5 @@ end fmGUI_ModeCurrent
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost

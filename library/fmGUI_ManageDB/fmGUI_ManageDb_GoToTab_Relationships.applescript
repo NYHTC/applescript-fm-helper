@@ -17,19 +17,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageDb_GoToTab_Relationships({})
 end run
-
-
 
 --------------------
 -- START OF CODE
@@ -40,7 +30,6 @@ on fmGUI_ManageDb_GoToTab_Relationships(prefs)
 	
 	fmGUI_ManageDb_GoToTab({tabName:"Relationships"})
 	
-	
 end fmGUI_ManageDb_GoToTab_Relationships
 
 --------------------
@@ -48,5 +37,5 @@ end fmGUI_ManageDb_GoToTab_Relationships
 --------------------
 
 on fmGUI_ManageDb_GoToTab(prefs)
-	tell helper to fmGUI_ManageDb_GoToTab(prefs)
+	tell application "htcLib" to fmGUI_ManageDb_GoToTab(prefs)
 end fmGUI_ManageDb_GoToTab

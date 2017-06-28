@@ -21,6 +21,7 @@ Default possible are:
 	Submarine.aiff
 	Tink.aiff
 
+
 HISTORY:
 	1.0 - 2016-06-17 ( eshagdar ): created
 *)
@@ -29,7 +30,6 @@ HISTORY:
 on run
 	systemNotification({msg:"some message", msgTitle:"Msg Title", msgSubtitle:"sub-title"})
 end run
-
 
 --------------------
 -- START OF CODE
@@ -49,7 +49,6 @@ on systemNotification(prefs)
 	
 	
 end systemNotification
-
 
 --------------------
 -- END OF CODE

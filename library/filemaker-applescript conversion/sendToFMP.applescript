@@ -19,7 +19,6 @@ on run
 	sendToFMP("foo")
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------

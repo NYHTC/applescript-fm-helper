@@ -9,15 +9,7 @@ HISTORY:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	tell application "System Events"
 		tell process "FileMaker Pro"
 			set frontmost to true
@@ -46,5 +38,5 @@ end fmGUI_ObjectClick_AffectsWindow
 --------------------
 
 on clickObjectByCoords(someObject)
-	tell helper to clickObjectByCoords(someObject)
+	tell application "htcLib" to clickObjectByCoords(someObject)
 end clickObjectByCoords

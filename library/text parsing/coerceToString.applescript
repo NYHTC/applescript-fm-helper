@@ -22,7 +22,6 @@ on run
 	coerceToString(someElement)
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------

@@ -18,20 +18,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageDB_Save({})
 end run
-
-
-
 
 --------------------
 -- START OF CODE
@@ -52,11 +41,9 @@ on fmGUI_ManageDB_Save(prefs)
 	set waitCycleMax to round (waitSaveTotalSeconds / waitCycleDelaySeconds) rounding down
 	
 	try
+		fmGUI_AppFrontMost()
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				
-				my fmGUI_AppFrontMost()
-				
 				if name of window 1 starts with manageDbWindowNamePrefix then
 					try
 						set manageDbWindowName to name of window 1
@@ -98,9 +85,9 @@ end fmGUI_ManageDB_Save
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on windowWaitUntil(prefs)
-	tell helper to windowWaitUntil(prefs)
+	tell application "htcLib" to windowWaitUntil(prefs)
 end windowWaitUntil

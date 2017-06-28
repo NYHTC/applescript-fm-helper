@@ -13,15 +13,7 @@ TODO:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	tell application "System Events"
 		tell application process "FileMaker Pro"
 			set frontmost to true
@@ -32,8 +24,6 @@ on run
 	fmGUI_PopupSet(TablePopupOnFieldTabOfManageDatabase, "ZZ_GLOBALS")
 	
 end run
-
-
 
 --------------------
 -- START OF CODE
@@ -58,5 +48,5 @@ end fmGUI_PopupSet
 --------------------
 
 on fmGUI_Popup_SelectByCommand(prefs)
-	tell helper to fmGUI_Popup_SelectByCommand(prefs)
+	tell application "htcLib" to fmGUI_Popup_SelectByCommand(prefs)
 end fmGUI_Popup_SelectByCommand

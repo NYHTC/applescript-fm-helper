@@ -8,15 +8,7 @@ HISTORY:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	tell application "System Events"
 		tell process "FileMaker Pro"
 			set frontmost to true
@@ -44,7 +36,7 @@ on clickObjectByCoords(someObject)
 	set xClick to round (xCoord + xSize / 2) rounding down -- middle
 	set yClick to round (yCoord + ySize / 2) rounding down -- middle
 	
-	clickAtCoords(xClick, yClick)
+	return clickAtCoords(xClick, yClick)
 	
 end clickObjectByCoords
 
@@ -53,5 +45,5 @@ end clickObjectByCoords
 --------------------
 
 on clickAtCoords(xClick, yClick)
-	tell helper to clickAtCoords(xClick, yClick)
+	tell application "htcLib" to clickAtCoords(xClick, yClick)
 end clickAtCoords

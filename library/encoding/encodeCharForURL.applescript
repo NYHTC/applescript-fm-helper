@@ -13,7 +13,6 @@ on run
 	encodeCharForURL(";")
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------

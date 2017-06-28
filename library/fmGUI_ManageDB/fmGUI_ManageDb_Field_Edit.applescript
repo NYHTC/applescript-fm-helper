@@ -26,15 +26,7 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageDb_Field_Edit({editMode:"TWEAK", tableName:"ZZ_GLOBALS", fieldName:"zzcSpace", autoEnterSpecialValue:"NONE", autoEnterCalcCode:"  ", autoEnterCalcContextTOC:"ZZ_GLOBALS", validationCalcCode:"", validationCalcContextTOC:"ZZ_GLOBALS"})
 end run
 
@@ -67,10 +59,6 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 *)
 	
 	try
-		
-		
-		
-		
 		-- try to select it first:
 		set fieldNowSelected to fmGUI_ManageDb_Field_Select(prefs)
 		
@@ -706,41 +694,41 @@ end fmGUI_ManageDb_Field_Edit
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_CheckboxSet(checkboxObject, checkboxValue)
-	tell helper to fmGUI_CheckboxSet(checkboxObject, checkboxValue)
+	tell application "htcLib" to fmGUI_CheckboxSet(checkboxObject, checkboxValue)
 end fmGUI_CheckboxSet
 
 on fmGUI_ManageDb_Field_Select(prefs)
-	tell helper to fmGUI_ManageDb_Field_Select(prefs)
+	tell application "htcLib" to fmGUI_ManageDb_Field_Select(prefs)
 end fmGUI_ManageDb_Field_Select
 
 on fmGUI_ObjectClick_AffectsWindow(buttonRef)
-	tell helper to fmGUI_ObjectClick_AffectsWindow(buttonRef)
+	tell application "htcLib" to fmGUI_ObjectClick_AffectsWindow(buttonRef)
 end fmGUI_ObjectClick_AffectsWindow
 
 on fmGUI_PopupSet(popupObject, popupChoice)
-	tell helper to fmGUI_PopupSet(popupObject, popupChoice)
+	tell application "htcLib" to fmGUI_PopupSet(popupObject, popupChoice)
 end fmGUI_PopupSet
 
 on fmGUI_TextFieldSet(textfieldObject, textfieldValue)
-	tell helper to fmGUI_TextFieldSet(textfieldObject, textfieldValue)
+	tell application "htcLib" to fmGUI_TextFieldSet(textfieldObject, textfieldValue)
 end fmGUI_TextFieldSet
 
 on clickObjectByCoords(someObject)
-	tell helper to clickObjectByCoords(someObject)
+	tell application "htcLib" to clickObjectByCoords(someObject)
 end clickObjectByCoords
 
 on coerceToString(incomingObject)
-	tell helper to coerceToString(incomingObject)
+	tell application "htcLib" to coerceToString(incomingObject)
 end coerceToString
 
 on windowWaitUntil(prefs)
-	tell helper to windowWaitUntil(prefs)
+	tell application "htcLib" to windowWaitUntil(prefs)
 end windowWaitUntil
 
 on windowWaitUntil_FrontIS(prefs)
-	tell helper to windowWaitUntil_FrontIS(prefs)
+	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS

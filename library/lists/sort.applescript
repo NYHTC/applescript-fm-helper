@@ -13,7 +13,6 @@ on run
 	sort({"a", "d", "c", "b"})
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------
@@ -30,6 +29,7 @@ on sort(oldList)
 	
 	return sortedList
 end sort
+
 --------------------
 -- END OF CODE
 --------------------

@@ -17,19 +17,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageSecurity_Save({fullAccount:"masteAccountName", fullPassword:"someAwesomePassword"})
 end run
-
-
 
 --------------------
 -- START OF CODE
@@ -42,9 +32,9 @@ on fmGUI_ManageSecurity_Save(prefs)
 	set prefs to prefs & defaulPrefs
 	
 	try
+		fmGUI_AppFrontMost()
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				my fmGUI_AppFrontMost()
 				
 				if name of window 1 does not contain "Manage Security for" then
 					error "Not in main Manage Security window." number 1024
@@ -85,9 +75,9 @@ end fmGUI_ManageSecurity_Save
 --------------------
 
 on clickObjectByCoords(prefs)
-	tell helper to clickObjectByCoords(prefs)
+	tell application "htcLib" to clickObjectByCoords(prefs)
 end clickObjectByCoords
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost

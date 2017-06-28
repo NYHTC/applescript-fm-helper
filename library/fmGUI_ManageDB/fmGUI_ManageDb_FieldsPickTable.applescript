@@ -19,18 +19,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageDb_FieldsPickTable("ZZ_GLOBALS")
 end run
-
 
 --------------------
 -- START OF CODE
@@ -59,13 +50,13 @@ end fmGUI_ManageDb_FieldsPickTable
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageDb_GoToTab_Fields(prefs)
-	tell helper to fmGUI_ManageDb_GoToTab_Fields(prefs)
+	tell application "htcLib" to fmGUI_ManageDb_GoToTab_Fields(prefs)
 end fmGUI_ManageDb_GoToTab_Fields
 
 on fmGUI_PopupSet(popupObject, popupChoice)
-	tell helper to fmGUI_PopupSet(popupObject, popupChoice)
+	tell application "htcLib" to fmGUI_PopupSet(popupObject, popupChoice)
 end fmGUI_PopupSet

@@ -8,12 +8,11 @@ HISTORY:
 	1.1 - 2015-04-14 ( eshagdar ): close FMEmpower window if open
 	1.0 - created
 *)
-	
+
 
 on run
 	fmGUI_AppFrontMost()
 end run
-
 
 --------------------
 -- START OF CODE

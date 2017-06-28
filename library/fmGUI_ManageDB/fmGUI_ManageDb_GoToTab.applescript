@@ -14,18 +14,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageDb_GoToTab({tabName:"Tables"})
 end run
-
 
 --------------------
 -- START OF CODE
@@ -52,7 +43,6 @@ on fmGUI_ManageDb_GoToTab(prefs)
 	on error errMsg number errNum
 		error "Couldn't go to the '" & tabName of prefs & "' tab - " & errMsg number errNum
 	end try
-	
 end fmGUI_ManageDb_GoToTab
 
 --------------------
@@ -60,9 +50,9 @@ end fmGUI_ManageDb_GoToTab
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageDb_Open(prefs)
-	tell helper to fmGUI_ManageDb_Open(prefs)
+	tell application "htcLib" to fmGUI_ManageDb_Open(prefs)
 end fmGUI_ManageDb_Open

@@ -16,12 +16,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
 	fmGUI_ManageScripts_ListOfScriptNames("WUSHOP")
 end run
-
 
 --------------------
 -- START OF CODE
@@ -31,7 +28,6 @@ on fmGUI_ManageScripts_ListOfScriptNames(someDbName)
 	-- version 1.2
 	
 	tell application id "com.filemaker.client.advanced12"
-		
 		if (count of every FileMaker script of database someDbName) is equal to 0 then
 			return {}
 		else
@@ -39,7 +35,6 @@ on fmGUI_ManageScripts_ListOfScriptNames(someDbName)
 		end if
 		
 		error "Could not get ManageScripts_ListOfScriptNames of database specified: " & someDbName & "." number 1024
-		
 	end tell
 	
 end ManageScripts_ListOfScriptNames

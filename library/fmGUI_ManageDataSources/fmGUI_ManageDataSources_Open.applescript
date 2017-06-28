@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1.1 - 2017-06-26 ( eshagdar ): moved frontmost to outer scope
 	1.1 - 
 	1.0 - created
 
@@ -14,32 +15,21 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageDataSources_Open({})
 end run
-
-
 
 --------------------
 -- START OF CODE
 --------------------
 
 on fmGUI_ManageDataSources_Open(prefs)
-	-- version 1.1
+	-- version 1.1.1
 	
 	try
+		fmGUI_AppFrontMost()
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				my fmGUI_AppFrontMost()
-				
 				-- try to open Manage window:
 				if name of window 1 starts with "Manage External Data Sources" then
 					return true
@@ -52,7 +42,6 @@ on fmGUI_ManageDataSources_Open(prefs)
 	on error errMsg number errNum
 		error "Couldn't open Manage Data Sources - " & errMsg number errNum
 	end try
-	
 end fmGUI_ManageDataSources_Open
 
 --------------------
@@ -60,5 +49,5 @@ end fmGUI_ManageDataSources_Open
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost

@@ -17,7 +17,6 @@ on run
 	listContains({"foo", "bob", "bar"}, "bob")
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------

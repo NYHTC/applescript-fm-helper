@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4.1 - 2017-06-26 ( eshagdar ): narrowed scope
 	1.4 -
 	1.3 - 
 	1.2 - 
@@ -17,31 +18,19 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageDataSources_Save({})
 end run
-
-
 
 --------------------
 -- START OF CODE
 --------------------
 
 on fmGUI_ManageDataSources_Save(prefs)
-	-- version 1.4
+	-- version 1.4.1
 	
 	set defaultPrefs to {notInManageWindowIsError:true}
-	
 	set prefs to prefs & defaultPrefs
-	
 	
 	set manageWindowNamePrefix to "Manage External Data Sources"
 	set waitCycleDelaySeconds to 5 -- seconds
@@ -50,10 +39,9 @@ on fmGUI_ManageDataSources_Save(prefs)
 	set waitCycleMax to round (waitSaveTotalSeconds / waitCycleDelaySeconds) rounding down
 	
 	try
+		fmGUI_AppFrontMost()
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				my fmGUI_AppFrontMost()
-				
 				if name of window 1 starts with manageWindowNamePrefix then
 					try
 						set manageWindowName to name of window 1
@@ -72,19 +60,13 @@ on fmGUI_ManageDataSources_Save(prefs)
 						return true
 					end if
 				end if
-				
 			end tell
-			
-			
-			my windowWaitUntil({windowName:manageWindowName, windowNameTest:"does not contain", whichWindow:"any", waitCycleDelaySeconds:waitCycleDelaySeconds, waitCycleMax:waitCycleMax})
-			
-			
-			delay 1 -- let normal window come to front. 
-			
-			return true
-			
-			
 		end tell
+			
+		windowWaitUntil({windowName:manageWindowName, windowNameTest:"does not contain", whichWindow:"any", waitCycleDelaySeconds:waitCycleDelaySeconds, waitCycleMax:waitCycleMax})
+		delay 1 -- let normal window come to front. 
+			
+		return true
 	on error errMsg number errNum
 		error "Couldn't save Manage Data Sources - " & errMsg number errNum
 	end try
@@ -96,9 +78,9 @@ end fmGUI_ManageDataSources_Save
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on windowWaitUntil(prefs)
-	tell helper to windowWaitUntil(prefs)
+	tell application "htcLib" to windowWaitUntil(prefs)
 end windowWaitUntil

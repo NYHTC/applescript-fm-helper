@@ -21,7 +21,6 @@ on run
 	getFromFMP({fmType:Pro})
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------

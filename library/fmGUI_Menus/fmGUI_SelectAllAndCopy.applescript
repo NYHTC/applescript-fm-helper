@@ -2,6 +2,7 @@
 -- Erik Shagdar, NYHTC
 -- select all and copy in whatever the context is
 
+
 (*
 HISTORY:
 	1.2 - 2016-10-14 ( eshagdar ): use clipboardClear handler
@@ -16,18 +17,10 @@ REQUIRES:
 	fmGUI_SelectAll
 *)
 
-property helper : ""
 
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_SelectAllAndCopy()
 end run
-
 
 --------------------
 -- START OF CODE
@@ -72,17 +65,17 @@ end fmGUI_SelectAllAndCopy
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on clipboardClear()
-	tell helper to clipboardClear()
+	tell application "htcLib" to clipboardClear()
 end clipboardClear
 
 on fmGUI_CopySelected()
-	tell helper to fmGUI_CopySelected()
+	tell application "htcLib" to fmGUI_CopySelected()
 end fmGUI_CopySelected
 
 on fmGUI_SelectAll()
-	tell helper to fmGUI_SelectAll()
+	tell application "htcLib" to fmGUI_SelectAll()
 end fmGUI_SelectAll

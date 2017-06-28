@@ -2,6 +2,7 @@
 -- Erik Shagdar, NYHTC
 -- Copy the selected objects in the current window in FileMaker
 
+
 (*
 HISTORY:
 	1.3 - 2016-10-18 ( eshagdar ): use fmGUI_clickMenuItem handler
@@ -14,18 +15,10 @@ REQUIRES:
 	fmGUI_menuItemAvailable
 *)
 
-property helper : ""
 
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_CopySelected()
 end run
-
 
 --------------------
 -- START OF CODE
@@ -60,9 +53,9 @@ end fmGUI_CopySelected
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_menuItemAvailable(prefs)
-	tell helper to fmGUI_menuItemAvailable(prefs)
+	tell application "htcLib" to fmGUI_menuItemAvailable(prefs)
 end fmGUI_menuItemAvailable

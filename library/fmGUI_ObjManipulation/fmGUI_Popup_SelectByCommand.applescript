@@ -20,7 +20,6 @@ on run
 	fmGUI_Popup_SelectByCommand({popupObject:TablePopupOnFieldsTabOfManageDatabase, popupChoice:"ZZ_GLOBALS"})
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------

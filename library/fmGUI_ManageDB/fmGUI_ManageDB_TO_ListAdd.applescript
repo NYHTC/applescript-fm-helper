@@ -17,18 +17,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageDb_TO_Add({TOList:null})
 end run
-
 
 --------------------
 -- START OF CODE
@@ -71,17 +62,17 @@ end fmGUI_ManageDB_TO_ListAdd
 --------------------
 
 on fmGUI_ManageDb_TO_Add(prefs)
-	tell helper to fmGUI_ManageDb_TO_Add(prefs)
+	tell application "htcLib" to fmGUI_ManageDb_TO_Add(prefs)
 end fmGUI_ManageDb_TO_Add
 
 on fmGUI_ManageDB_Save(prefs)
-	tell helper to fmGUI_ManageDB_Save(prefs)
+	tell application "htcLib" to fmGUI_ManageDB_Save(prefs)
 end fmGUI_ManageDB_Save
 
 on parseChars(prefs)
-	tell helper to parseChars(prefs)
+	tell application "htcLib" to parseChars(prefs)
 end parseChars
 
 on replaceSimple(prefs)
-	tell helper to replaceSimple(prefs)
+	tell application "htcLib" to replaceSimple(prefs)
 end replaceSimple

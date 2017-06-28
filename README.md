@@ -1,5 +1,5 @@
 # applescript-fm-helper Overview
-applescript-fm-helper is applescript script designed for assisting with GUI scripting, with a focus on FileMaker. It is written again OSX 10.10.5 and works with FileMaker 12.
+applescript-fm-helper is applescript script designed for assisting with GUI scripting, with a focus on FileMaker. It is written again 10.12.5 and is being updated for FileMaker 15.0.3 ~~OSX 10.10.5 and works with FileMaker 12~~.
 
 **NOTE:** It should work on newer versions of OS X as well newer versions of FileMaker, **but it is not officially supported.**
 
@@ -25,7 +25,7 @@ set helperPath to ((path to home folder) & "Code:applescript-fm-helper:main.scpt
 set helper to load script file helperPath
 
 tell helper
-	return parseChars({sourceTEXT:"This sentence will be converted into a list of words", parseString:" "})
+    return parseChars({sourceTEXT:"This sentence will be converted into a list of words", parseString:" "})
 end tell
 ```
 

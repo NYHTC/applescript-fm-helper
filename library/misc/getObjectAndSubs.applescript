@@ -12,7 +12,6 @@ TODO:
 	2017-01-12 ( dshockley ): Try to figure out a way to preseve human-friendly class names (without the chevrons)
 
 
-
 REQUIRES:
 	coerceToString
 	quoteString
@@ -20,21 +19,11 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
-	
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"
 			set frontmost to true
 			delay 0.5
-			
 			
 			-- WARNING!!! If you pick a high (or no) maxSubLevel, it can take a LONG time for objects with many sub-objects.
 			set objectString to my getObjectAndSubs({someObjectRef:window 1, maxSubLevel:4})
@@ -42,12 +31,9 @@ on run
 			set the clipboard to objectString
 			
 			return objectString
-			
 		end tell
 	end tell
-	
 end run
-
 
 --------------------
 -- START OF CODE
@@ -222,15 +208,14 @@ end getObjectAndSubs
 --------------------
 
 on coerceToString(incomingObject)
-	tell helper to coerceToString(incomingObject)
+	tell application "htcLib" to coerceToString(incomingObject)
 end coerceToString
 
 on quoteString(someString)
-	tell helper to quoteString(someString)
+	tell application "htcLib" to quoteString(someString)
 end quoteString
 
 
 on repeatString(prefs)
-	tell helper to repeatString(prefs)
+	tell application "htcLib" to repeatString(prefs)
 end repeatString
-

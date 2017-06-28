@@ -21,7 +21,6 @@ on run
 	getTextBetween({"one-two&three", "-", "&"})
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------
@@ -66,7 +65,6 @@ on getTextBetween(prefs)
 	return finalResult
 	
 end getTextBetween
-
 
 --------------------
 -- END OF CODE

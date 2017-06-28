@@ -12,11 +12,9 @@ TODO:
 *)
 
 
-
 on run
 	removeExtraAppsFromDock(prefs)
 end run
-
 
 --------------------
 -- START OF CODE
@@ -70,7 +68,6 @@ on removeExtraAppsFromDock(prefs)
 	end tell
 	
 	return true
-	
 end removeExtraAppsFromDock
 
 --------------------

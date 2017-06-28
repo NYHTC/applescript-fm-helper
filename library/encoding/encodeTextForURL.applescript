@@ -13,18 +13,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	encodeTextForURL("hello;here", true, false)
 end run
-
 
 --------------------
 -- START OF CODE
@@ -56,5 +47,5 @@ end encodeTextForURL
 --------------------
 
 on encodeCharForURL(this_char)
-	tell helper to encodeCharForURL(this_char)
+	tell application "htcLib" to encodeCharForURL(this_char)
 end encodeCharForURL

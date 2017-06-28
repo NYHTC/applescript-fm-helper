@@ -15,7 +15,6 @@ on run
 	--writeToFile({fullFilePath:((path to documents folder) as string) & "test.txt", outputText:"bob"})
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------
@@ -51,4 +50,3 @@ end writeToFile
 --------------------
 -- END OF CODE
 --------------------
-

@@ -19,20 +19,12 @@ REQUIRES:
 *)
 
 
-property helper : ""
 property debugMode : true
 property ScriptName : "displayFileMakerDatabase_TEST"
 
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	displayFileMakerDatabase({dbName:"a00_TIMESSQUARE", fmAppType:"Adv"})
 end run
-
 
 --------------------
 -- START OF CODE
@@ -93,9 +85,6 @@ on displayFileMakerDatabase(prefs)
 			if debugMode then log dbName
 			if debugMode then log docName
 			ignoring case
-				--if debugMode then logConsole(ScriptName, "displayFileMakerDatabase docName: " & coerceToString(class of docName))
-				--if debugMode then logConsole(ScriptName, "displayFileMakerDatabase dbName: " & coerceToString(class of dbName))
-				
 				
 				-- apparently these two TEXT variables have some difference (formatting?) even when they are identical STRINGS:
 				if (docName as string) is equal to (dbName as string) then
@@ -109,7 +98,7 @@ on displayFileMakerDatabase(prefs)
 					end using terms from
 					return true
 				else
-					--if debugMode then logConsole(ScriptName, "displayFileMakerDatabase DIFF" )
+					if debugMode then logConsole(ScriptName, "displayFileMakerDatabase DIFF")
 				end if
 			end ignoring
 		end repeat
@@ -126,9 +115,9 @@ end displayFileMakerDatabase
 --------------------
 
 on logConsole(processName, consoleMsg)
-	tell helper to logConsole(processName, consoleMsg)
+	tell application "htcLib" to logConsole(processName, consoleMsg)
 end logConsole
 
 on coerceToString(incomingObject)
-	tell helper to coerceToString(incomingObject)
+	tell application "htcLib" to coerceToString(incomingObject)
 end coerceToString

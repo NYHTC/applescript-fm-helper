@@ -13,7 +13,6 @@ on run
 	listUniqueValues({inputList:{"bob", "sue", "sue", "fred", "bob"}})
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------

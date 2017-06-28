@@ -15,18 +15,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_getRecCounts()
 end run
-
 
 --------------------
 -- START OF CODE
@@ -72,13 +63,13 @@ end fmGUI_getRecCounts
 --------------------
 
 on fmGUI_ModeEnsure_Browse()
-	tell helper to fmGUI_ModeEnsure_Browse()
+	tell application "htcLib" to fmGUI_ModeEnsure_Browse()
 end fmGUI_ModeEnsure_Browse
 
 on getTextAfter(sourceText, afterThis)
-	tell helper to getTextAfter(sourceText, afterThis)
+	tell application "htcLib" to getTextAfter(sourceText, afterThis)
 end getTextAfter
 
 on getTextBefore(sourceTEXT, stopHere)
-	tell helper to getTextBefore(sourceTEXT, stopHere)
+	tell application "htcLib" to getTextBefore(sourceTEXT, stopHere)
 end getTextBefore

@@ -14,7 +14,6 @@ on run
 	indexOfListItem({someList:{"a", "c", "d", "c", "b"}, someListItem:"c"})
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------
@@ -35,6 +34,7 @@ on indexOfListItem(prefs)
 	end repeat
 	
 end indexOfListItem
+
 --------------------
 -- END OF CODE
 --------------------

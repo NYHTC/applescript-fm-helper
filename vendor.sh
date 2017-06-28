@@ -11,11 +11,12 @@ if [ ! -d "$vendor_dir" ]; then
 fi
 
 
+cd "$vendor_dir"
 if [ ! -d "$dir_cliclick" ]; then
 	# get cliclick repo
-	cd "$vendor_dir"
 	git clone https://github.com/BlueM/cliclick.git
 fi
+git pull
 
 
 if [ ! -f "$dir_cliclick"/"$exec_cliclick" ]; then

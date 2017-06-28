@@ -14,19 +14,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	SFR_DictGet("<:foo:=bar:><:fizz:=buzz:>", "foo")
 end run
-
-
 
 --------------------
 -- START OF CODE
@@ -54,19 +44,16 @@ on SFR_DictGet(someDict, itemName)
 	end if
 	
 	return SFR_Unescape(itemValue)
-	
-	
 end SFR_DictGet
-
 
 --------------------
 -- END OF CODE
 --------------------
 
 on SFR_Escape(someString)
-	tell helper to SFR_Escape(someString)
+	tell application "htcLib" to SFR_Escape(someString)
 end SFR_Escape
 
 on SFR_Unescape(someString)
-	tell helper to SFR_Unescape(someString)
+	tell application "htcLib" to SFR_Unescape(someString)
 end SFR_Unescape

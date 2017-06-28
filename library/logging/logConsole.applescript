@@ -14,19 +14,9 @@ HISTORY:
 	1.0 - created
 *)
 
-
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	logConsole("SomeProcessName", "SomeMessage")
 end run
-
 
 --------------------
 -- START OF CODE
@@ -53,9 +43,9 @@ end logConsole
 --------------------
 
 on coerceToString(incomingObject)
-	tell helper to coerceToString(incomingObject)
+	tell application "htcLib" to coerceToString(incomingObject)
 end coerceToString
 
 on replaceSimple(prefs)
-	tell helper to replaceSimple(prefs)
+	tell application "htcLib" to replaceSimple(prefs)
 end replaceSimple

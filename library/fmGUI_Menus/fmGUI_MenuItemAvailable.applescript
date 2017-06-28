@@ -2,6 +2,7 @@
 -- Erik Shagdar, NYHTC
 -- wait until the specified menu item is available
 
+
 (*
 HISTORY:
 	1.0 - 2016-10-18 ( eshagdar ): created
@@ -11,15 +12,8 @@ REQUIRES:
 	fmGUI_AppFrontMost
 *)
 
-property helper : ""
 
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"
 			set copyMenuItem to menu item "Copy" of menu 1 of menu bar item "Edit" of menu bar 1
@@ -67,5 +61,5 @@ end fmGUI_MenuItemAvailable
 -- END OF CODE
 --------------------
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost

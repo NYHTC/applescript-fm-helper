@@ -16,29 +16,10 @@ REQUIRES:
 	replaceSimple
 *)
 
-property helper : ""
 
 on run
-	------------------------------------------------------------
-	-- INCLUDE if there are REQUIRED handlers:
-	------------------------------------------------------------
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	------------------------------------------------------------
-	-- END OF INCLUDE.
-	------------------------------------------------------------
-	
-	
-	-- SAMPLE CALL TO THIS FUNCTION:
-	
 	run script (quoteString("Bob\\Jeff is \"my\" name."))
-	
-	
 end run
-
 
 --------------------
 -- START OF CODE
@@ -66,5 +47,5 @@ end quoteString
 --------------------
 
 on replaceSimple(prefs)
-	tell helper to replaceSimple(prefs)
+	tell application "htcLib" to replaceSimple(prefs)
 end replaceSimple

@@ -20,19 +20,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageDb_Open({})
 end run
-
-
 
 --------------------
 -- START OF CODE
@@ -42,10 +32,9 @@ on fmGUI_ManageDb_Open(prefs)
 	-- version 1.2
 	
 	try
+		fmGUI_AppFrontMost()
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				my fmGUI_AppFrontMost()
-
 				-- try to open Manage DB
 				if name of window 1 starts with "Manage Database for" then
 					return true
@@ -113,9 +102,9 @@ end fmGUI_ManageDb_Open
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageDb_RelationshipsTab(prefs)
-	tell helper to fmGUI_ManageDb_RelationshipsTab(prefs)
+	tell application "htcLib" to fmGUI_ManageDb_RelationshipsTab(prefs)
 end fmGUI_ManageDb_RelationshipsTab

@@ -10,11 +10,9 @@ HISTORY:
 *)
 
 
-
 on run
 	getResourcePath({resourceName:"bob", subDirectoryName:"", subDirectoryList:{}})
 end run
-
 
 --------------------
 -- START OF CODE

@@ -14,18 +14,9 @@ REQUIRES:
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageSecurity_GoToTab_PrivSets({})
 end run
-
 
 --------------------
 -- START OF CODE
@@ -47,5 +38,5 @@ end fmGUI_ManageSecurity_GoToTab_PrivSets
 --------------------
 
 on fmGUI_ManageSecurity_GotoTab(prefs)
-	tell helper to fmGUI_ManageSecurity_GotoTab(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_GotoTab(prefs)
 end fmGUI_ManageSecurity_GotoTab

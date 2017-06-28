@@ -2,6 +2,7 @@
 -- Erik Shagdar, NYHTC
 -- Paste FileMaker object into the current context. Assumes the focus is already set and there is an object in the clipboard
 
+
 (*
 HISTORY:
 	1.3 - 2016-10-27 ( eshagdar ): added try block.
@@ -15,18 +16,10 @@ REQUIRES:
 	fmGUI_clickMenuItem
 *)
 
-property helper : ""
 
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_PasteFromClipboard()
 end run
-
 
 --------------------
 -- START OF CODE
@@ -63,9 +56,9 @@ end fmGUI_PasteFromClipboard
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_clickMenuItem(prefs)
-	tell helper to fmGUI_clickMenuItem(prefs)
+	tell application "htcLib" to fmGUI_clickMenuItem(prefs)
 end fmGUI_clickMenuItem

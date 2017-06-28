@@ -2,23 +2,20 @@
 -- Dan Shockley, NYHTC
 -- Converts an AppleScript date to a FileMaker Timestamp.
 
-(*
 
+(*
 HISTORY:
 	1.0 - 2011-xx-xx ( dshockley ): first created, date unknown.
-
 *)
+
 
 on run
 	dateToFileMakerTimestamp(date "Tuesday, November 29, 2016 at 4:02:00 PM")
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------
-
-
 
 on dateToFileMakerTimestamp(incomingDate)
 	-- version 1.0
@@ -51,12 +48,8 @@ on dateToFileMakerTimestamp(incomingDate)
 	
 	set customDateString to textMonth & "/" & textDay & "/" & textYear & " " & textHours & ":" & textMinutes & ":" & textSeconds
 	
-	return customDateString
-	
+	return customDateString	
 end dateToFileMakerTimestamp
-
-
-
 
 --------------------
 -- END OF CODE

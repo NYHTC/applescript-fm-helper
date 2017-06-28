@@ -14,7 +14,6 @@ on run
 	unParseChars({"one", "two", "three"}, "-")
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------
@@ -35,7 +34,6 @@ on unParseChars(thisList, newDelim)
 		error "ERROR: unParseChars() handler: " & errMsg number errNum
 	end try
 end unParseChars
-
 
 --------------------
 -- END OF CODE

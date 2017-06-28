@@ -14,7 +14,6 @@ on run
 	getTextBefore("one-two&three", "&")
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------

@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4 - narrowed scope
 	1.3 - now takes record param: {serverIP:, mainDbName:, customLinkReceiverScriptName:, dbName: }
 	1.2 - be sure to send the ShowWindow param.
 	1.1 - 
@@ -12,23 +13,17 @@ HISTORY:
 
 
 REQUIRES:
+	encodeTextForURL
 	logConsole
 	replaceSimple
 *)
 
 
-property helper : ""
 property debugMode : true
 property ScriptName : "openFileMakerDatabase_TEST"
 
 
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	openFileMakerDatabase({mainDbName:"a00_TIMESSQUARE", dbName:"WUSHOP", serverIP:"192.168.254.6", customLinkReceiverScriptName:"ReceiveSomeLink_DO_NOT_RENAME"})
 end run
 
@@ -39,24 +34,20 @@ end run
 --------------------
 
 on openFileMakerDatabase(prefs)
-	-- version 1.3
+	-- version 1.4
 	
 	try
 		set customURL to "htclink://AccessFile?FileName=" & dbName of prefs & "&Command=Open&SilentOpen=1&ShowWindow=1"
+		set fmpURL to "FMP://" & serverIP of prefs & "/" & mainDbName of prefs & "?script=" & customLinkReceiverScriptName of prefs & "&param=" & encodeTextForURL(customURL, true, false)
 		
-		tell application "System Events"
-			
-			set fmpURL to "FMP://" & serverIP of prefs & "/" & mainDbName of prefs & "?script=" & customLinkReceiverScriptName of prefs & "&param=" & my encodeTextForURL(customURL, true, false)
-			
-			-- we must double-encode equals (%3D) and ampersand (%26) to work-around FileMaker bug:
-			set fmpURL to my replaceSimple({fmpURL, "%3D", "%253D"})
-			set fmpURL to my replaceSimple({fmpURL, "%26", "%2526"})
-			
-			if debugMode then my logConsole(ScriptName, "openFileMakerDatabase fmpURL: " & fmpURL)
-			
-			open location fmpURL
-			
-		end tell
+		-- we must double-encode equals (%3D) and ampersand (%26) to work-around FileMaker bug:
+		set fmpURL to replaceSimple({fmpURL, "%3D", "%253D"})
+		set fmpURL to replaceSimple({fmpURL, "%26", "%2526"})
+		
+		if debugMode then logConsole(ScriptName, "openFileMakerDatabase fmpURL: " & fmpURL)
+		
+		tell application "System Events" to open location fmpURL
+		
 		
 		return true
 		
@@ -74,10 +65,14 @@ end openFileMakerDatabase
 -- END OF CODE
 --------------------
 
-on replaceSimple(prefs)
-	tell helper to replaceSimple(prefs)
-end replaceSimple
+on encodeTextForURL(this_text, encode_URL_A, encode_URL_B)
+	tell application "htcLib" to encodeTextForURL(this_text, encode_URL_A, encode_URL_B)
+end encodeTextForURL
 
 on logConsole(processName, consoleMsg)
-	tell helper to logConsole(processName, consoleMsg)
+	tell application "htcLib" to logConsole(processName, consoleMsg)
 end logConsole
+
+on replaceSimple(prefs)
+	tell application "htcLib" to replaceSimple(prefs)
+end replaceSimple

@@ -19,7 +19,6 @@ on run
 	fmGUI_TextFieldSet(FieldCommentInManageDatabase, "some comment")
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------

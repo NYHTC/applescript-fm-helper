@@ -21,12 +21,9 @@ on run
 	versionCompare({v1:v1, v2:v2})
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------
-
-
 
 on versionCompare(prefs)
 	
@@ -80,7 +77,6 @@ on versionCompare(prefs)
 	return versionResult
 	
 end versionCompare
-
 
 --------------------
 -- END OF CODE

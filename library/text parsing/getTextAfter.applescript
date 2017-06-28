@@ -15,7 +15,6 @@ on run
 	getTextBefore("one-two&three", "&")
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------
@@ -42,7 +41,6 @@ on getTextAfter(sourceText, afterThis)
 		return "" -- return nothing if the stop text is not found
 	end try
 end getTextAfter
-
 
 --------------------
 -- END OF CODE

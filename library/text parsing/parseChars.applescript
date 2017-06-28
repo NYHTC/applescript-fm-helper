@@ -14,7 +14,6 @@ on run
 	parseChars({sourceTEXT:"bob is here. He is ready.", parseString:"is"})
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------
@@ -72,7 +71,6 @@ on parseChars(prefs)
 		error "ERROR: parseChars() handler: " & errMsg number errNum
 	end try
 end parseChars
-
 
 --------------------
 -- END OF CODE

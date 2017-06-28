@@ -12,22 +12,14 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
+	fmGUI_ManageDataSources_Open
+	fmGUI_ObjectClick_AffectsWindow
 *)
 
 
-property helper : ""
-
 on run
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	
 	fmGUI_ManageDataSources_EnsureExists({dataSourceName:"a01_PERSON"})
 end run
-
-
 
 --------------------
 -- START OF CODE
@@ -47,10 +39,10 @@ on fmGUI_ManageDataSources_EnsureExists(prefs)
 	
 	
 	try
+		fmGUI_AppFrontMost()
 		fmGUI_ManageDataSources_Open({})
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				my fmGUI_AppFrontMost()
 
 				-- Make sure a specified Data Source exists.
 				if not (exists (first row of (table 1 of scroll area 1 of window 1) whose name of static text 1 is dataSourceName)) then
@@ -74,7 +66,6 @@ on fmGUI_ManageDataSources_EnsureExists(prefs)
 	on error errMsg number errNum
 		error "Couldn't ensure existence of data source '" & dataSourceName & "' - " & errMsg number errNum
 	end try
-	
 end fmGUI_ManageDataSources_EnsureExists
 
 --------------------
@@ -82,13 +73,13 @@ end fmGUI_ManageDataSources_EnsureExists
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell helper to fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageDataSources_Open(prefs)
-	tell helper to fmGUI_ManageDataSources_Open(prefs)
+	tell application "htcLib" to fmGUI_ManageDataSources_Open(prefs)
 end fmGUI_ManageDataSources_Open
 
 on fmGUI_ObjectClick_AffectsWindow(prefs)
-	tell helper to fmGUI_ObjectClick_AffectsWindow(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_AffectsWindow(prefs)
 end fmGUI_ObjectClick_AffectsWindow

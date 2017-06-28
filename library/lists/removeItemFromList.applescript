@@ -14,7 +14,6 @@ on run
 	removeItemFromList({someList:{"a", "c", "d", "c", "b", "d"}, removeItem:"c"})
 end run
 
-
 --------------------
 -- START OF CODE
 --------------------
