@@ -13,11 +13,11 @@ on run
 	tell application "System Events"
 		tell process "FileMaker Pro"
 			set frontmost to true
-			set AddExpressionObjectOfDataViewer to first button of tab group 1 of window 1 whose accessibility description is "Add Expression"
+			set cancelButton to get first button of window 1 whose name is "Cancel"
 		end tell
 	end tell
 	
-	fmGUI_ObjectClick_AffectsWindow(AddExpressionObjectOfDataViewer)
+	fmGUI_ObjectClick_AffectsWindow(cancelButton)
 end run
 
 --------------------

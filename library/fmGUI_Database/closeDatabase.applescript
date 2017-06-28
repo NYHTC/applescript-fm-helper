@@ -18,9 +18,9 @@ REQUIRES:
 	fmGUI_ManageScripts_Close
 	fmGUI_ManageScripts_FmScript_Select
 	fmGUI_ManageScripts_Open
+	fmGUI_MenuItemAvailable
 	logConsole
 	logLEVEL
-	waitUntilMenuIsAvailable
 *)
 
 
@@ -79,7 +79,7 @@ on closeDatabase(prefs)
 		
 		
 		-- wait until Close Window is available ( menu item is available ):
-		set closeWindowAvailable to waitUntilMenuIsAvailable({menuObj:closeMenuItem})
+		set closeWindowAvailable to fmGUI_MenuItemAvailable({menuObj:closeMenuItem})
 		
 		
 		-- try to close by running the close script
@@ -132,6 +132,10 @@ on fmGUI_ManageScripts_Open(prefs)
 	tell application "htcLib" to fmGUI_ManageScripts_Open(prefs)
 end fmGUI_ManageScripts_Open
 
+on fmGUI_MenuItemAvailable(prefs)
+	tell application "htcLib" to fmGUI_MenuItemAvailable(prefs)
+end fmGUI_MenuItemAvailable
+
 on logConsole(processName, consoleMsg)
 	tell application "htcLib" to logConsole(processName, consoleMsg)
 end logConsole
@@ -139,7 +143,3 @@ end logConsole
 on logLEVEL(level, someMsg)
 	tell application "htcLib" to logLEVEL(level, someMsg)
 end logLEVEL
-
-on waitUntilMenuIsAvailable(prefs)
-	tell application "htcLib" to waitUntilMenuIsAvailable(prefs)
-end waitUntilMenuIsAvailable

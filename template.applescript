@@ -23,23 +23,8 @@ REQUIRES:
 property helper : ""
 
 on run
-	------------------------------------------------------------
-	-- INCLUDE if there are REQUIRED handlers:
-	------------------------------------------------------------
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of ((path to me) as string)
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to do shell script "dirname " & quoted form of POSIX path of pathHelper
-	set pathHelper to POSIX file (pathHelper & "/main.scpt") as string
-	set helper to load script file pathHelper
-	------------------------------------------------------------
-	-- END OF INCLUDE.
-	------------------------------------------------------------
-	
-	
 	-- SAMPLE CALL TO THIS FUNCTION:
-	
 	someAwesomeHandlerName({someAmazingParamName:"sample value", anotherDescriptiveParamName:"value"})
-	
 end run
 
 
@@ -64,5 +49,6 @@ end someAwesomeHandlerName
 --------------------
 
 on someRequiredHandler(prefs)
-	return "helper code goes here. Generally this is just a slug that calls the same function in main.scpt"
+	return "helper code goes here. Generally this is just a slug that calls the same function in 'htcLib' application that"
+	-- tell app "htcLib" to someRequiredHandler(prefs)
 end someRequiredHandler

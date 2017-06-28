@@ -12,11 +12,11 @@ on run
 	tell application "System Events"
 		tell process "FileMaker Pro"
 			set frontmost to true
-			set RefreshButtonObjectOfDataViewer to button "Refresh Values" of tab group 1 of window 1
+			set cancelButton to get first button of window 1 whose name is "Cancel"
 		end tell
 	end tell
 	
-	clickObjectByCoords(RefreshButtonObjectOfDataViewer)
+	clickObjectByCoords(cancelButton)
 end run
 
 
@@ -28,10 +28,10 @@ end run
 on clickObjectByCoords(someObject)
 	-- version 1.0
 	
-	using terms from application "System Events"
+	tell application "System Events"
 		set {xCoord, yCoord} to position of someObject
 		set {xSize, ySize} to size of someObject
-	end using terms from
+	end tell
 	
 	set xClick to round (xCoord + xSize / 2) rounding down -- middle
 	set yClick to round (yCoord + ySize / 2) rounding down -- middle
