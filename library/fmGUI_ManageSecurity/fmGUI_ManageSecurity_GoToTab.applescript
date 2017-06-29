@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.2.1 - 2017-06-28 ( eshagdar ): pass in prefs into open security handler
 	1.2 - 2016-07-20 ( eshagdar ): changed params from a string to a  record
 	1.1 - 
 	1.0 - first created
@@ -25,14 +26,14 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_GoToTab(prefs)
-	-- version 1.2
+	-- version 1.2.1
 	
 	set defaultPrefs to {tabName:"Accounts"}
 	set prefs to prefs & defaultPrefs
 	
 	try
 		fmGUI_AppFrontMost()
-		fmGUI_ManageSecurity_Open({})
+		fmGUI_ManageSecurity_Open(prefs)
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"

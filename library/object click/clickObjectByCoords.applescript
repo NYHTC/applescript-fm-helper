@@ -3,7 +3,12 @@
 -- Click on some object by coordinates
 
 (*
+REQUIRES:
+	clickAtCoords
+	ensureObjectRef
+	
 HISTORY:
+	1.1 - 2017-06-29 ( eshagdar ): incoming param may be a string, so ensure it becomes an object reference
 	1.0 - created
 *)
 
@@ -26,7 +31,9 @@ end run
 --------------------
 
 on clickObjectByCoords(someObject)
-	-- version 1.0
+	-- version 1.1
+	
+	set someObject to ensureObjectRef(someObject)
 	
 	tell application "System Events"
 		set {xCoord, yCoord} to position of someObject
@@ -47,3 +54,8 @@ end clickObjectByCoords
 on clickAtCoords(xClick, yClick)
 	tell application "htcLib" to clickAtCoords(xClick, yClick)
 end clickAtCoords
+
+on ensureObjectRef(someObject)
+	tell application "htcLib" to ensureObjectRef(someObject)
+end ensureObjectRef
+

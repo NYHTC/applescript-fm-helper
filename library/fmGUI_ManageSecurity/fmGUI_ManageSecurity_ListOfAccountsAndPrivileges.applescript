@@ -27,7 +27,7 @@ on fmGUI_ManageSecurity_ListOfAccountsAndPrivileges(prefs)
 	
 	try
 		fmGUI_AppFrontMost()
-		fmGUI_ManageSecurity_GoToTab_Accounts({})
+		fmGUI_ManageSecurity_GoToTab_Accounts({prefs})
 		
 		tell application "System Events"
 			tell process "FileMaker Pro"
