@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1 - 2017-06-29 ( dshockley ): added ensureObjectRef. 
 	1.0 - 2016-10-21 ( dshockley ): first created.
 
 
@@ -14,6 +15,7 @@ TODO:
 
 REQUIRES:
 	coerceToString
+	ensureObjectRef
 	quoteString
 	repeatString
 *)
@@ -40,7 +42,7 @@ end run
 --------------------
 
 on getObjectAndSubs(prefs)
-	-- version 1.0
+	-- version 1.1
 	
 	set defaultPrefs to {someObjectRef:null, outputType:"TEXT", maxSubLevel:null, subLevel:0}
 	(* 
@@ -56,6 +58,7 @@ on getObjectAndSubs(prefs)
 	set maxSubLevel to maxSubLevel of prefs
 	set subLevel to subLevel of prefs
 	
+	set someObjectRef to ensureObjectRef(someObjectRef)
 	
 	set indentString to my repeatString({someString:tab, repeatCount:subLevel})
 	set subIndentString to my repeatString({someString:tab, repeatCount:subLevel + 1})
@@ -211,10 +214,13 @@ on coerceToString(incomingObject)
 	tell application "htcLib" to coerceToString(incomingObject)
 end coerceToString
 
+on ensureObjectRef(someObject)
+	tell application "htcLib" to ensureObjectRef(someObject)
+end ensureObjectRef
+
 on quoteString(someString)
 	tell application "htcLib" to quoteString(someString)
 end quoteString
-
 
 on repeatString(prefs)
 	tell application "htcLib" to repeatString(prefs)
