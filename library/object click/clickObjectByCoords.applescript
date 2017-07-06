@@ -17,11 +17,13 @@ on run
 	tell application "System Events"
 		tell process "FileMaker Pro"
 			set frontmost to true
+			delay 0.25
 			set cancelButton to get first button of window 1 whose name is "Cancel"
 		end tell
 	end tell
 	
-	clickObjectByCoords(cancelButton)
+	--clickObjectByCoords(cancelButton)
+	clickObjectByCoords("button \"Cancel\" of window \"Edit Privilege Set\" of application process \"FileMaker Pro\" of application \"System Events\"")
 end run
 
 
@@ -34,6 +36,7 @@ on clickObjectByCoords(someObject)
 	-- version 1.1
 	
 	set someObject to ensureObjectRef(someObject)
+	
 	
 	tell application "System Events"
 		set {xCoord, yCoord} to position of someObject
@@ -56,6 +59,11 @@ on clickAtCoords(xClick, yClick)
 end clickAtCoords
 
 on ensureObjectRef(someObject)
-	tell application "htcLib" to ensureObjectRef(someObject)
+	if class of someObject is equal to class of "fakestring" then
+		using terms from application "System Events"
+			tell application "htcLib" to set someObject to ensureObjectRef(someObject)
+		end using terms from
+	end if
+	return someObject
 end ensureObjectRef
 

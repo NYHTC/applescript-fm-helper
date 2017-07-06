@@ -1,0 +1,67 @@
+-- fmGUI_ManageSecurity_AccessRecord_GetCalc({})
+-- Erik Shagdar, NYHTC
+-- get the field-level access for the currently opened table of manage security
+
+
+(*
+HISTORY:
+	1.0 - 2017-07-06 ( eshagdar ):created
+
+
+REQUIRES:
+	fmGUI_AppFrontMost
+	fmGUI_ManageSecurity_AccessRecord_GetFieldPriv
+	fmGUI_ManageSecurity_AccessRecord_OpenCalc
+*)
+
+
+on run
+	fmGUI_ManageSecurity_AccessRecord_GetCalc({calcFor:"field"})
+end run
+
+--------------------
+-- START OF CODE
+--------------------
+
+on fmGUI_ManageSecurity_AccessRecord_GetCalc(prefs)
+	set defaultPrefs to {calcFor:null}
+	set prefs to prefs & defaultPrefs
+	
+	try
+		fmGUI_AppFrontMost()
+		fmGUI_ManageSecurity_AccessRecord_OpenCalc(prefs)
+		
+		tell application "System Events"
+			tell process "FileMaker Pro"
+				if calcFor of prefs is equal to "field" then
+					if name of window 1 is not "Custom Field Privileges" then error "must be on specify calculation window" number -1024
+					set calc to my fmGUI_ManageSecurity_AccessRecord_GetFieldPriv({})
+				else
+					if name of window 1 is not "Specify Calculation" then error "must be on specify calculation window" number -1024
+					set calc to value of text area 1 of scroll area 1 of splitter group 1 of window 1
+				end if
+				click button "Cancel" of window 1
+			end tell
+		end tell
+		
+		return calc
+	on error errMsg number errNum
+		error "unable to fmGUI_ManageSecurity_AccessRecord_GetCalc - " & errMsg number errNum
+	end try
+end fmGUI_ManageSecurity_AccessRecord_GetCalc
+
+--------------------
+-- END OF CODE
+--------------------
+
+on fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
+end fmGUI_AppFrontMost
+
+on fmGUI_ManageSecurity_AccessRecord_GetFieldPriv(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_AccessRecord_GetFieldPriv(prefs)
+end fmGUI_ManageSecurity_AccessRecord_GetFieldPriv
+
+on fmGUI_ManageSecurity_AccessRecord_OpenCalc(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_AccessRecord_OpenCalc(prefs)
+end fmGUI_ManageSecurity_AccessRecord_OpenCalc

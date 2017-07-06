@@ -14,7 +14,7 @@ HISTORY:
 
 
 on run
-	replaceSimple({sourceTEXT:"hello", oldChars:"l", newChars:return})
+	replaceSimple({sourceTEXT:"hello", oldChars:"l", newChars:"r"})
 end run
 
 

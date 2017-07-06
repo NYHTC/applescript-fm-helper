@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1 - 2017-06-29 ( eshagdar ): changed default outputFile name
 	1.0 - 2016-06-29 ( eshagdar ): first created
 *)
 
@@ -20,7 +21,7 @@ end run
 --------------------
 
 on writeToFile(prefs)
-	-- version 1.0
+	-- version 1.1
 	
 	set defaultPrefs to {fullFilePath:null, fileName:null, fileDirectory:(path to desktop) as string, outputText:null}
 	set prefs to prefs & defaultPrefs
@@ -31,7 +32,7 @@ on writeToFile(prefs)
 	else if fileName of prefs is not null then
 		set outputFile to fileDirectory of prefs & fileName of prefs
 	else
-		set outputFile to ((path to desktop) as string) & "ASFileWrittenBy_fmGUI.txt"
+		set outputFile to ((path to desktop) as string) & "ASFileWrittenBy_htcLib.txt"
 	end if
 	
 	

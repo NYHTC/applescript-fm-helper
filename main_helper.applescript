@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2017-06-29 ( eshagdar ): check to see if htcLib exists.
 	2017-06-26 ( eshagdar ): quit the app before deleting it.
 	2017-06-14 ( eshagdar ): also make an app.
 	2016-04-21 ( eshagdar ): Updated clickCommandPosix path.
@@ -89,14 +90,20 @@ on run
 	if result does not contain "SUCCESS" then return "Error: unable to run vendor.sh"
 	
 	
+	set appExists to false
+	tell application "Finder"
+		if exists pathApp then set appExists to true
+	end tell
+	
+	
 	--quit the pre-existing app
-	try
+	if appExists then
 		tell application appName to quit
-	end try
+	end if
 	
 	-- remove pre-existing app file
 	tell application "Finder"
-		if exists pathApp then delete file pathApp
+		if appExists then delete file pathApp
 	end tell
 	
 	-- now make it into an app
@@ -107,6 +114,26 @@ on run
 	tell application "Finder"
 		if exists pathTempCode then delete file pathTempCode
 	end tell
+	
+	
+	tell it to activate
+	set AsstAccessDlg to display dialog "You must enable assistive access for " & appName & "." with title appName buttons {"Open", "OK"} default button "OK"
+	
+	
+	-- navigate to security preference pane
+	if button returned of AsstAccessDlg is equal to "Open" then
+		tell application "System Preferences"
+			activate
+			set the current pane to pane id "com.apple.preference.security" of application "System Preferences"
+			delay 0.5
+		end tell
+		
+		tell application "System Events"
+			tell process "System Preferences"
+				click radio button "Privacy" of tab group 1 of window 1
+			end tell
+		end tell
+	end if
 	
 	return true
 end run

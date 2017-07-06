@@ -26,7 +26,7 @@ on windowWaitUntil_FrontIS(prefs)
 	
 	set defaultPrefs to {windowName:null, windowNameTest:"is", whichWindow:"front", waitCycleDelaySeconds:0.1, waitCycleMax:100}
 	set prefs to prefs & defaultPrefs
-		
+	
 	return windowWaitUntil(prefs)
 	
 	
@@ -38,4 +38,4 @@ end windowWaitUntil_FrontIS
 
 on windowWaitUntil(prefs)
 	tell application "htcLib" to windowWaitUntil(prefs)
-end encodeCharForURL
+end windowWaitUntil

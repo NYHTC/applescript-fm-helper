@@ -7,28 +7,17 @@ Although some of the FileMaker-specific handlers are written to work with both P
 
 
 ### Install
-Once the repository is saved, be sure to execute the make.sh, which will install dependencies (cliclick) and compile main.scpt. 
+Once the repository is saved, be sure to execute the make.sh, which will install dependencies (cliclick) and compile an 'htcLib' application. You will need to enable assistive access in order to use it since make of the handlers maniupulate the GUI.
 
 
 ### Usage
-Assuming the save path of this repository is `~/Code/applescript-fm-helper/`, any file that needs access needs to load script with the following code:
+Just tell application 'htcLib' to run some handler. Here is an example:
 
 ```applescript
-set helperPath to ((path to home folder) & "Code:applescript-fm-helper:main.scpt") as string
-set helper to load script file helperPath
+Tell application "htcLib" to replaceSimple({sourceTEXT:"hello", oldChars:"l", newChars:"r"})
 ```
 
-Once loaded, simple `Tell helper` to execute a supported function. For example:
-
-```applescript
-set helperPath to ((path to home folder) & "Code:applescript-fm-helper:main.scpt") as string
-set helper to load script file helperPath
-
-tell helper
-    return parseChars({sourceTEXT:"This sentence will be converted into a list of words", parseString:" "})
-end tell
-```
-
+**NOTE:** If you're passing any objects into the app, you must first coerce the object reference into a string. To do this, you will want to make a copy of the coerceToString handler ( /applescript-fm-helper/library/text parsing/coerceToString.applescript) in your local script/app.
 
 
 ### Dependency
@@ -37,4 +26,4 @@ This package assumes that cliclick ([github](https://github.com/BlueM/cliclick))
 
 
 ### Helpful Tools
-[RCDefaultApp](http://www.rubicode.com/Software/RCDefaultApp/) is a helpful system preferences utility used for setting up the default app for opening FMP URLs. This tools is especially useful when both Pro and Advanced is installed.
+[RCDefaultApp](http://www.rubicode.com/Software/RCDefaultApp/) is a helpful system preferences utility used for setting up the default app for opening FMP URLs. This tools is especially useful when both Pro and Advanced are installed.

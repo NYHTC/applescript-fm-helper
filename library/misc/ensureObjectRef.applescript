@@ -9,7 +9,7 @@ HISTORY:
 
 
 on run
-	ensureObjectRef(myObj)
+	ensureObjectRef("button \"Cancel\" of window \"Edit Privilege Set\" of application process \"FileMaker Pro\" of application \"System Events\"")
 end run
 
 --------------------
