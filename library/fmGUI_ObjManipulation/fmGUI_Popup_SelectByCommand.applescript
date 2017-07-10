@@ -15,17 +15,11 @@ on run
 		tell application process "FileMaker Pro"
 			set frontmost to true
 			delay 1
-			--set TablePopupOnFieldsTabOfManageDatabase to (pop up button "Table:" of tab group 1 of window 1)
-			set recordAccessCustomPrivPopUp to pop up button "Records:" of window 1
-			--click recordAccessCustomPrivPopUp
-			--return result
+			set popUpButtonRef to pop up button "Records:" of window 1
 		end tell
 	end tell
-	set objStr to coerceToString(recordAccessCustomPrivPopUp)
 	
-	--fmGUI_Popup_SelectByCommand({popupObject:TablePopupOnFieldsTabOfManageDatabase, popupChoice:"ZZ_GLOBALS"})
-	--fmGUI_Popup_SelectByCommand({popupObject:recordAccessCustomPrivPopUp, popupChoice:"Custom privileges..."})
-	fmGUI_Popup_SelectByCommand({popupObject:objStr, popupChoice:"Custom privileges..."})
+	fmGUI_Popup_SelectByCommand({popupObject:my coerceToString(popUpButtonRef), popupChoice:"Custom privileges..."})
 end run
 
 --------------------
@@ -44,8 +38,8 @@ on fmGUI_Popup_SelectByCommand(prefs)
 	set clickIfAlreadySet to clickIfAlreadySet of prefs -- re-select even if popup is the requested value.
 	
 	
-	tell application "System Events"
-		try
+	try
+		tell application "System Events"
 			if not (exists popupObject) then
 				-- does NOT exist, so error with that:
 				error "The specified popupObject does not exist." number 1024
@@ -91,6 +85,7 @@ on fmGUI_Popup_SelectByCommand(prefs)
 					end if
 				end if
 				
+				
 				if mustPick then
 					if popupChoice is not null then
 						click popupObject
@@ -109,22 +104,37 @@ on fmGUI_Popup_SelectByCommand(prefs)
 						
 					end if
 				end if
-				
-				return true
-				
 			end if
-		on error errMsg number errNum
-			error "Couldn't select menu item whose value _" & selectCommand & "_ '" & popupChoice & "' in popup - " & errMsg number errNum
-		end try
-	end tell
+		end tell
+		
+		return true
+	on error errMsg number errNum
+		error "Couldn't select menu item whose value _" & selectCommand & "_ '" & popupChoice & "' in popup - " & errMsg number errNum
+	end try
 end fmGUI_Popup_SelectByCommand
 
 --------------------
 -- END OF CODE
 --------------------
 
-on ensureObjectRef(someObject)
-	tell application "htcLib" to ensureObjectRef(someObject)
+on ensureObjectRef(someObjectRef)
+	
+	tell application "System Events"
+		
+		if class of someObjectRef is equal to class of "fakestring" then
+			set objCode to "script someObject" & return & Â
+				"tell app \"System Events\" to " & someObjectRef & return & Â
+				"end script" & return & Â
+				"run someObject"
+			
+			set someObjectRef to run script objCode
+			
+		end if
+		
+		return someObjectRef
+		
+	end tell
+	
 end ensureObjectRef
 
 on coerceToString(incomingObject)
@@ -199,4 +209,3 @@ on coerceToString(incomingObject)
 		return objectString
 	end if
 end coerceToString
-

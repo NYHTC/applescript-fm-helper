@@ -58,12 +58,23 @@ on clickAtCoords(xClick, yClick)
 	tell application "htcLib" to clickAtCoords(xClick, yClick)
 end clickAtCoords
 
-on ensureObjectRef(someObject)
-	if class of someObject is equal to class of "fakestring" then
-		using terms from application "System Events"
-			tell application "htcLib" to set someObject to ensureObjectRef(someObject)
-		end using terms from
-	end if
-	return someObject
+on ensureObjectRef(someObjectRef)
+	
+	tell application "System Events"
+		
+		if class of someObjectRef is equal to class of "fakestring" then
+			set objCode to "script someObject" & return & Â
+				"tell app \"System Events\" to " & someObjectRef & return & Â
+				"end script" & return & Â
+				"run someObject"
+			
+			set someObjectRef to run script objCode
+			
+		end if
+		
+		return someObjectRef
+		
+	end tell
+	
 end ensureObjectRef
 
