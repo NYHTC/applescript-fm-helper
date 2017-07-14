@@ -38,7 +38,8 @@ on fmGUI_ManageSecurity_OpenSelectedPrivSet(prefs)
 			end tell
 		end tell
 		clickObjectByCoords(editButton)
-		if windowWaitUntil({windowName:"Edit Privilege Set"}) then return true
+		windowWaitUntil({windowName:"Edit Privilege Set"})
+		return true
 		
 		error "failed opening  edit PrivSetWindow window" number -1024
 		
@@ -56,83 +57,21 @@ on fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on clickObjectByCoords(someObject)
-	set someObjStr to coerceToString(someObject)
-	tell application "htcLib" to clickObjectByCoords(someObjStr)
+	tell application "htcLib" to clickObjectByCoords(my coerceToString(someObject))
 end clickObjectByCoords
 
 on windowWaitUntil(prefs)
 	tell application "htcLib" to windowWaitUntil(prefs)
 end windowWaitUntil
 
+
+
 on coerceToString(incomingObject)
-	-- version 2.2
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a coerceToString into this file for the sample to run ( instead of having a copy of the handler locally ).
 	
-	if class of incomingObject is string then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject
-	else if class of incomingObject is integer then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject as string
-	else if class of incomingObject is real then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject as string
-	else if class of incomingObject is Unicode text then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject as string
-	else
-		-- LIST, RECORD, styled text, or unknown
-		try
-			try
-				set some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of "XXXX" to "some_UUID_Value_54F827C7379E4073B5A216BB9CDE575D"
-				
-				-- GENERATE the error message for a known 'object' (here, a string) so we can get 
-				-- the 'lead' and 'trail' part of the error message
-			on error errMsg number errNum
-				set {oldDelims, AppleScript's text item delimiters} to {AppleScript's text item delimiters, {"\"XXXX\""}}
-				set {errMsgLead, errMsgTrail} to text items of errMsg
-				set AppleScript's text item delimiters to oldDelims
-			end try
-			
-			-- now, generate error message for the SPECIFIED object: 
-			set some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of incomingObject to "some_UUID_Value_54F827C7379E4073B5A216BB9CDE575D"
-			
-			
-		on error errMsg
-			if errMsg starts with "System Events got an error: Can’t make some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of " and errMsg ends with "into type specifier." then
-				set errMsgLead to "System Events got an error: Can’t make some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of "
-				set errMsgTrail to " into type specifier."
-				
-				set {od, AppleScript's text item delimiters} to {AppleScript's text item delimiters, errMsgLead}
-				
-				set objectString to text item 2 of errMsg
-				set AppleScript's text item delimiters to errMsgTrail
-				
-				set objectString to text item 1 of objectString
-				set AppleScript's text item delimiters to od
-				
-				
-				
-			else
-				--tell me to log errMsg
-				set objectString to errMsg
-				
-				if objectString contains errMsgLead then
-					set {od, AppleScript's text item delimiters} to {AppleScript's text item delimiters, errMsgLead}
-					set objectString to text item 2 of objectString
-					set AppleScript's text item delimiters to od
-				end if
-				
-				if objectString contains errMsgTrail then
-					set {od, AppleScript's text item delimiters} to {AppleScript's text item delimiters, errMsgTrail}
-					set AppleScript's text item delimiters to errMsgTrail
-					set objectString to text item 1 of objectString
-					set AppleScript's text item delimiters to od
-				end if
-				
-				--set {text:objectString} to (objectString as string) -- what does THIS do?
-			end if
-		end try
-		
-		return objectString
-	end if
+	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
+	set codeCoerce to read file coercePath as text
+	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	set codeCoerce to run script codeCoerce
+	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

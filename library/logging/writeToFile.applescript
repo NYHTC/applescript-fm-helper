@@ -1,17 +1,18 @@
--- writeToFile(prefs)
+-- writeToFile({outputText:"", fullFilePath:null, fileName:null, fileDirectory:null, appendText:false, appendLine:true})
 -- Erik Shagdar, NYHTC
 -- Write some text to a file
 
 
 (*
 HISTORY:
+	1.2 - 2017-07-14 ( eshagdar ): allow appending to file ( appends a new line by default )
 	1.1 - 2017-06-29 ( eshagdar ): changed default outputFile name
 	1.0 - 2016-06-29 ( eshagdar ): first created
 *)
 
 
 on run
-	writeToFile({outputText:"bob"})
+	writeToFile({outputText:"bob", appendText:true})
 	--writeToFile({fileName:"test.txt", fileDirectory:(path to documents folder) as string, outputText:"bob"})
 	--writeToFile({fullFilePath:((path to documents folder) as string) & "test.txt", outputText:"bob"})
 end run
@@ -21,10 +22,12 @@ end run
 --------------------
 
 on writeToFile(prefs)
-	-- version 1.1
+	-- version 1.2
 	
-	set defaultPrefs to {fullFilePath:null, fileName:null, fileDirectory:(path to desktop) as string, outputText:null}
+	set defaultPrefs to {outputText:"", fullFilePath:null, fileName:null, fileDirectory:(path to desktop) as string, appendText:false, appendLine:true}
 	set prefs to prefs & defaultPrefs
+	set outputText to outputText of prefs
+	
 	
 	-- determine file path
 	if fullFilePath of prefs is not null then
@@ -39,13 +42,21 @@ on writeToFile(prefs)
 	-- now write output text to file
 	try
 		set fileReference to open for access file outputFile with write permission
-		write outputText of prefs to fileReference
+		if appendText of prefs is false then
+			set eof of the fileReference to 0
+		else if appendLine of prefs is true then
+			set outputText to return & outputText
+		end if
+		write outputText to fileReference starting at eof
 		close access fileReference
+		return true
 	on error
 		try
 			close access file outputFile
+			return true
 		end try
 	end try
+	return false
 end writeToFile
 
 --------------------
