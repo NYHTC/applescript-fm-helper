@@ -18,7 +18,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageSecurity_GoToTab({tabName:"Accounts"})
+	fmGUI_ManageSecurity_GoToTab({tabName:"Accounts", fullAccessAccountName:"admin", fullAccessPassword:""})
 end run
 
 --------------------

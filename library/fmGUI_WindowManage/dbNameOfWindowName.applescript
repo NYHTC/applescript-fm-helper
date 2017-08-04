@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4.1 - 2017-08-02 ( eshagdar ): FM15 has the host name after the name of the database.
 	1.4 - 2017-01-13 ( eshagdar ): updated for FM15 - handle script workspace
 	1.3 - handle specially-named windows ("Manage xxx for…" and so on)
 	1.2 - fix to work when the Edit Script script name has parentheses ITSELF.
@@ -27,7 +28,7 @@ end run
 --------------------
 
 on dbNameOfWindowName(someWindowName)
-	-- version 1.4
+	-- version 1.4.1
 	
 	set tryNameByExtractingPartBeforeHost to false -- only if the window turns out to block normal AppleScript and we are in a sub-window whose ancestor(s) might have the database name.
 	
@@ -67,7 +68,7 @@ on dbNameOfWindowName(someWindowName)
 		return getTextBetween({sourceTEXT:someWindowName, beforeText:beforeDB, afterText:afterDB})
 	end if
 	
-	set {beforeDB, afterDB} to {"Script Workspace (", ")"} -- parentheses
+	set {beforeDB, afterDB} to {"Script Workspace (", " ("} -- parentheses
 	if someWindowName starts with beforeDB then
 		return getTextBetween({sourceTEXT:someWindowName, beforeText:beforeDB, afterText:afterDB})
 	else if someWindowName is in {"Edit Value List"} then

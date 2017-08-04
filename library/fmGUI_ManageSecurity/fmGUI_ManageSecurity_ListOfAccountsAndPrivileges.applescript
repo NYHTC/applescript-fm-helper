@@ -15,7 +15,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageSecurity_ListOfAccountsAndPrivileges({})
+	fmGUI_ManageSecurity_ListOfAccountsAndPrivileges({fullAccessAccountName:"admin", fullAccessPassword:""})
 end run
 
 --------------------
