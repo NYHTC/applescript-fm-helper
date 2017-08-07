@@ -1,16 +1,11 @@
--- fmGUI_ManageSecurity_Save({fullAccessAccountName:null, fullAccessPassword:null})
--- Daniel A. Shockley, NYHTC
--- Close ( and save ) Manage Security
+-- fmGUI_ManageSecurity_Cancel({})
+-- Erik Shagdar, NYHTC
+-- Close ( and CANCEL ) Manage Security
 
 
 (*
 HISTORY:
-	1.4.1 - 2017-08-07 ( eshagdar ): added windowWaitUntil handler to execute sample code
-	1.4 - 2017-07-14 ( eshagdar ): renamed params: fullAccount -> fullAccessAccountName and fullPassword -> fullAccessPassword. wait until windows are gone.
-	1.3 - 2016-07-20 ( eshagdar ): converted params from list to record
-	1.2 - parameter as 'prefs' list for now, instead of two parameters.
-	1.1 - 
-	1.0 - created
+	1.0 - 2017-08-07 ( eshagdar ): copied logic from fmGUI_ManageSecurity_Save
 
 
 REQUIRES:
@@ -21,17 +16,17 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageSecurity_Save({fullAccessAccountName:"admin", fullAccessPassword:""})
+	fmGUI_ManageSecurity_Cancel({})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_ManageSecurity_Save(prefs)
-	--version 1.4.1
+on fmGUI_ManageSecurity_Cancel(prefs)
+	--version 1.0
 	
-	set defaulPrefs to {fullAccessAccountName:null, fullAccessPassword:null}
+	set defaulPrefs to {}
 	set prefs to prefs & defaulPrefs
 	
 	try
@@ -40,37 +35,36 @@ on fmGUI_ManageSecurity_Save(prefs)
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
 				if name of window 1 does not contain "Manage Security for" then error "Not in main Manage Security window." number 1024
-				set okButton to button "OK" of window 1
+				set cancelButton to button "Cancel" of window 1
 			end tell
 		end tell
 		
 		-- save security changes
-		clickObjectByCoords(okButton)
+		clickObjectByCoords(cancelButton)
 		delay 0.5
 		
 		
-		-- confirm with full access account
-		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
-				if name of window 1 is "Confirm Full access Login" then
-					set value of text field "Full Access Account:" of window 1 to fullAccessAccountName of prefs
-					set value of text field "Password:" of window 1 to fullAccessPassword of prefs
-				end if
+		-- confirm discard
+		try
+			tell application "System Events"
+				tell application process "FileMaker Pro Advanced"
+					set discardButton to button "Discard" of window 1
+				end tell
 			end tell
-		end tell
-		clickObjectByCoords(okButton)
+			clickObjectByCoords(discardButton)
+		end try
 		
 		
 		-- wait until window is gone
-		windowWaitUntil({whichWindow:"front", windowNameTest:"is not", windowName:"Confirm Full access Login"})
+		windowWaitUntil({whichWindow:"front", windowNameTest:"is not", windowName:"FileMaker Pro"})
 		windowWaitUntil({whichWindow:"front", windowNameTest:"does not start with", windowName:"Manage Security"})
 		
 		return true
 	on error errMsg number errNum
-		error "Couldn't save Manage Security - " & errMsg number errNum
+		error "Couldn't fmGUI_ManageSecurity_Cancel - " & errMsg number errNum
 	end try
 	
-end fmGUI_ManageSecurity_Save
+end fmGUI_ManageSecurity_Cancel
 
 --------------------
 -- END OF CODE

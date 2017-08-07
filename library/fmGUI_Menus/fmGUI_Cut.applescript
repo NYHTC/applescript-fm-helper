@@ -1,13 +1,11 @@
--- fmGUI_SelectAll({})
+-- fmGUI_Cut({})
 -- Erik Shagdar, NYHTC
--- Copy the selected objects in the current window in FileMaker
+-- Cut the selected objects in the current window in FileMaker
 
 
 (*
 HISTORY:
-	1.3 - 2016-10-18 ( eshagdar ): use fmGUI_clickMenuItem handler
-	1.2 - 2016-10-18 ( eshagdar ): make sure the menu item is available again
-	1.1 - 2016-10-14 ( eshagdar ): 1.0 was looking only for script steps. now looks at non-zero length
+	1.0 - 2017-08-07 ( eshagdar ): copied logic from fmGUI_SelectAll
 
 
 REQUIRES:
@@ -17,14 +15,14 @@ REQUIRES:
 
 
 on run
-	fmGUI_SelectAll()
+	fmGUI_Cut()
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_SelectAll()
+on fmGUI_Cut()
 	-- version 1.1, Erik Shagdar
 	
 	try
@@ -32,17 +30,17 @@ on fmGUI_SelectAll()
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				set SelectAllMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Select All"
+				set cutMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Cut"
 			end tell
 		end tell
 		
-		return fmGUI_ClickMenuItem({menuItemRef:SelectAllMenuItem})
+		return fmGUI_ClickMenuItem({menuItemRef:cutMenuItem})
 		
 	on error errMsg number errNum
 		error "Couldn't fmGUI_SelectAll - " & errMsg number errNum
 	end try
 	
-end fmGUI_SelectAll
+end fmGUI_Cut
 
 --------------------
 -- END OF CODE
