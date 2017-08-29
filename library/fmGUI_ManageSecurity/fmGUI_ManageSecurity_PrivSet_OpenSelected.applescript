@@ -1,4 +1,4 @@
--- fmGUI_ManageSecurity_OpenSelectedPrivSet(prefs)
+-- fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
 -- Erik Shagdar, NYHTC
 -- open the currently selected privSet
 
@@ -15,14 +15,14 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageSecurity_OpenSelectedPrivSet({})
+	fmGUI_ManageSecurity_PrivSet_OpenSelected({})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_ManageSecurity_OpenSelectedPrivSet(prefs)
+on fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
 	-- version 1.0
 	
 	set defaultPrefs to {}
@@ -44,9 +44,9 @@ on fmGUI_ManageSecurity_OpenSelectedPrivSet(prefs)
 		error "failed opening  edit PrivSetWindow window" number -1024
 		
 	on error errMsg number errNum
-		error "unable to fmGUI_ManageSecurity_OpenSelectedPrivSet - " & errMsg number errNum
+		error "unable to fmGUI_ManageSecurity_PrivSet_OpenSelected - " & errMsg number errNum
 	end try
-end fmGUI_ManageSecurity_OpenSelectedPrivSet
+end fmGUI_ManageSecurity_PrivSet_OpenSelected
 
 --------------------
 -- END OF CODE

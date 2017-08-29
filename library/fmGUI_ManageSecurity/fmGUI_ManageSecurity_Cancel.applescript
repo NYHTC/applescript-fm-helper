@@ -35,7 +35,7 @@ on fmGUI_ManageSecurity_Cancel(prefs)
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
 				if name of window 1 does not contain "Manage Security for" then error "Not in main Manage Security window." number 1024
-				set cancelButton to button "Cancel" of window 1
+				set cancelButton to first button of window 1 whose name is equal to "Cancel"
 			end tell
 		end tell
 		

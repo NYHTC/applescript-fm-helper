@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4.2 - 2017-08-09 ( eshagdar ): instead of waiting for a set amount of time, wait until the frontmost window is not manage security ( it will either be the confirm full access window, or finished saving ).
 	1.4.1 - 2017-08-07 ( eshagdar ): added windowWaitUntil handler to execute sample code
 	1.4 - 2017-07-14 ( eshagdar ): renamed params: fullAccount -> fullAccessAccountName and fullPassword -> fullAccessPassword. wait until windows are gone.
 	1.3 - 2016-07-20 ( eshagdar ): converted params from list to record
@@ -29,7 +30,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_Save(prefs)
-	--version 1.4.1
+	--version 1.4.2
 	
 	set defaulPrefs to {fullAccessAccountName:null, fullAccessPassword:null}
 	set prefs to prefs & defaulPrefs
@@ -46,15 +47,16 @@ on fmGUI_ManageSecurity_Save(prefs)
 		
 		-- save security changes
 		clickObjectByCoords(okButton)
-		delay 0.5
 		
 		
 		-- confirm with full access account
+		windowWaitUntil({whichWindow:"front", windowNameTest:"does not start with", windowName:"Manage Security"})
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
 				if name of window 1 is "Confirm Full access Login" then
 					set value of text field "Full Access Account:" of window 1 to fullAccessAccountName of prefs
 					set value of text field "Password:" of window 1 to fullAccessPassword of prefs
+					set okButton to button "OK" of window 1
 				end if
 			end tell
 		end tell

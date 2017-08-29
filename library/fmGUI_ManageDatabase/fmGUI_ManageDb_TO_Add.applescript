@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4.1 - 2017-08-23 ( eshagdar ): must pass credentials when going to relationships tab of manage DB
 	1.4 - 2016-08-23 ( eshagdar ): declare all params. fixed error message.
 	1.3 - 2015-04-24 ( eshagdar ): creates a data source if needed
 	1.2 - 
@@ -23,7 +24,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageDb_TO_Add({tocName:"bob", dbName:"a01_PERSON", baseTableName:"A_PERSON"})
+	fmGUI_ManageDb_TO_Add({TOName:"bob", dbName:"a01_PERSON", baseTableName:"A_PERSON"})
 end run
 
 --------------------
@@ -31,7 +32,7 @@ end run
 --------------------
 
 on fmGUI_ManageDb_TO_Add(prefs)
-	-- version 1.4
+	-- version 1.4.1
 	
 	set defaultPrefs to {TOName:null, dbName:null, doNotChangeExisting:false, baseTableName:null}
 	
@@ -42,39 +43,73 @@ on fmGUI_ManageDb_TO_Add(prefs)
 	
 	
 	try
-		fmGUI_ManageDb_GoToTab_Relationships({})
+		fmGUI_AppFrontMost()
+		fmGUI_ManageDb_GoToTab_Relationships(prefs)
+		
+		
+		-- add a new TO
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				my fmGUI_AppFrontMost()
 				set addTocButton to first button of tab group 1 of window 1 whose description contains "Add a table"
-				my fmGUI_ObjectClick_AffectsWindow(addTocButton)
-				delay 1
-				set dataSourcePopUpButton to pop up button "Data Source:" of window 1
-				try
-					my fmGUI_PopupSet(dataSourcePopUpButton, dbName)
-					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is baseTableName)
-				on error
-					--Not an existing data source, so create it
-					key code 53 -- Hit 'Esc'
-					my fmGUI_PopupSet(dataSourcePopUpButton, "Manage Data Sources…")
-					my fmGUI_ManageDataSources_EnsureExists({dataSourceName:dbName})
-					my fmGUI_ManageDataSources_Save({})
-					delay 1
-					
-					-- now that we've added the data source, try again
-					my fmGUI_PopupSet(dataSourcePopUpButton, dbName)
-					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is baseTableName)
-				end try
-				--if debugMode then my logLEVEL(5, "Add TO 003")
-				--if debugMode then my logLEVEL(5, "About to edit name")
-				set value of text field "Name" of window 1 to TOName
-				if debugMode then my logLEVEL(5, "TO added: '" & TOName & "'")
-				
-				my fmGUI_ObjectClick_AffectsWindow(button "OK" of window 1)
-				
-				return true
 			end tell
 		end tell
+		fmGUI_ObjectClick_AffectsWindow(addTocButton)
+		delay 1
+		
+		
+		-- specify Db of new TO
+		tell application "System Events"
+			tell application process "FileMaker Pro Advanced"
+				set dataSourcePopUpButton to pop up button "Data Source:" of window 1
+			end tell
+		end tell
+		
+		try
+			-- try to select existing data source
+			fmGUI_PopupSet(dataSourcePopUpButton, dbName)
+			tell application "System Events"
+				tell application process "FileMaker Pro Advanced"
+					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is baseTableName)
+				end tell
+			end tell
+			
+		on error
+			--Not an existing data source, so create it
+			tell application "System Events"
+				tell application process "FileMaker Pro Advanced"
+					key code 53 -- Hit 'Esc'
+				end tell
+			end tell
+			fmGUI_PopupSet(dataSourcePopUpButton, "Manage Data Sources…")
+			fmGUI_ManageDataSources_EnsureExists({dataSourceName:dbName})
+			fmGUI_ManageDataSources_Save({})
+			delay 1
+			
+			-- now that we've added the data source, try again
+			fmGUI_PopupSet(dataSourcePopUpButton, dbName)
+			tell application "System Events"
+				tell application process "FileMaker Pro Advanced"
+					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is baseTableName)
+				end tell
+			end tell
+		end try
+		
+		
+		-- specify TO name
+		tell application "System Events"
+			tell application process "FileMaker Pro Advanced"
+				set value of text field "Name" of window 1 to TOName
+			end tell
+		end tell
+		if debugMode then logLEVEL(5, "TO added: '" & TOName & "'")
+		tell application "System Events"
+			tell application process "FileMaker Pro Advanced"
+				set okButton to button "OK" of window 1
+			end tell
+		end tell
+		fmGUI_ObjectClick_AffectsWindow(okButton)
+		
+		return true
 	on error errMsg number errNum
 		error "fmGUI_ManageDb_TO_Add - " & errMsg number errNum
 	end try

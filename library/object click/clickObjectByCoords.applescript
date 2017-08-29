@@ -18,12 +18,13 @@ on run
 		tell process "FileMaker Pro"
 			set frontmost to true
 			delay 0.25
-			set cancelButton to get first button of window 1 whose name is "Cancel"
+			set optionsButton to first button of tab group 1 of window 1 whose name starts with "Options"
+			--set cancelButton to get first button of window 1 whose name is "Cancel"
 		end tell
 	end tell
 	
-	--clickObjectByCoords(cancelButton)
-	clickObjectByCoords("button \"Cancel\" of window \"Edit Privilege Set\" of application process \"FileMaker Pro\" of application \"System Events\"")
+	clickObjectByCoords(optionsButton)
+	--clickObjectByCoords("button \"Cancel\" of window \"Edit Privilege Set\" of application process \"FileMaker Pro\" of application \"System Events\"")
 end run
 
 

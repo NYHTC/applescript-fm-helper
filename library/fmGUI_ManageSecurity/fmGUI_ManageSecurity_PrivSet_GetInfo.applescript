@@ -1,4 +1,4 @@
--- fmGUI_ManageSecurity_GetInfo_PrivSet({getAccessInfo:false})
+-- fmGUI_ManageSecurity_PrivSet_GetInfo({getAccessInfo:false})
 -- Erik Shagdar, NYHTC
 -- gather all the info about the currently opened privSet
 
@@ -15,14 +15,14 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageSecurity_GetInfo_PrivSet({getAccessInfo:true})
+	fmGUI_ManageSecurity_PrivSet_GetInfo({getAccessInfo:true})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_ManageSecurity_GetInfo_PrivSet(prefs)
+on fmGUI_ManageSecurity_PrivSet_GetInfo(prefs)
 	-- version 1.0
 	
 	set defaultPrefs to {getAccessInfo:false}
@@ -41,7 +41,7 @@ on fmGUI_ManageSecurity_GetInfo_PrivSet(prefs)
 			end tell
 		end tell
 		
-		if needToOpenEditWindow then fmGUI_ManageSecurity_OpenSelectedPrivSet({})
+		if needToOpenEditWindow then fmGUI_ManageSecurity_PrivSet_OpenSelected({})
 		
 		
 		
@@ -133,9 +133,9 @@ on fmGUI_ManageSecurity_GetInfo_PrivSet(prefs)
 		
 		return privSetInfo
 	on error errMsg number errNum
-		error "unable to getPrivSetInfo - " & errMsg number errNum
+		error "unable to fmGUI_ManageSecurity_PrivSet_GetInfo - " & errMsg number errNum
 	end try
-end fmGUI_ManageSecurity_GetInfo_PrivSet
+end fmGUI_ManageSecurity_PrivSet_GetInfo
 
 --------------------
 -- END OF CODE
@@ -145,9 +145,9 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_ManageSecurity_OpenSelectedPrivSet(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_OpenSelectedPrivSet(prefs)
-end fmGUI_ManageSecurity_OpenSelectedPrivSet
+on fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
+end fmGUI_ManageSecurity_PrivSet_OpenSelected
 
 on fmGUI_ManageSecurity_AccessLayout_GetInfo(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_AccessLayout_GetInfo(prefs)

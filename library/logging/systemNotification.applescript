@@ -47,7 +47,6 @@ on systemNotification(prefs)
 		display notification msg of prefs with title msgTitle of prefs subtitle msgSubtitle of prefs sound name msgSound of prefs
 	end if
 	
-	
 end systemNotification
 
 --------------------

@@ -10,6 +10,7 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
+	windowWaitUntil_FrontIS
 *)
 
 

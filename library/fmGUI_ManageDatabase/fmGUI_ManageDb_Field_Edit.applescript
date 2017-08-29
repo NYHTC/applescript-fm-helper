@@ -64,14 +64,12 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 		
 		if not fieldNowSelected then return false
 		
+		fmGUI_AppFrontMost()
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				my fmGUI_AppFrontMost()
-				
-				
-				set changeButton to first button of tab group 1 of window 1 whose title is "Change"
 				
 				-- COMMENT is for any field type:
+				set changeButton to first button of tab group 1 of window 1 whose title is "Change"
 				if fieldComment of prefs is not null then
 					if my fmGUI_TextFieldSet(text field "Comment:" of tab group 1 of window 1, fieldComment of prefs) then
 						click changeButton
@@ -79,6 +77,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					
 					delay 0.5
 				end if
+				
 				
 				if editMode is "TWEAK" and fieldType of prefs is null then
 					-- just find out what it already is and use that: 

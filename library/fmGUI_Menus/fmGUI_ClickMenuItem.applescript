@@ -18,11 +18,12 @@ on run
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"
 			set frontmost to true
-			set copyMenuItem to menu item "Copy" of menu 1 of menu bar item "Edit" of menu bar 1
+			--set someMenuItem to menu item "Copy" of menu 1 of menu bar item "Edit" of menu bar 1
+			set someMenuItem to first menu item of menu 1 of menu item "Manage" of menu 1 of menu bar item "File" of menu bar 1 whose name starts with "Scripts"
 		end tell
 	end tell
-	set copyMenuItem to coerceToString(copyMenuItem)
-	fmGUI_ClickMenuItem({menuItemRef:copyMenuItem})
+	set someMenuItem to coerceToString(someMenuItem)
+	fmGUI_ClickMenuItem({menuItemRef:someMenuItem})
 end run
 
 --------------------

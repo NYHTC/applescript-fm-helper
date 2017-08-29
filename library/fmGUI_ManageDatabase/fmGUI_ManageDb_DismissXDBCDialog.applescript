@@ -1,67 +1,76 @@
--- fmGUI_PasteFromClipboard()
+-- fmGUI_ManageDb_DismissXDBCDialog(prefs)
 -- Erik Shagdar, NYHTC
--- Paste FileMaker object into the current context. Assumes the focus is already set and there is an object in the clipboard
+-- Dismiss XDBC connections dialogs
 
 
 (*
 HISTORY:
-	1.3 - 2016-10-27 ( eshagdar ): added try block.
-	1.2 - 2016-10-18 ( eshagdar ): call fmGUI_clickMenuItem handler
-	1.1 - 2016-09-29 ( eshagdar ): HTC is converting 'Paste' menu item to 'Paste Styled Text'. The default 'Paste' shortcut is pasting plain text. This tries the default 'Paste' command, and then uses 'Paste Styled Text' if needed.
-	1.0 - 2016-06-28 ( eshagdar ): first created
+	1.0 - created
 
 
 REQUIRES:
+	clickObjectByCoords
 	fmGUI_AppFrontMost
-	fmGUI_clickMenuItem
 *)
 
 
 on run
-	fmGUI_PasteFromClipboard()
+	fmGUI_ManageDb_DismissXDBCDialog({})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_PasteFromClipboard()
-	-- version 1.3, Erik Shagdar
+on fmGUI_ManageDb_DismissXDBCDialog(prefs)
+	-- version 1.0
 	
 	try
 		fmGUI_AppFrontMost()
 		
+		-- get obj references
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				-- get the menu item
+				set windowName to name of window 1
 				try
-					set pasteMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Paste"
+					set cancelButton to button "Cancel" of window 1
 				on error
-					set pasteMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Paste Styled Text"
+					return true
 				end try
-				
 			end tell
 		end tell
 		
-		return fmGUI_ClickMenuItem({menuItemRef:pasteMenuItem})
+		
+		-- loop until we don't have any more xDBC windows
+		repeat 100 times
+			if windowName begins with "Connect to " then
+				clickObjectByCoords(cancelButton)
+				delay 1 -- seconds
+			else
+				return true
+			end if
+		end repeat
+		
+		
+		-- we should never hit this ( unless there were more than 100 dialogs )
+		return false
 	on error errMsg number errNum
-		error "Couldn't fmGUI_CopySelected - " & errMsg number errNum
+		error "Unable to fmGUI_ManageDb_DismissXDBCDialog - " & errMsg number errNum
 	end try
 	
-end fmGUI_PasteFromClipboard
+end fmGUI_ManageDb_DismissXDBCDialog
 
 --------------------
 -- END OF CODE
 --------------------
 
+on clickObjectByCoords(prefs)
+	tell application "htcLib" to clickObjectByCoords(my coerceToString(prefs))
+end clickObjectByCoords
+
 on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
-
-on fmGUI_ClickMenuItem(prefs)
-	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
-	tell application "htcLib" to fmGUI_ClickMenuItem(prefs)
-end fmGUI_ClickMenuItem
 
 
 
@@ -74,3 +83,4 @@ on coerceToString(incomingObject)
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString
+

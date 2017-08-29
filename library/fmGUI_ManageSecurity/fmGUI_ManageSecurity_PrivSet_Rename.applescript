@@ -11,7 +11,7 @@ HISTORY:
 REQUIRES:
 	clickObjectByCoords
 	fmGUI_AppFrontMost
-	fmGUI_ManageSecurity_OpenSelectedPrivSet
+	fmGUI_ManageSecurity_PrivSet_OpenSelected
 	fmGUI_ManageSecurity_PrivSet_Select
 	windowWaitUntil
 *)
@@ -40,7 +40,7 @@ on fmGUI_ManageSecurity_PrivSet_Rename(prefs)
 		
 		-- open privSet by old name
 		if not fmGUI_ManageSecurity_PrivSet_Select({privSetName:privSet_oldName of prefs, fullAccessAccountName:fullAccessAccountName of prefs, fullAccessPassword:fullAccessPassword of prefs}) then error "unable to select by old name" number -1024
-		fmGUI_ManageSecurity_OpenSelectedPrivSet({})
+		fmGUI_ManageSecurity_PrivSet_OpenSelected({})
 		
 		
 		-- rename opened privSet
@@ -73,9 +73,9 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_ManageSecurity_OpenSelectedPrivSet(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_OpenSelectedPrivSet(prefs)
-end fmGUI_ManageSecurity_OpenSelectedPrivSet
+on fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
+end fmGUI_ManageSecurity_PrivSet_OpenSelected
 
 on fmGUI_ManageSecurity_PrivSet_Select(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_Select(prefs)

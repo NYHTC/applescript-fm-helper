@@ -1,54 +1,46 @@
--- fmGUI_PasteFromClipboard()
+-- fmGUI_Menu_OpenDB({})
 -- Erik Shagdar, NYHTC
--- Paste FileMaker object into the current context. Assumes the focus is already set and there is an object in the clipboard
+-- Click Open Manage Database menu item
 
 
 (*
 HISTORY:
-	1.3 - 2016-10-27 ( eshagdar ): added try block.
-	1.2 - 2016-10-18 ( eshagdar ): call fmGUI_clickMenuItem handler
-	1.1 - 2016-09-29 ( eshagdar ): HTC is converting 'Paste' menu item to 'Paste Styled Text'. The default 'Paste' shortcut is pasting plain text. This tries the default 'Paste' command, and then uses 'Paste Styled Text' if needed.
-	1.0 - 2016-06-28 ( eshagdar ): first created
+	1.0 - 2017-08-23 ( eshagdar ): copied logic from fmGUI_Cut
 
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_clickMenuItem
+	fmGUI_menuItemAvailable
 *)
 
 
 on run
-	fmGUI_PasteFromClipboard()
+	fmGUI_Menu_OpenDB()
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_PasteFromClipboard()
-	-- version 1.3, Erik Shagdar
+on fmGUI_Menu_OpenDB(prefs)
+	-- version 1.0, Erik Shagdar
 	
 	try
 		fmGUI_AppFrontMost()
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				-- get the menu item
-				try
-					set pasteMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Paste"
-				on error
-					set pasteMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Paste Styled Text"
-				end try
-				
+				set openManageDBMenuItem to first menu item of menu 1 of menu item "Manage" of menu 1 of menu bar item "File" of menu bar 1 whose name starts with "Database"
 			end tell
 		end tell
 		
-		return fmGUI_ClickMenuItem({menuItemRef:pasteMenuItem})
+		return fmGUI_ClickMenuItem({menuItemRef:openManageDBMenuItem})
+		
 	on error errMsg number errNum
-		error "Couldn't fmGUI_CopySelected - " & errMsg number errNum
+		error "Couldn't fmGUI_SelectAll - " & errMsg number errNum
 	end try
 	
-end fmGUI_PasteFromClipboard
+end fmGUI_Menu_OpenDB
 
 --------------------
 -- END OF CODE
