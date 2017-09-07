@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4.2 - 2017-09-06 ( eshagdar ): updated error message. updated call to pop up set.
 	1.4.1 - 2017-08-23 ( eshagdar ): must pass credentials when going to relationships tab of manage DB
 	1.4 - 2016-08-23 ( eshagdar ): declare all params. fixed error message.
 	1.3 - 2015-04-24 ( eshagdar ): creates a data source if needed
@@ -32,7 +33,7 @@ end run
 --------------------
 
 on fmGUI_ManageDb_TO_Add(prefs)
-	-- version 1.4.1
+	-- version 1.4.2
 	
 	set defaultPrefs to {TOName:null, dbName:null, doNotChangeExisting:false, baseTableName:null}
 	
@@ -66,7 +67,7 @@ on fmGUI_ManageDb_TO_Add(prefs)
 		
 		try
 			-- try to select existing data source
-			fmGUI_PopupSet(dataSourcePopUpButton, dbName)
+			fmGUI_PopupSet({objRef:dataSourcePopUpButton, objValue:dbName})
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
 					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is baseTableName)
@@ -80,13 +81,13 @@ on fmGUI_ManageDb_TO_Add(prefs)
 					key code 53 -- Hit 'Esc'
 				end tell
 			end tell
-			fmGUI_PopupSet(dataSourcePopUpButton, "Manage Data Sources…")
+			fmGUI_PopupSet({objRef:dataSourcePopUpButton, objValue:"Manage Data Sources…"})
 			fmGUI_ManageDataSources_EnsureExists({dataSourceName:dbName})
 			fmGUI_ManageDataSources_Save({})
 			delay 1
 			
 			-- now that we've added the data source, try again
-			fmGUI_PopupSet(dataSourcePopUpButton, dbName)
+			fmGUI_PopupSet({objRef:dataSourcePopUpButton, objValue:dbName})
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
 					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is baseTableName)
@@ -111,7 +112,7 @@ on fmGUI_ManageDb_TO_Add(prefs)
 		
 		return true
 	on error errMsg number errNum
-		error "fmGUI_ManageDb_TO_Add - " & errMsg number errNum
+		error "unable to fmGUI_ManageDb_TO_Add - " & errMsg number errNum
 	end try
 	
 end fmGUI_ManageDb_TO_Add
@@ -140,6 +141,19 @@ on fmGUI_ObjectClick_AffectsWindow(prefs)
 	tell application "htcLib" to fmGUI_ObjectClick_AffectsWindow(prefs)
 end fmGUI_ObjectClick_AffectsWindow
 
-on fmGUI_PopupSet(popupObject, popupChoice)
-	tell application "htcLib" to fmGUI_PopupSet(popupObject, popupChoice)
+on fmGUI_PopupSet(prefs)
+	set objRefStr to coerceToString(objRef of prefs)
+	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
 end fmGUI_PopupSet
+
+
+
+on coerceToString(incomingObject)
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a coerceToString into this file for the sample to run ( instead of having a copy of the handler locally ).
+	
+	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
+	set codeCoerce to read file coercePath as text
+	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceTEXT:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	set codeCoerce to run script codeCoerce
+	tell codeCoerce to coerceToString(incomingObject)
+end coerceToString

@@ -16,7 +16,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageSecurity_AccessRecord_GetCalc({calcFor:"field"})
+	fmGUI_ManageSecurity_AccessRecord_GetCalc({calcFor:"view"})
 end run
 
 --------------------

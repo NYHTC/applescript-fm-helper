@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4.1 - 2017-09-06 ( eshagdar ): updated error message. updated call to pop up set.
 	1.4 - 2016-04-25 ( eshagdar ): added option to NOT change any of the checkboxes when tweaking a field.
 	1.3 - 2016-03-18 ( eshagdar ): updated storage tab to text that autoIndex is not null
 	1.2 - specifying an autoEnterCalcCode turns on autoEnterIsCalculation; if validationCalcCode is an empty string instead of null, force an error; if autoEnterCalcCode is an empty string instead of null, force an error
@@ -36,7 +37,7 @@ end run
 --------------------
 
 on fmGUI_ManageDb_Field_Edit(prefs)
-	-- version 1.2
+	-- version 1.4.1
 	
 	-- any BOOLEAN parameters can be either actually boolean, or 1/0.  This function will change that to match UI scripting interface needs.
 	
@@ -109,7 +110,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					-- FIELD TYPE:
 					set fieldTypePopup to pop up button "Type:" of tab group 1 of window 1
 					if value of fieldTypePopup is not "Calculation" then
-						my fmGUI_PopupSet(fieldTypePopup, "Calculation")
+						my fmGUI_PopupSet({objRef:fieldTypePopup, objValue:"Calculation"})
 						
 						-- click CHANGE to save the data type.
 						my fmGUI_ObjectClick_AffectsWindow(button "Change" of tab group 1 of window 1)
@@ -141,14 +142,10 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					end if
 					
 					-- Calc CONTEXT Table (occurrence):
-					if calcContextTOC of prefs is not null then
-						my fmGUI_PopupSet(first pop up button of window 1 whose name contains "context", calcContextTOC of prefs)
-					end if
+					if calcContextTOC of prefs is not null then my fmGUI_PopupSet({objRef:first pop up button of window 1 whose name contains "context", objValue:calcContextTOC of prefs})
 					
 					-- Calc Result TYPE:
-					if dataType of prefs is not null then
-						my fmGUI_PopupSet(first pop up button of window 1 whose name contains "Calculation result is", dataType of prefs)
-					end if
+					if dataType of prefs is not null then my fmGUI_PopupSet({objRef:first pop up button of window 1 whose name contains "Calculation result is", objValue:dataType of prefs})
 					
 					-- Do Not Evaluate if all referenced field are empty:
 					if alwaysEvaluate of prefs is not null then
@@ -214,9 +211,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 							end if
 						end if
 						
-						if indexLanguage of prefs is not null then
-							my fmGUI_PopupSet(first pop up button of workingArea whose name contains "Default language", indexLanguage of prefs)
-						end if
+						if indexLanguage of prefs is not null then my fmGUI_PopupSet({objRef:first pop up button of workingArea whose name contains "Default language", objValue:indexLanguage of prefs})
 						
 						if autoIndex of prefs is not null then
 							set autoIndexCheckbox to first checkbox of workingArea whose name contains "create indexes"
@@ -289,7 +284,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					if editMode is "CONFORM" or dataType of prefs is not null then
 						set dataTypePopup to pop up button "Type:" of tab group 1 of window 1
 						if value of dataTypePopup is not dataType of prefs then
-							my fmGUI_PopupSet(dataTypePopup, dataType of prefs)
+							my fmGUI_PopupSet({objRef:dataTypePopup, objValue:dataType of prefs})
 							
 							-- click CHANGE to save the data type.
 							my fmGUI_ObjectClick_AffectsWindow(button "Change" of tab group 1 of window 1)
@@ -399,9 +394,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 						end if
 						
 						-- Index Language: 
-						if indexLanguage of prefs is not null then
-							my fmGUI_PopupSet(first pop up button of workingArea whose name contains "Default language", indexLanguage of prefs)
-						end if
+						if indexLanguage of prefs is not null then my fmGUI_PopupSet({objRef:first pop up button of workingArea whose name contains "Default language", objValue:indexLanguage of prefs})
 						
 						-- Create indexes automatically: 
 						if autoIndex of prefs is not null then
@@ -468,7 +461,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 							else if autoEnterSpecialValue of prefs is "CreationDate" then
 								set menuChoice to "Date"
 							end if
-							my fmGUI_PopupSet(pop up button "Creation" of workingArea, menuChoice)
+							my fmGUI_PopupSet({objRef:pop up button "Creation" of workingArea, objValue:menuChoice})
 							
 						else if autoEnterSpecialValue of prefs starts with "Modification" then
 							if autoEnterSpecialValue of prefs is "ModificationUserName" then
@@ -484,7 +477,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 							else if autoEnterSpecialValue of prefs is "ModificationDate" then
 								set menuChoice to "Date"
 							end if
-							my fmGUI_PopupSet(pop up button "Modification" of workingArea, menuChoice)
+							my fmGUI_PopupSet({objRef:pop up button "Modification" of workingArea, objValue:menuChoice})
 							
 							
 						else if autoEnterSpecialValue of prefs is equal to "NONE" then
@@ -561,7 +554,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 							
 							-- Calc CONTEXT Table (occurrence):
 							if autoEnterCalcContextTOC of prefs is not null then
-								my fmGUI_PopupSet(first pop up button of workingArea whose name contains "context", autoEnterCalcContextTOC of prefs)
+								my fmGUI_PopupSet({objRef:first pop up button of workingArea whose name contains "context", objValue:autoEnterCalcContextTOC of prefs})
 							end if
 							
 							-- Do Not Evaluate if all referenced field are empty:
@@ -643,7 +636,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 						
 						-- Calc CONTEXT Table (occurrence):
 						if validationCalcContextTOC of prefs is not null then
-							my fmGUI_PopupSet(first pop up button of workingArea whose name contains "context", validationCalcContextTOC of prefs)
+							my fmGUI_PopupSet({objRef:first pop up button of workingArea whose name contains "context", objValue:validationCalcContextTOC of prefs})
 						end if
 						
 						-- click OK to save Specify Calculation: 
@@ -708,8 +701,9 @@ on fmGUI_ObjectClick_AffectsWindow(buttonRef)
 	tell application "htcLib" to fmGUI_ObjectClick_AffectsWindow(buttonRef)
 end fmGUI_ObjectClick_AffectsWindow
 
-on fmGUI_PopupSet(popupObject, popupChoice)
-	tell application "htcLib" to fmGUI_PopupSet(popupObject, popupChoice)
+on fmGUI_PopupSet(prefs)
+	set objRefStr to coerceToString(objRef of prefs)
+	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
 end fmGUI_PopupSet
 
 on fmGUI_TextFieldSet(textfieldObject, textfieldValue)
@@ -720,10 +714,6 @@ on clickObjectByCoords(someObject)
 	tell application "htcLib" to clickObjectByCoords(someObject)
 end clickObjectByCoords
 
-on coerceToString(incomingObject)
-	tell application "htcLib" to coerceToString(incomingObject)
-end coerceToString
-
 on windowWaitUntil(prefs)
 	tell application "htcLib" to windowWaitUntil(prefs)
 end windowWaitUntil
@@ -731,3 +721,15 @@ end windowWaitUntil
 on windowWaitUntil_FrontIS(prefs)
 	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS
+
+
+
+on coerceToString(incomingObject)
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a coerceToString into this file for the sample to run ( instead of having a copy of the handler locally ).
+	
+	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
+	set codeCoerce to read file coercePath as text
+	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	set codeCoerce to run script codeCoerce
+	tell codeCoerce to coerceToString(incomingObject)
+end coerceToString

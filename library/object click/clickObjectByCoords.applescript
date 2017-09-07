@@ -5,11 +5,13 @@
 (*
 REQUIRES:
 	clickAtCoords
-	ensureObjectRef
+	minNum
+	
 	
 HISTORY:
+	1.2 - 2017-09-05 ( eshagdar ): offset should be the half teh object's height or width ( whichever is smaller ).
 	1.1 - 2017-06-29 ( eshagdar ): incoming param may be a string, so ensure it becomes an object reference
-	1.0 - created
+	1.0 - 201x-xx-xx ( dshockley ): created
 *)
 
 
@@ -18,13 +20,13 @@ on run
 		tell process "FileMaker Pro"
 			set frontmost to true
 			delay 0.25
-			set optionsButton to first button of tab group 1 of window 1 whose name starts with "Options"
+			--set optionsButton to first button of tab group 1 of window 1 whose name starts with "Options"
 			--set cancelButton to get first button of window 1 whose name is "Cancel"
+			set privSetPrintCheckbox to checkbox "Allow printing" of window 1
 		end tell
 	end tell
 	
-	clickObjectByCoords(optionsButton)
-	--clickObjectByCoords("button \"Cancel\" of window \"Edit Privilege Set\" of application process \"FileMaker Pro\" of application \"System Events\"")
+	clickObjectByCoords(privSetPrintCheckbox)
 end run
 
 
@@ -34,21 +36,26 @@ end run
 --------------------
 
 on clickObjectByCoords(someObject)
-	-- version 1.1
+	-- version 1.2
 	
 	set someObject to ensureObjectRef(someObject)
 	
-	
-	tell application "System Events"
-		set {xCoord, yCoord} to position of someObject
-		set {xSize, ySize} to size of someObject
-	end tell
-	
-	set xClick to round (xCoord + xSize / 2) rounding down -- middle
-	set yClick to round (yCoord + ySize / 2) rounding down -- middle
-	
-	return clickAtCoords(xClick, yClick)
-	
+	try
+		tell application "System Events"
+			set {xCoord, yCoord} to position of someObject
+			set {xSize, ySize} to size of someObject
+		end tell
+		set objOffset to round (minNum({xSize, ySize}) / 2) rounding down
+		
+		
+		set xClick to xCoord + objOffset
+		set yClick to yCoord + objOffset
+		
+		
+		return clickAtCoords(xClick, yClick)
+	on error errMsg number errNum
+		error "unable to clickObjectByCoords - " & errMsg number errNum
+	end try
 end clickObjectByCoords
 
 --------------------
@@ -59,23 +66,18 @@ on clickAtCoords(xClick, yClick)
 	tell application "htcLib" to clickAtCoords(xClick, yClick)
 end clickAtCoords
 
-on ensureObjectRef(someObjectRef)
-	
-	tell application "System Events"
-		
-		if class of someObjectRef is equal to class of "fakestring" then
-			set objCode to "script someObject" & return & Â
-				"tell app \"System Events\" to " & someObjectRef & return & Â
-				"end script" & return & Â
-				"run someObject"
-			
-			set someObjectRef to run script objCode
-			
-		end if
-		
-		return someObjectRef
-		
-	end tell
-	
-end ensureObjectRef
+on minNum(someList)
+	tell application "htcLib" to minNum(someList)
+end minNum
 
+
+
+on ensureObjectRef(someObjectRef)
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a ensureObjectRef into this file for the sample to run ( instead of having a copy of the handler locally ).
+	
+	tell application "Finder" to set ensureObjPath to (container of (container of (path to me)) as text) & "text parsing:ensureObjectRef.applescript"
+	set codeEnsureObj to read file ensureObjPath as text
+	tell application "htcLib" to set codeEnsureObj to "script codeEnsureObj " & return & getTextBetween({sourceText:codeEnsureObj, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeEnsureObj"
+	set codeEnsureObj to run script codeEnsureObj
+	tell codeEnsureObj to ensureObjectRef(someObjectRef)
+end ensureObjectRef
