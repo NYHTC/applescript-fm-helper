@@ -19,7 +19,7 @@ end run
 --------------------
 
 on fmGUI_AppFrontMost()
-		-- version 1.1
+	-- version 1.1
 	
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"

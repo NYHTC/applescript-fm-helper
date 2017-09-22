@@ -5,12 +5,14 @@
 
 (*
 HISTORY:
+	1.1 - 2017-09-07 ( eshagdar ): click cancel button via handler. init data access vars, then update privSetInfo once instead of after every type of data access.
 	1.0.1 - 2017-09-05 ( eshagdar ): renamed 'extendedPrivs' to 'extendedPrivList'
 	1.0 - 2017-06-29 ( eshagdar ):created
 
 
 REQUIRES:
 	fmGUI_AppFrontMost
+	fmGUI_ObjectClick_CancelButton
 	fmGUI_ManageSecurity_OpenSelectedPrivSet
 *)
 
@@ -49,13 +51,14 @@ on fmGUI_ManageSecurity_PrivSet_GetInfo(prefs)
 		-- now the the info
 		tell application "System Events"
 			tell process "FileMaker Pro"
-				set privSetInfo to {privSetName:value of text field "Privilege Set Name" of window 1, privSetDesc:value of text field "Description" of window 1, accessRecord:value of pop up button "Records:" of window 1, accessLayouts:value of pop up button "Layouts:" of window 1, accessVL:value of pop up button "Value Lists:" of window 1, accessScripts:value of pop up button "Scripts:" of window 1, extendedPrivList:name of checkbox 1 of (every row of table 1 of scroll area 1 of window 1 whose value of checkbox 1 is 1), allowPrinting:value of checkbox "Allow printing" of window 1, allowExporting:value of checkbox "Allow exporting" of window 1, mangeExtPriv:value of checkbox "Manage extended privileges" of window 1, allowOverride:value of checkbox "Allow user to override data validation warnings" of window 1, disconnectIdle:value of checkbox "Disconnect user from server when idle" of window 1, modifyPwd:value of checkbox "Allow user to modify their own password" of window 1, menuCommands:value of pop up button "Available menu commands:" of window 1}
+				set privSetInfo to {privSetName:value of text field "Privilege Set Name" of window 1, privSetDesc:value of text field "Description" of window 1, accessRecord:value of pop up button "Records:" of window 1, accessLayout:value of pop up button "Layouts:" of window 1, accessVL:value of pop up button "Value Lists:" of window 1, accessScript:value of pop up button "Scripts:" of window 1, extendedPrivList:name of checkbox 1 of (every row of table 1 of scroll area 1 of window 1 whose value of checkbox 1 is 1), allowPrinting:value of checkbox "Allow printing" of window 1, allowExporting:value of checkbox "Allow exporting" of window 1, mangeExtPriv:value of checkbox "Manage extended privileges" of window 1, allowOverride:value of checkbox "Allow user to override data validation warnings" of window 1, disconnectIdle:value of checkbox "Disconnect user from server when idle" of window 1, modifyPwd:value of checkbox "Allow user to modify their own password" of window 1, menuCommands:value of pop up button "Available menu commands:" of window 1}
 			end tell
 		end tell
 		
 		
 		-- should we get detailed access info:
 		if getAccessInfo of prefs then
+			set {recordAccess, layoutAccess, vlAccess, scriptsAccess} to {null, null, null, null}
 			
 			-- record level
 			if accessRecord of privSetInfo is equal to customPriv then
@@ -67,17 +70,12 @@ on fmGUI_ManageSecurity_PrivSet_GetInfo(prefs)
 					end tell
 				end tell
 				set recordAccess to fmGUI_ManageSecurity_AccessRecord_GetInfo({})
-				tell application "System Events"
-					tell process "FileMaker Pro"
-						click button "Cancel" of window 1
-					end tell
-				end tell
-				set privSetInfo to privSetInfo & {recordAccess:recordAccess}
+				fmGUI_ObjectClick_CancelButton({})
 			end if
 			
 			
 			-- layout access
-			if accessLayouts of privSetInfo is equal to customPriv then
+			if accessLayout of privSetInfo is equal to customPriv then
 				tell application "System Events"
 					tell process "FileMaker Pro"
 						set popUpButtonRef to pop up button "Layouts:" of window 1
@@ -86,12 +84,7 @@ on fmGUI_ManageSecurity_PrivSet_GetInfo(prefs)
 					end tell
 				end tell
 				set layoutAccess to fmGUI_ManageSecurity_AccessLayout_GetInfo({})
-				tell application "System Events"
-					tell process "FileMaker Pro"
-						click button "Cancel" of window 1
-					end tell
-				end tell
-				set privSetInfo to privSetInfo & {layoutAccess:layoutAccess}
+				fmGUI_ObjectClick_CancelButton({})
 			end if
 			
 			-- value list access
@@ -104,16 +97,11 @@ on fmGUI_ManageSecurity_PrivSet_GetInfo(prefs)
 					end tell
 				end tell
 				set vlAccess to fmGUI_ManageSecurity_AccessValueList_GetInfo({})
-				tell application "System Events"
-					tell process "FileMaker Pro"
-						click button "Cancel" of window 1
-					end tell
-				end tell
-				set privSetInfo to privSetInfo & {vlAccess:vlAccess}
+				fmGUI_ObjectClick_CancelButton({})
 			end if
 			
 			-- script access
-			if accessScripts of privSetInfo is equal to customPriv then
+			if accessScript of privSetInfo is equal to customPriv then
 				tell application "System Events"
 					tell process "FileMaker Pro"
 						set popUpButtonRef to pop up button "Scripts:" of window 1
@@ -122,13 +110,11 @@ on fmGUI_ManageSecurity_PrivSet_GetInfo(prefs)
 					end tell
 				end tell
 				set scriptsAccess to fmGUI_ManageSecurity_AccessScripts_GetInfo({})
-				tell application "System Events"
-					tell process "FileMaker Pro"
-						click button "Cancel" of window 1
-					end tell
-				end tell
-				set privSetInfo to privSetInfo & {scriptsAccess:scriptsAccess}
+				fmGUI_ObjectClick_CancelButton({})
 			end if
+			
+			set privSetInfo to privSetInfo & {recordAccess:recordAccess, layoutAccess:layoutAccess, vlAccess:vlAccess, scriptsAccess:scriptsAccess}
+			
 		end if
 		
 		
@@ -145,6 +131,10 @@ end fmGUI_ManageSecurity_PrivSet_GetInfo
 on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
+
+on fmGUI_ObjectClick_CancelButton(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_CancelButton(prefs)
+end fmGUI_ObjectClick_CancelButton
 
 on fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)

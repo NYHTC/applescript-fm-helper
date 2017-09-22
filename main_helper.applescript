@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2017-09-12 ( eshagdar ): attempt to de-select and re-select teh htcLib checkbox.
 	2017-06-29 ( eshagdar ): check to see if htcLib exists.
 	2017-06-26 ( eshagdar ): quit the app before deleting it.
 	2017-06-14 ( eshagdar ): also make an app.
@@ -131,8 +132,32 @@ on run
 		tell application "System Events"
 			tell process "System Preferences"
 				click radio button "Privacy" of tab group 1 of window 1
+				
+				-- get htcLib checkbox
+				set htcLibRow to (first row of table 1 of scroll area 1 of group 1 of tab group 1 of window 1 whose value of static text 1 of UI element 1 contains "htcLib")
+				set htcLibCheckbox to checkbox 1 of UI element 1 of htcLibRow
+				select htcLibRow
+				
+				-- unlock if needed
+				set canMakeChanges to enabled of htcLibCheckbox
+				if canMakeChanges is false then
+					click button 1 of window 1
+					display dialog "You must deselect, then reselect the HtcLib checkbox" buttons "OK" default button "OK"
+					return true
+				end if
+				
+				
+				-- uncheck, then recheck to re-allow control of htcLib
+				click htcLibCheckbox
+				delay 0.5
+				click htcLibCheckbox
+				delay 0.5
+				set visible to false
 			end tell
 		end tell
+		
+		tell me to activate
+		display dialog "HtcLib is ready" buttons "OK" default button "OK"
 	end if
 	
 	return true
