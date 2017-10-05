@@ -1,10 +1,11 @@
--- fmGUI_CheckboxSet(checkboxObject, checkboxValue)
+-- fmGUI_CheckboxSet({objRef:null, objValue:null})
 -- Dan Shockley, NYHTC
 -- (de)select checkbox object
 
 
 (*
 HISTORY:
+	1.1 - 2017-09-05 ( eshagdar ): converted prefs to record.
 	1.0 - created
 
 *)
@@ -15,31 +16,39 @@ on run
 		tell process "FileMaker Pro"
 			set frontmost to true
 			--set checkboxRef to checkbox "Creation" of tab group 1 of window 1
-			set checkboxRef to checkbox 1 of window 1
+			--set checkboxRef to checkbox 1 of window 1
+			set checkboxRef to checkbox "Allow printing" of window 1 -- allow printing checkbox in privSet
 		end tell
 	end tell
 	
-	fmGUI_CheckboxSet(my coerceToString(checkboxRef), 1)
+	fmGUI_CheckboxSet({objRef:checkboxRef, objValue:0})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_CheckboxSet(checkboxObject, checkboxValue)
-	-- version 1.0
+on fmGUI_CheckboxSet(prefs)
+	-- version 1.1
+	
+	set defaultPrefs to {objRef:null, objValue:null}
+	set prefs to prefs & defaultPrefs
+	set objRef to ensureObjectRef(objRef of prefs)
+	set objValue to objValue of prefs
 	
 	try
-		set checkboxObject to ensureObjectRef(checkboxObject)
 		using terms from application "System Events"
-			if checkboxValue is not null then
-				if value of checkboxObject is not checkboxValue then click checkboxObject
+			if objValue is not null then
+				if value of objRef is not objValue then
+					my clickObjectByCoords(objRef)
+				end if
+				return true
 			end if
 		end using terms from
 		
-		return true
+		return false
 	on error errMsg number errNum
-		error "Couldn't select '" & checkboxValue & "' for checkbox - " & errMsg number errNum
+		error "Unable to fmGUI_CheckboxSet ( couldn't select '" & objValue & "' for checkbox ) - " & errMsg number errNum
 	end try
 end fmGUI_CheckboxSet
 
@@ -47,95 +56,30 @@ end fmGUI_CheckboxSet
 -- END OF CODE
 --------------------
 
-on ensureObjectRef(someObjectRef)
-	
-	tell application "System Events"
-		
-		if class of someObjectRef is equal to class of "fakestring" then
-			set objCode to "script someObject" & return & Â
-				"tell app \"System Events\" to " & someObjectRef & return & Â
-				"end script" & return & Â
-				"run someObject"
-			
-			set someObjectRef to run script objCode
-			
-		end if
-		
-		return someObjectRef
-		
-	end tell
-	
-end ensureObjectRef
+on clickObjectByCoords(objRef)
+	tell application "htcLib" to clickObjectByCoords(my coerceToString(objRef))
+end clickObjectByCoords
+
+
 
 on coerceToString(incomingObject)
-	-- version 2.2
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a coerceToString into this file for the sample to run ( instead of having a copy of the handler locally ).
 	
-	if class of incomingObject is string then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject
-	else if class of incomingObject is integer then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject as string
-	else if class of incomingObject is real then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject as string
-	else if class of incomingObject is Unicode text then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject as string
-	else
-		-- LIST, RECORD, styled text, or unknown
-		try
-			try
-				set some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of "XXXX" to "some_UUID_Value_54F827C7379E4073B5A216BB9CDE575D"
-				
-				-- GENERATE the error message for a known 'object' (here, a string) so we can get 
-				-- the 'lead' and 'trail' part of the error message
-			on error errMsg number errNum
-				set {oldDelims, AppleScript's text item delimiters} to {AppleScript's text item delimiters, {"\"XXXX\""}}
-				set {errMsgLead, errMsgTrail} to text items of errMsg
-				set AppleScript's text item delimiters to oldDelims
-			end try
-			
-			-- now, generate error message for the SPECIFIED object: 
-			set some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of incomingObject to "some_UUID_Value_54F827C7379E4073B5A216BB9CDE575D"
-			
-			
-		on error errMsg
-			if errMsg starts with "System Events got an error: CanÕt make some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of " and errMsg ends with "into type specifier." then
-				set errMsgLead to "System Events got an error: CanÕt make some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of "
-				set errMsgTrail to " into type specifier."
-				
-				set {od, AppleScript's text item delimiters} to {AppleScript's text item delimiters, errMsgLead}
-				
-				set objectString to text item 2 of errMsg
-				set AppleScript's text item delimiters to errMsgTrail
-				
-				set objectString to text item 1 of objectString
-				set AppleScript's text item delimiters to od
-				
-				
-				
-			else
-				--tell me to log errMsg
-				set objectString to errMsg
-				
-				if objectString contains errMsgLead then
-					set {od, AppleScript's text item delimiters} to {AppleScript's text item delimiters, errMsgLead}
-					set objectString to text item 2 of objectString
-					set AppleScript's text item delimiters to od
-				end if
-				
-				if objectString contains errMsgTrail then
-					set {od, AppleScript's text item delimiters} to {AppleScript's text item delimiters, errMsgTrail}
-					set AppleScript's text item delimiters to errMsgTrail
-					set objectString to text item 1 of objectString
-					set AppleScript's text item delimiters to od
-				end if
-				
-				--set {text:objectString} to (objectString as string) -- what does THIS do?
-			end if
-		end try
-		
-		return objectString
-	end if
+	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
+	set codeCoerce to read file coercePath as text
+	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	set codeCoerce to run script codeCoerce
+	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString
+
+
+
+on ensureObjectRef(someObjectRef)
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a ensureObjectRef into this file for the sample to run ( instead of having a copy of the handler locally ).
+	
+	tell application "Finder" to set ensureObjPath to (container of (container of (path to me)) as text) & "text parsing:ensureObjectRef.applescript"
+	set codeEnsureObj to read file ensureObjPath as text
+	tell application "htcLib" to set codeEnsureObj to "script codeEnsureObj " & return & getTextBetween({sourceText:codeEnsureObj, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeEnsureObj"
+	set codeEnsureObj to run script codeEnsureObj
+	tell codeEnsureObj to ensureObjectRef(someObjectRef)
+end ensureObjectRef

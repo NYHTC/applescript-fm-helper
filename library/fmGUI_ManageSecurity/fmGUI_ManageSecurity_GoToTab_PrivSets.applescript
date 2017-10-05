@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.2.1 - 2017-09-06 ( eshagdar ): updated error message. updated call to pop up set.
 	1.2 - 2017-07-12 ( eshagdar ) make sure the privSets are sorted by name
 	1.1 - 2017-06-28 ( eshagdar ): pass in prefs
 	1.0 - created
@@ -24,7 +25,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
-	-- version 1.2
+	-- version 1.2.1
 	
 	try
 		fmGUI_ManageSecurity_GotoTab({tabName:"Privilege Sets"} & prefs)
@@ -33,9 +34,9 @@ on fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
 				set viewByPopUpButton to pop up button "View by:" of tab group 1 of window 1
 			end tell
 		end tell
-		fmGUI_PopupSet(viewByPopUpButton, "Name")
+		fmGUI_PopupSet({objRef:viewByPopUpButton, objValue:"Name"})
 	on error errMsg number errNum
-		error "Couldn't go to Accounts tab - " & errMsg number errNum
+		error "fmGUI_ManageSecurity_GoToTab_PrivSets - " & errMsg number errNum
 	end try
 	
 end fmGUI_ManageSecurity_GoToTab_PrivSets
@@ -48,8 +49,9 @@ on fmGUI_ManageSecurity_GotoTab(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_GotoTab(prefs)
 end fmGUI_ManageSecurity_GotoTab
 
-on fmGUI_PopupSet(popupObject, popupChoice)
-	tell application "htcLib" to fmGUI_PopupSet(my coerceToString(popupObject), popupChoice)
+on fmGUI_PopupSet(prefs)
+	set objRefStr to coerceToString(objRef of prefs)
+	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
 end fmGUI_PopupSet
 
 

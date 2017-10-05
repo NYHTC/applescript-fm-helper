@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1 - 2017-09-06 ( eshagdar ): return a null value for calc if there isn't one. get access values from button value, not row ( rows render ellipsis, whereas the buttons use 3 dots ).
 	1.0 - 2017-06-29 ( eshagdar ):created
 
 
@@ -24,7 +25,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_AccessRecord_GetInfo(prefs)
-	-- version 1.0
+	-- version 1.1
 	
 	set defaultPrefs to {}
 	set prefs to prefs & defaultPrefs
@@ -48,10 +49,15 @@ on fmGUI_ManageSecurity_AccessRecord_GetInfo(prefs)
 			tell application "System Events"
 				tell process "FileMaker Pro"
 					select row rowNum of table 1 of scroll area 1 of window 1
-					set oneTableList to value of every static text of row rowNum of table 1 of scroll area 1 of window 1
+					set oneTableRec to {baseTable:value of static text 1 of row rowNum of table 1 of scroll area 1 of window 1 Â
+						, viewAccess:value of pop up button "View" of window 1 Â
+						, editAccess:value of pop up button "Edit" of window 1 Â
+						, createAccess:value of pop up button "Create" of window 1 Â
+						, deleteAccess:value of pop up button "Delete" of window 1 Â
+						, fieldAccess:value of pop up button "Field Access" of window 1}
 				end tell
 			end tell
-			set oneTableRec to {baseTable:item 1 of oneTableList, viewAccess:item 2 of oneTableList, editAccess:item 3 of oneTableList, createAccess:item 4 of oneTableList, deleteAccess:item 5 of oneTableList, fieldAccess:item 6 of oneTableList}
+			
 			
 			
 			-- get the details of limited calcs
@@ -60,6 +66,10 @@ on fmGUI_ManageSecurity_AccessRecord_GetInfo(prefs)
 			if createAccess of oneTableRec contains "limited" then set oneTableRec to oneTableRec & {createCalc:fmGUI_ManageSecurity_AccessRecord_GetCalc({calcFor:"create"})}
 			if deleteAccess of oneTableRec contains "limited" then set oneTableRec to oneTableRec & {deleteCalc:fmGUI_ManageSecurity_AccessRecord_GetCalc({calcFor:"delete"})}
 			if fieldAccess of oneTableRec contains "limited" then set oneTableRec to oneTableRec & {fieldCalc:fmGUI_ManageSecurity_AccessRecord_GetCalc({calcFor:"field"})}
+			
+			
+			-- ensure the key exists ( even if it's null )
+			set oneTableRec to oneTableRec & {viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null}
 			
 			copy oneTableRec to end of recordAccessList
 		end repeat

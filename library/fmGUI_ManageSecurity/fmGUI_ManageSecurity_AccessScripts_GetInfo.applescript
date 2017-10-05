@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1 - 2017-09-07 ( eshagdar ): return scriptAccess
 	1.0 - 2017-07-06 ( eshagdar ):created
 
 
@@ -22,7 +23,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_AccessScripts_GetInfo(prefs)
-	-- version 1.0
+	-- version 1.1
 	
 	set defaultPrefs to {}
 	set prefs to prefs & defaultPrefs
@@ -51,7 +52,7 @@ on fmGUI_ManageSecurity_AccessScripts_GetInfo(prefs)
 		set scriptAccess to {allowCreate:allowCreate, scriptPrivList:scriptPrivList}
 		
 		
-		return scriptPrivList
+		return scriptAccess
 	on error errMsg number errNum
 		error "unable to fmGUI_ManageSecurity_AccessScripts_GetInfo - " & errMsg number errNum
 	end try

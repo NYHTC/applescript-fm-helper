@@ -1,29 +1,24 @@
--- fmGUI_PopupSet({objRef:null, objValue:null})
--- Dan Shockley
--- Wrapper method for fmGUI_Popup_SelectByCommand that requires only an object and a choice
+-- fmGUI_ObjectClick_OkButton({buttonRef:null, windowNameThatCloses:null})
+-- Erik Shagdar, NYHTC
+-- Wrapper method for clicking the ok button and waiting for the window to close
 
 
 (*
 REQUIRES:
-	fmGUI_Popup_SelectByCommand
+	clickObjectByCoords
+	databaseNameOfFrontWindow
+	fmGUI_AppFrontMost
+	windowWaitUntil
 	
 
 HISTORY:
-	1.1 - 2017-07-06 ( eshagdar ): narrowed scope
-	1.0 - created
+	1.0 - 2017-09-06 ( eshagdar ): created
 *)
 
 
 on run
-	tell application "System Events"
-		tell application process "FileMaker Pro"
-			set frontmost to true
-			--set TablePopupOnFieldTabOfManageDatabase to (pop up button "Table:" of tab group 1 of window 1)
-			set popUpButtonRef to pop up button "Available menu commands:" of window 1
-		end tell
-	end tell
 	
-	fmGUI_PopupSet({objRef:popUpButtonRef, objValue:"Minimum"})
+	fmGUI_ObjectClick_OkButton({})
 	
 end run
 
@@ -31,28 +26,63 @@ end run
 -- START OF CODE
 --------------------
 
-on fmGUI_PopupSet(prefs)
+on fmGUI_ObjectClick_OkButton(prefs)
 	-- version 1.1
 	
-	set defaultPrefs to {objRef:null, objValue:null}
+	set defaultPrefs to {buttonRef:null, windowNameThatCloses:null}
 	set prefs to prefs & defaultPrefs
-	set objRef to ensureObjectRef(objRef of prefs)
+	set buttonRef to ensureObjectRef(buttonRef of prefs)
+	set windowNameThatCloses to windowNameThatCloses of prefs
 	
 	try
-		return fmGUI_Popup_SelectByCommand(prefs & {selectCommand:"contains"})
+		fmGUI_AppFrontMost()
+		
+		
+		-- get frontmost window name if not specified
+		if windowNameThatCloses is null then
+			tell application "System Events"
+				tell process "FileMaker Pro"
+					set windowNameThatCloses to name of window 1
+				end tell
+			end tell
+		end if
+		
+		
+		-- use the most commonly found button reference ( unless specified )
+		if buttonRef is null then
+			tell application "System Events"
+				tell process "FileMaker Pro"
+					set buttonRef to button "OK" of window 1
+				end tell
+			end tell
+		end if
+		
+		
+		-- click button and wait for it to close
+		clickObjectByCoords(buttonRef)
+		windowWaitUntil({windowName:windowNameThatCloses, windowNameTest:"is not", whichWindow:"front"})
+		
+		return true
 	on error errMsg number errNum
-		error "Unable to fmGUI_PopupSet ( couldn't select '" & objValue of prefs & "' in popup ) - " & errMsg number errNum
+		error "Unable to fmGUI_ObjectClick_OkButton - " & errMsg number errNum
 	end try
-end fmGUI_PopupSet
+end fmGUI_ObjectClick_OkButton
 
 --------------------
 -- END OF CODE
 --------------------
 
-on fmGUI_Popup_SelectByCommand(prefs)
-	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_Popup_SelectByCommand({objRef:objRefStr} & prefs)
-end fmGUI_Popup_SelectByCommand
+on fmGUI_AppFrontMost()
+	tell application "htcLib" to fmGUI_AppFrontMost()
+end fmGUI_AppFrontMost
+
+on clickObjectByCoords(someObject)
+	tell application "htcLib" to clickObjectByCoords(my coerceToString(someObject))
+end clickObjectByCoords
+
+on windowWaitUntil(prefs)
+	tell application "htcLib" to windowWaitUntil(prefs)
+end windowWaitUntil
 
 
 

@@ -1,10 +1,18 @@
--- fmGUI_Popup_SelectByCommand(popupObject:"", popupChoice:"", selectCommand:"", clickIfAlreadySet:"")
+-- fmGUI_Popup_SelectByCommand(objRef:"", objValue:"", calcValue:null, selectCommand:"", clickIfAlreadySet:"")
 -- Daniel A. Shockley, NYHTC
 -- Selects a choice from a popup menu
 
 
 (*
+REQUIRES:
+	clickObjectByCoords
+	windowWaitUntil
+	windowWaitUntil_FrontIS
+	
+	 
 HISTORY:
+	1.3 - 2017-09-06 ( eshagdar ): added calcValue param that sets a calc in the 'Specify Calculation' that comes up.
+	1.2 - 2017-09-05 ( eshagdar ): clicking done by handler
 	1.1 - 2017-06-29 ( eshagdar ): prefs must be a record. incoming param may be a string, so ensure that it's an object reference.
 	1.0 - created
 *)
@@ -15,11 +23,12 @@ on run
 		tell application process "FileMaker Pro"
 			set frontmost to true
 			delay 1
-			set popUpButtonRef to pop up button "Records:" of window 1
+			--set popUpButtonRef to pop up button "Available menu commands:" of window 1
+			set popUpButtonRef to pop up button "View" of window 1
 		end tell
 	end tell
 	
-	fmGUI_Popup_SelectByCommand({popupObject:my coerceToString(popUpButtonRef), popupChoice:"Custom privileges..."})
+	fmGUI_Popup_SelectByCommand({objRef:popUpButtonRef, objValue:"limited...", calcValue:"If ( True; True; GetAsNumber ( \"1\" ) )", clickIfAlreadySet:true})
 end run
 
 --------------------
@@ -27,89 +36,110 @@ end run
 --------------------
 
 on fmGUI_Popup_SelectByCommand(prefs)
-	-- version 1.1
+	-- version 1.3
 	
-	set defaultPrefs to {popupObject:null, popupChoice:null, selectCommand:"is", clickIfAlreadySet:false}
+	set defaultPrefs to {objRef:null, objValue:null, calcValue:null, selectCommand:"is", clickIfAlreadySet:false}
 	set prefs to prefs & defaultPrefs
 	
-	set popupObject to ensureObjectRef(popupObject of prefs)
+	set objRef to ensureObjectRef(objRef of prefs)
 	set selectCommand to selectCommand of prefs
-	set popupChoice to popupChoice of prefs
+	set objValue to objValue of prefs
 	set clickIfAlreadySet to clickIfAlreadySet of prefs -- re-select even if popup is the requested value.
+	set calcBoxWindowName to "Specify Calculation"
 	
 	
 	try
 		tell application "System Events"
-			if not (exists popupObject) then
-				-- does NOT exist, so error with that:
-				error "The specified popupObject does not exist." number 1024
+			if not (exists objRef) then error "The specified objRef does not exist." number 1024
+			
+			
+			-- the objRef DOES exist
+			set mustPick to false
+			if not (exists value of objRef) then
+				-- first check if the value of the objRef exists - if it doesn't, then we can't test it directly
+				set mustPick to true
 				
-			else
-				-- the popupObject DOES exist
-				set mustPick to false
-				if not (exists value of popupObject) then
-					-- first check if the value of the popupObject exists - if it doesn't, then we can't test it directly
+			else -- we can see the value without 'picking' the menu, so test it:
+				-- note that our selection might be one of several 'matching' commands:
+				if clickIfAlreadySet then
+					-- RE-SELECT even if popup already is the requested value.
 					set mustPick to true
 					
-				else -- we can see the value without 'picking' the menu, so test it:
-					-- note that our selection might be one of several 'matching' commands:
-					if clickIfAlreadySet then
-						-- RE-SELECT even if popup already is the requested value.
+				else if selectCommand is equal to "is" then
+					if value of objRef is not objValue then
 						set mustPick to true
-						
-					else if selectCommand is equal to "is" then
-						if value of popupObject is not popupChoice then
-							set mustPick to true
-						end if
-						
-					else if selectCommand is equal to "contains" then
-						if value of popupObject does not contain popupChoice then
-							set mustPick to true
-						end if
-						
-					else if selectCommand is equal to "startsWith" then
-						if value of popupObject does not start with popupChoice then
-							set mustPick to true
-						end if
-						
-					else if selectCommand is equal to "beginsWith" then
-						if value of popupObject does not start with popupChoice then
-							set mustPick to true
-						end if
-						
-					else if selectCommand is equal to "endsWith" then
-						if value of popupObject does not end with popupChoice then
-							set mustPick to true
-						end if
-						
 					end if
-				end if
-				
-				
-				if mustPick then
-					if popupChoice is not null then
-						click popupObject
-						if selectCommand is equal to "is" then
-							click (first menu item of menu 1 of popupObject whose name is popupChoice)
-						else if selectCommand is equal to "contains" then
-							click (first menu item of menu 1 of popupObject whose name contains popupChoice)
-							
-						else if selectCommand is equal to "beginsWith" then
-							click (first menu item of menu 1 of popupObject whose name starts with popupChoice)
-							
-						else if selectCommand is equal to "endsWith" then
-							click (first menu item of menu 1 of popupObject whose name ends with popupChoice)
-							
-						end if
-						
+					
+				else if selectCommand is equal to "contains" then
+					if value of objRef does not contain objValue then
+						set mustPick to true
 					end if
+					
+				else if selectCommand is equal to "startsWith" then
+					if value of objRef does not start with objValue then
+						set mustPick to true
+					end if
+					
+				else if selectCommand is equal to "beginsWith" then
+					if value of objRef does not start with objValue then
+						set mustPick to true
+					end if
+					
+				else if selectCommand is equal to "endsWith" then
+					if value of objRef does not end with objValue then
+						set mustPick to true
+					end if
+					
 				end if
 			end if
 		end tell
 		
+		
+		
+		if mustPick then
+			if objValue is not null then
+				-- click pop up button so the menu becomes available
+				clickObjectByCoords(objRef)
+				
+				
+				-- now pick an item from the pop up
+				tell application "System Events"
+					objRef
+					if selectCommand is equal to "is" then
+						set objValue to first menu item of menu 1 of objRef whose name is objValue
+					else if selectCommand is equal to "contains" then
+						set objValue to first menu item of menu 1 of objRef whose name contains objValue
+					else if selectCommand is equal to "beginsWith" then
+						set objValue to first menu item of menu 1 of objRef whose name starts with objValue
+					else if selectCommand is equal to "endsWith" then
+						set objValue to first menu item of menu 1 of objRef whose name ends with objValue
+					else
+						error "unable to pick objValue because select command is failed" number -1024
+					end if
+				end tell
+				clickObjectByCoords(objValue)
+			end if
+			
+			
+			-- set calc if there is one
+			if calcValue of prefs is not null then
+				windowWaitUntil_FrontIS({windowName:calcBoxWindowName})
+				tell application "System Events"
+					tell process "FileMaker Pro"
+						set okButton to button "OK" of window 1
+						set calcBoxObj to text area 1 of scroll area 1 of splitter group 1 of window 1
+						if value of calcBoxObj is not equal to calcValue of prefs then set value of calcBoxObj to calcValue of prefs
+					end tell
+				end tell
+				clickObjectByCoords(okButton)
+				windowWaitUntil({windowName:calcBoxWindowName, windowNameTest:"is not", whichWindow:"front"})
+			end if
+		end if
+		
+		
 		return true
 	on error errMsg number errNum
-		error "Couldn't select menu item whose value _" & selectCommand & "_ '" & popupChoice & "' in popup - " & errMsg number errNum
+		error "Couldn't select menu item whose value _" & selectCommand & "_ '" & objValue & "' in popup - " & errMsg number errNum
 	end try
 end fmGUI_Popup_SelectByCommand
 
@@ -117,95 +147,38 @@ end fmGUI_Popup_SelectByCommand
 -- END OF CODE
 --------------------
 
-on ensureObjectRef(someObjectRef)
-	
-	tell application "System Events"
-		
-		if class of someObjectRef is equal to class of "fakestring" then
-			set objCode to "script someObject" & return & Â
-				"tell app \"System Events\" to " & someObjectRef & return & Â
-				"end script" & return & Â
-				"run someObject"
-			
-			set someObjectRef to run script objCode
-			
-		end if
-		
-		return someObjectRef
-		
-	end tell
-	
-end ensureObjectRef
+on clickObjectByCoords(objRef)
+	tell application "htcLib" to clickObjectByCoords(my coerceToString(objRef))
+end clickObjectByCoords
+
+on windowWaitUntil(prefs)
+	tell application "htcLib" to windowWaitUntil(prefs)
+end windowWaitUntil
+
+on windowWaitUntil_FrontIS(prefs)
+	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+end windowWaitUntil_FrontIS
+
+
 
 on coerceToString(incomingObject)
-	-- version 2.2
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a coerceToString into this file for the sample to run ( instead of having a copy of the handler locally ).
 	
-	if class of incomingObject is string then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject
-	else if class of incomingObject is integer then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject as string
-	else if class of incomingObject is real then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject as string
-	else if class of incomingObject is Unicode text then
-		set {text:incomingObject} to (incomingObject as string)
-		return incomingObject as string
-	else
-		-- LIST, RECORD, styled text, or unknown
-		try
-			try
-				set some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of "XXXX" to "some_UUID_Value_54F827C7379E4073B5A216BB9CDE575D"
-				
-				-- GENERATE the error message for a known 'object' (here, a string) so we can get 
-				-- the 'lead' and 'trail' part of the error message
-			on error errMsg number errNum
-				set {oldDelims, AppleScript's text item delimiters} to {AppleScript's text item delimiters, {"\"XXXX\""}}
-				set {errMsgLead, errMsgTrail} to text items of errMsg
-				set AppleScript's text item delimiters to oldDelims
-			end try
-			
-			-- now, generate error message for the SPECIFIED object: 
-			set some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of incomingObject to "some_UUID_Value_54F827C7379E4073B5A216BB9CDE575D"
-			
-			
-		on error errMsg
-			if errMsg starts with "System Events got an error: CanÕt make some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of " and errMsg ends with "into type specifier." then
-				set errMsgLead to "System Events got an error: CanÕt make some_UUID_Property_54F827C7379E4073B5A216BB9CDE575D of "
-				set errMsgTrail to " into type specifier."
-				
-				set {od, AppleScript's text item delimiters} to {AppleScript's text item delimiters, errMsgLead}
-				
-				set objectString to text item 2 of errMsg
-				set AppleScript's text item delimiters to errMsgTrail
-				
-				set objectString to text item 1 of objectString
-				set AppleScript's text item delimiters to od
-				
-				
-				
-			else
-				--tell me to log errMsg
-				set objectString to errMsg
-				
-				if objectString contains errMsgLead then
-					set {od, AppleScript's text item delimiters} to {AppleScript's text item delimiters, errMsgLead}
-					set objectString to text item 2 of objectString
-					set AppleScript's text item delimiters to od
-				end if
-				
-				if objectString contains errMsgTrail then
-					set {od, AppleScript's text item delimiters} to {AppleScript's text item delimiters, errMsgTrail}
-					set AppleScript's text item delimiters to errMsgTrail
-					set objectString to text item 1 of objectString
-					set AppleScript's text item delimiters to od
-				end if
-				
-				--set {text:objectString} to (objectString as string) -- what does THIS do?
-			end if
-		end try
-		
-		return objectString
-	end if
+	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
+	set codeCoerce to read file coercePath as text
+	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	set codeCoerce to run script codeCoerce
+	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString
+
+
+
+on ensureObjectRef(someObjectRef)
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a ensureObjectRef into this file for the sample to run ( instead of having a copy of the handler locally ).
+	
+	tell application "Finder" to set ensureObjPath to (container of (container of (path to me)) as text) & "text parsing:ensureObjectRef.applescript"
+	set codeEnsureObj to read file ensureObjPath as text
+	tell application "htcLib" to set codeEnsureObj to "script codeEnsureObj " & return & getTextBetween({sourceText:codeEnsureObj, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeEnsureObj"
+	set codeEnsureObj to run script codeEnsureObj
+	tell codeEnsureObj to ensureObjectRef(someObjectRef)
+end ensureObjectRef
