@@ -14,7 +14,7 @@ REQUIRES:
 	fmGUI_ManageSecurity_PrivSet_OpenSelected
 	fmGUI_ManageSecurity_PrivSet_Select
 	fmGUI_ManageSecurity_PrivSet_Update_AccessLayout
-	fmGUI_ManageSecurity_PrivSet_Update_AccessRecord
+	fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables
 	fmGUI_ManageSecurity_PrivSet_Update_AccessScript
 	fmGUI_ManageSecurity_PrivSet_Update_AccessValueList
 	fmGUI_ManageSecurity_PrivSet_Update_ExtendedPrivileges
@@ -111,7 +111,7 @@ on fmGUI_ManageSecurity_PrivSet_Update(prefs)
 		fmGUI_ManageSecurity_PrivSet_Update_ExtendedPrivileges({extendedPrivList:extendedPrivList of prefs})
 		
 		-- data access
-		fmGUI_ManageSecurity_PrivSet_Update_AccessRecord({accessRecord:accessRecord of prefs, recordAccess:recordAccess of prefs})
+		fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables({accessRecord:accessRecord of prefs, recordAccess:recordAccess of prefs})
 		fmGUI_ManageSecurity_PrivSet_Update_AccessLayout({accessLayout:accessLayout of prefs, layoutAccess:layoutAccess of prefs})
 		fmGUI_ManageSecurity_PrivSet_Update_AccessValueList({accessVL:accessVL of prefs, vlAccess:vlAccess of prefs})
 		fmGUI_ManageSecurity_PrivSet_Update_AccessScript({accessScript:accessScript of prefs, scriptsAccess:scriptsAccess of prefs})
@@ -150,23 +150,23 @@ end fmGUI_ManageSecurity_PrivSet_Select
 
 on fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)
-end fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv
+end fmGUI_ManageSecurity_PrivSet_Update_AccessLayout
 
-on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord(prefs)
-	tell app "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_AccessRecord(prefs)
-end
+on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables(prefs)
+end fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables
 
 on fmGUI_ManageSecurity_PrivSet_Update_AccessScript(prefs)
-	tell app "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_AccessScript(prefs)
-end
+	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_AccessScript(prefs)
+end fmGUI_ManageSecurity_PrivSet_Update_AccessScript
 
 on fmGUI_ManageSecurity_PrivSet_Update_AccessValueList(prefs)
-	tell app "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_AccessValueList(prefs)
-end
+	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_AccessValueList(prefs)
+end fmGUI_ManageSecurity_PrivSet_Update_AccessValueList
 
 on fmGUI_ManageSecurity_PrivSet_Update_ExtendedPrivileges(prefs)
-	tell app "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_ExtendedPrivileges(prefs)
-end
+	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_ExtendedPrivileges(prefs)
+end fmGUI_ManageSecurity_PrivSet_Update_ExtendedPrivileges
 
 on fmGUI_ObjectClick_OkButton(prefs)
 	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)

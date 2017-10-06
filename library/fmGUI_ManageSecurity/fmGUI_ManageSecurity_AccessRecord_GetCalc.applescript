@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.0.1 - 2017-09-22 ( eshagdar ): 'calc' renamed to 'calcValue'.
 	1.0 - 2017-07-06 ( eshagdar ):created
 
 
@@ -35,16 +36,16 @@ on fmGUI_ManageSecurity_AccessRecord_GetCalc(prefs)
 			tell process "FileMaker Pro"
 				if calcFor of prefs is equal to "field" then
 					if name of window 1 is not "Custom Field Privileges" then error "must be on specify calculation window" number -1024
-					set calc to my fmGUI_ManageSecurity_AccessRecord_GetFieldPriv({})
+					set calcValue to my fmGUI_ManageSecurity_AccessRecord_GetFieldPriv({})
 				else
 					if name of window 1 is not "Specify Calculation" then error "must be on specify calculation window" number -1024
-					set calc to value of text area 1 of scroll area 1 of splitter group 1 of window 1
+					set calcValue to value of text area 1 of scroll area 1 of splitter group 1 of window 1
 				end if
 				click button "Cancel" of window 1
 			end tell
 		end tell
 		
-		return calc
+		return calcValue
 	on error errMsg number errNum
 		error "unable to fmGUI_ManageSecurity_AccessRecord_GetCalc - " & errMsg number errNum
 	end try

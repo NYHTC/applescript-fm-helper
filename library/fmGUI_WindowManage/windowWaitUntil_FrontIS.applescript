@@ -1,4 +1,4 @@
--- windowWaitUntil_FrontIS(windowName:"", windowNameTest:"", whichWindow:"", waitCycleDelaySeconds:"", waitCycleMax:"")
+-- windowWaitUntil_FrontIS({windowName:"", windowNameTest:"", whichWindow:"", waitCycleDelaySeconds:"", waitCycleMax:""})
 -- Daniel A. Shockely, NYHTC
 -- keep checking until the frontmost window matches specified criteria.
 
@@ -14,7 +14,7 @@ REQUIRES:
 
 
 on run
-	windowWaitUntil({windowName:"Times Square"})
+	windowWaitUntil_FrontIS({windowName:"Times Square"})
 end run
 
 --------------------

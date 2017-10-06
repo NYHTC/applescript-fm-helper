@@ -21,6 +21,7 @@ on fmGUI_NameOfFrontmostWindow()
 	-- version 1.0
 	
 	fmGUI_AppFrontMost()
+	
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"
 			return name of window 1

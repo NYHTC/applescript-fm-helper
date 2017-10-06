@@ -1,32 +1,32 @@
--- fmGUI_ManageSecurity_PrivSet_Update_AccessRecord({accessRecord:null, recordAccess:null})
+-- fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables({accessRecord:null, recordAccess:null})
 -- Erik Shagdar, NYHTC
 -- update record access of the currently opened privilege set
 
 
 (*
 HISTORY:
+	1.1 - 2017-09-22 ( eshagdar ): added '_AllTables' to end of handler name. loop over list of records in recordAccess, calling a handler that handler one table.
 	1.0 - 2017-09-07 ( eshagdar ): moved from fmGUI_ManageSecurity_PrivSet_Update.
 
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv
+	fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable
 	fmGUI_ObjectClick_OkButton
 	fmGUI_Popup_SelectByCommand
-	fmGUI_PopupSet
-	windowWaitUntil_FrontIS
-*)
+	windowWaitUntil_FrontIS*)
 
 
 on run
-	fmGUI_ManageSecurity_PrivSet_Update_AccessRecord({accessRecord:"Custom privileges...", recordAccess:{{baseTable:"ZZ_GLOBALS", viewAccess:"yes", editAccess:"yes", createAccess:"yes", deleteAccess:"yes", fieldAccess:"all", viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null}, {baseTable:"[Any New Table]", viewAccess:"yes", editAccess:"yes", createAccess:"yes", deleteAccess:"yes", fieldAccess:"all", viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null}}})
+	fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables({accessRecord:"Custom privileges...", recordAccess:{{baseTable:"ZZ_GLOBALS", viewAccess:"yes", editAccess:"yes", createAccess:"yes", deleteAccess:"yes", fieldAccess:"all", viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null}, {baseTable:"[Any New Table]", viewAccess:"yes", editAccess:"yes", createAccess:"yes", deleteAccess:"yes", fieldAccess:"all", viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null}}})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord(prefs)
+on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables(prefs)
+	-- version 1.1
 	
 	set defaultPrefs to {accessRecord:null, recordAccess:null}
 	set prefs to prefs & defaultPrefs
@@ -69,45 +69,16 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord(prefs)
 			-- look through each table, ensuring each type of access is set
 			repeat with oneTableRec in recordAccess of prefs
 				set oneTableRec to contents of oneTableRec
-				tell application "System Events"
-					tell process "FileMaker Pro"
-						set oneTableRow to (first row of table 1 of scroll area 1 of window 1 whose name of static text 1 is equal to baseTable of oneTableRec)
-						select oneTableRow
-					end tell
-				end tell
-				
-				-- edit comes before view since 'no' view disables edit button
-				if editCalc of oneTableRec is not null then
-					fmGUI_Popup_SelectByCommand({objRef:editButton, objValue:editAccess of oneTableRec, calcValue:editCalc of oneTableRec} & popUpExtras)
-				else
-					fmGUI_Popup_SelectByCommand({objRef:editButton, objValue:editAccess of oneTableRec})
-				end if
-				if viewCalc of oneTableRec is not null then
-					fmGUI_Popup_SelectByCommand({objRef:viewButton, objValue:viewAccess of oneTableRec, calcValue:viewCalc of oneTableRec} & popUpExtras)
-				else
-					fmGUI_Popup_SelectByCommand({objRef:viewButton, objValue:viewAccess of oneTableRec})
-				end if
-				if createCalc of oneTableRec is not null then
-					fmGUI_Popup_SelectByCommand({objRef:createButton, objValue:createAccess of oneTableRec, calcValue:createCalc of oneTableRec} & popUpExtras)
-				else
-					fmGUI_Popup_SelectByCommand({objRef:createButton, objValue:createAccess of oneTableRec})
-				end if
-				if deleteCalc of oneTableRec is not null then
-					fmGUI_Popup_SelectByCommand({objRef:deleteButton, objValue:deleteAccess of oneTableRec, calcValue:deleteCalc of oneTableRec} & popUpExtras)
-				else
-					fmGUI_Popup_SelectByCommand({objRef:deleteButton, objValue:deleteAccess of oneTableRec})
-				end if
-				fmGUI_PopupSet({objRef:fieldAccessButton, objValue:fieldAccess of oneTableRec})
-				if fieldCalc of oneTableRec is not null then fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv({fieldList:fieldCalc of oneTableRec})
+				fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable({oneTableRec})
 			end repeat
 			fmGUI_ObjectClick_OkButton({})
 		end if
 		
 		return true
 	on error errMsg number errNum
-		error "unable to fmGUI_ManageSecurity_PrivSet_Update_AccessRecord - " & errMsg number errNum
+		error "unable to fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables - " & errMsg number errNum
 	end try
-end fmGUI_ManageSecurity_PrivSet_Update_AccessRecord
+end fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables
 
 --------------------
 -- END OF CODE
@@ -117,9 +88,9 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv(prefs)
-end fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv
+on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable(prefs)
+end fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable
 
 on fmGUI_ObjectClick_OkButton(prefs)
 	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
@@ -129,11 +100,6 @@ on fmGUI_Popup_SelectByCommand(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
 	tell application "htcLib" to fmGUI_Popup_SelectByCommand({objRef:objRefStr} & prefs)
 end fmGUI_Popup_SelectByCommand
-
-on fmGUI_PopupSet(prefs)
-	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
-end fmGUI_PopupSet
 
 on windowWaitUntil_FrontIS(prefs)
 	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)

@@ -6,11 +6,11 @@
 (*
 REQUIRES:
 	clickObjectByCoords
-	windowWaitUntil
-	windowWaitUntil_FrontIS
+	fmGUI_SpecifyCalcWindowSet
 	
 	 
 HISTORY:
+	1.4 - 2017-09-22 ( eshagdar ): set calc using handler.
 	1.3 - 2017-09-06 ( eshagdar ): added calcValue param that sets a calc in the 'Specify Calculation' that comes up.
 	1.2 - 2017-09-05 ( eshagdar ): clicking done by handler
 	1.1 - 2017-06-29 ( eshagdar ): prefs must be a record. incoming param may be a string, so ensure that it's an object reference.
@@ -122,18 +122,7 @@ on fmGUI_Popup_SelectByCommand(prefs)
 			
 			
 			-- set calc if there is one
-			if calcValue of prefs is not null then
-				windowWaitUntil_FrontIS({windowName:calcBoxWindowName})
-				tell application "System Events"
-					tell process "FileMaker Pro"
-						set okButton to button "OK" of window 1
-						set calcBoxObj to text area 1 of scroll area 1 of splitter group 1 of window 1
-						if value of calcBoxObj is not equal to calcValue of prefs then set value of calcBoxObj to calcValue of prefs
-					end tell
-				end tell
-				clickObjectByCoords(okButton)
-				windowWaitUntil({windowName:calcBoxWindowName, windowNameTest:"is not", whichWindow:"front"})
-			end if
+			if calcValue of prefs is not null then fmGUI_SpecifyCalcWindowSet({calcValue:calcValue of prefs})
 		end if
 		
 		
@@ -151,14 +140,9 @@ on clickObjectByCoords(objRef)
 	tell application "htcLib" to clickObjectByCoords(my coerceToString(objRef))
 end clickObjectByCoords
 
-on windowWaitUntil(prefs)
-	tell application "htcLib" to windowWaitUntil(prefs)
-end windowWaitUntil
-
-on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
-end windowWaitUntil_FrontIS
-
+on fmGUI_SpecifyCalcWindowSet(prefs)
+	tell application "htcLib" to fmGUI_SpecifyCalcWindowSet(prefs)
+end fmGUI_SpecifyCalcWindowSet
 
 
 on coerceToString(incomingObject)

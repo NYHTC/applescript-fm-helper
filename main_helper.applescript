@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2017-10-06 ( eshagdar ): added library folder to skip when generating htcLib. renamed variables for clarity.
 	2017-09-12 ( eshagdar ): attempt to de-select and re-select teh htcLib checkbox.
 	2017-06-29 ( eshagdar ): check to see if htcLib exists.
 	2017-06-26 ( eshagdar ): quit the app before deleting it.
@@ -25,47 +26,54 @@ property appExtension : ".app"
 
 
 on run
-	set tempCode to ""
 	set folderName_library to "library:"
-	set commentBreaker to "--------------------"
+	set folderName_toSkip to "standalone"
 	
+	set tempCode to ""
+	set commentBreaker to "--------------------"
 	set codeStart to commentBreaker & LF & "-- START OF CODE" & LF & commentBreaker
 	set codeEnd to commentBreaker & LF & "-- END OF CODE" & LF & commentBreaker
 	
+	
 	tell application "Finder"
-		set pathDirRoot to (folder of (path to me)) as string
+		set pathRoot to (folder of (path to me)) as string
 		set thisFileName to name of (path to me)
 	end tell
 	
-	set pathTempCode to pathDirRoot & tempFileName
-	set pathMain to pathDirRoot & mainFileName
-	set pathApp to pathDirRoot & appName & appExtension
-	set pathDirLibraries to pathDirRoot & folderName_library
-	set librariesSubDir to list folder (pathDirLibraries) without invisibles
-	
+	set pathTempCode to pathRoot & tempFileName
+	set pathMain to pathRoot & mainFileName
+	set pathApp to pathRoot & appName & appExtension
+	set pathLibrary to pathRoot & folderName_library
+	set libraryNames to list folder (pathLibrary) without invisibles
 	
 	
 	-- loop over each sub-directory, appending code from each file
-	repeat with dirCount from 1 to count of librariesSubDir
-		set pathOneDir to pathDirLibraries & (item dirCount of librariesSubDir)
-		set filesInOneDir to list folder (pathOneDir) without invisibles
-		
-		-- append all libraries into a single file
-		repeat with fileCount from 1 to count of filesInOneDir
-			-- read one file and get everything above the helper methods
-			set pathOneFile to pathOneDir & ":" & (item fileCount of filesInOneDir)
-			set oneCodeRaw to read file pathOneFile
-			if oneCodeRaw contains codeStart and oneCodeRaw contains codeEnd then
-				set oneCodeToAdd to getTextBetween({oneCodeRaw, codeStart, codeEnd})
-			else
-				set oneCodeToAdd to oneCodeRaw
-			end if
-			set oneCodeToAdd to removeLF(oneCodeToAdd)
+	repeat with dirCount from 1 to count of libraryNames
+		set oneLibraryName to item dirCount of libraryNames
+		set pathOneLibrary to pathLibrary & oneLibraryName
+		if oneLibraryName is equal to folderName_toSkip then
+			-- skip this folder because it contains standalone handlers
+		else
+			-- get all files in the the folder
+			set fileNamesInOneLibrary to list folder (pathOneLibrary) without invisibles
 			
-			-- now append
-			if (length of tempCode) is greater than 0 then set tempCode to tempCode & return & return & return
-			set tempCode to tempCode & oneCodeToAdd
-		end repeat
+			-- append all libraries into a single file
+			repeat with fileCount from 1 to count of fileNamesInOneLibrary
+				-- read one file and get everything above the helper methods
+				set pathOneFileinOneLibrary to pathOneLibrary & ":" & (item fileCount of fileNamesInOneLibrary)
+				set oneFileRawCode to read file pathOneFileinOneLibrary
+				if oneFileRawCode contains codeStart and oneFileRawCode contains codeEnd then
+					set oneFileCodeToAd to getTextBetween({oneFileRawCode, codeStart, codeEnd})
+				else
+					set oneFileCodeToAd to oneFileRawCode
+				end if
+				set oneFileCodeToAd to removeLF(oneFileCodeToAd)
+				
+				-- now append
+				if (length of tempCode) is greater than 0 then set tempCode to tempCode & return & return & return
+				set tempCode to tempCode & oneFileCodeToAd
+			end repeat
+		end if
 	end repeat
 	
 	-- prepend code with documentation
@@ -87,7 +95,7 @@ on run
 	do shell script "echo " & quoted form of tempCode & " > " & quoted form of POSIX path of pathTempCode
 	do shell script "osacompile -o " & quoted form of POSIX path of pathMain & " " & quoted form of POSIX path of pathTempCode
 	do shell script "pwd"
-	do shell script "sh " & quoted form of (POSIX path of (pathDirRoot & "vendor.sh"))
+	do shell script "sh " & quoted form of (POSIX path of (pathRoot & "vendor.sh"))
 	if result does not contain "SUCCESS" then return "Error: unable to run vendor.sh"
 	
 	

@@ -1,7 +1,23 @@
+-- CopyValuesFromViewIndexWindow({})
+-- Dan Shockley, NYHTC
 -- Copy Values from View Index Window
--- version 1.0, Daniel A. Shockley, HTC
+
+(*
+HISTORY:
+	1.0 - 2017-xx-xx ( dshockley ): first created. 
+*)
+
 
 on run
+	CopyValuesFromViewIndexWindow({})
+end run
+
+--------------------
+-- START OF CODE
+--------------------
+
+on CopyValuesFromViewIndexWindow({})
+	-- version 1.0
 	
 	tell application "System Events"
 		tell application process "FileMaker Pro Advanced"
@@ -22,4 +38,9 @@ on run
 	
 	return indexTextBlock
 	
-end run
+end CopyValuesFromViewIndexWindow
+
+--------------------
+-- END OF CODE
+--------------------
+
