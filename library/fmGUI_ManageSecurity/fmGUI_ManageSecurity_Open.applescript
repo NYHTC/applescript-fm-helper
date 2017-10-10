@@ -33,6 +33,7 @@ on fmGUI_ManageSecurity_Open(prefs)
 		if fullAccessAccountName of prefs is null or fullAccessPassword of prefs is null then error "missing full-access credentials" number 1024
 		
 		fmGUI_AppFrontMost()
+		if not fmGUI_isInFullAccessMode({}) then error "must be logged as full-access" number -1024
 		if fmGUI_NameOfFrontmostWindow() does not contain "Manage Security for" then
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
@@ -65,6 +66,10 @@ end fmGUI_ManageSecurity_Open
 on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
+
+on fmGUI_isInFullAccessMode(prefs)
+	tell application "htcLib" to fmGUI_isInFullAccessMode(prefs)
+end fmGUI_isInFullAccessMode
 
 on fmGUI_NameOfFrontmostWindow()
 	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
