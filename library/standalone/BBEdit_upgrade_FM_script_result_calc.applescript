@@ -1,4 +1,6 @@
--- TextWrangler - upgrade upgrade FM script result calc
+-- BBEdit_upgrade_FM_script_result_calc({})
+-- Dan Shockley, NYHTC
+-- BBEdit - upgrade upgrade FM script result calc
 
 (* 
 HISTORY: 
@@ -9,11 +11,9 @@ HISTORY:
 
 on run
 	
-	tell application "TextWrangler"
+	tell application "BBEdit"
 		activate
 		
-		
-		display dialog "Hi!"
 		
 		tell window 1
 			

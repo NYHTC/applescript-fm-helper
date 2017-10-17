@@ -1,6 +1,6 @@
--- TextWrangler_upgrade_SQL_Query_to_newer_format({})
+-- BBEdit_upgrade_SQL_Query_to_newer_format({})
 -- Dan Shockley, NYHTC
--- TextWrangler - upgrade SQL Query to newer format
+-- BBEdit - upgrade SQL Query to newer format
 
 (*
 HISTORY:
@@ -33,7 +33,7 @@ on TextWrangler_upgrade_SQL_Query_to_newer_format({})
 	set regexReplace_WhereEqualsClause to "\\1\\& SQL_Where ( \\2 ; \"=\" ; \\3 )\\r"
 	
 	
-	tell application "TextWrangler"
+	tell application "BBEdit"
 		activate
 		
 		tell window 1
