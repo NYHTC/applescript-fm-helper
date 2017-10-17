@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.0.1 - 2017-10-17 ( eshagdar ): removed unused variable.
 	1.0 - 2017-09-22 ( eshagdar ): moved from fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables handler
 
 
@@ -25,12 +26,11 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable(prefs)
-	-- version 1.0
+	-- version 1.0.1
 	
 	set defaultPrefs to {baseTable:null, viewAccess:null, editAccess:null, createAccess:null, deleteAccess:null, fieldAccess:null, viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null}
 	set prefs to prefs & defaultPrefs
 	
-	set windowNameEditPrivSet to "Edit Privilege Set"
 	set popUpExtras to {selectCommand:"contains", clickIfAlreadySet:true}
 	
 	try
