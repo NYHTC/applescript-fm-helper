@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.2 - 2017-10-17 ( eshagdar ): updated error message. full-access test should run ONLY if not already in manage security.
 	1.1 - 2017-06-28 ( eshagdar ): updated for Fm15 ( authenticate up-front )
 	1.0 - created
 
@@ -23,7 +24,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_Open(prefs)
-	-- version 1.1
+	-- version 1.2
 	
 	try
 		set defaultPrefs to {fullAccessAccountName:null, fullAccessPassword:null}
@@ -33,8 +34,8 @@ on fmGUI_ManageSecurity_Open(prefs)
 		if fullAccessAccountName of prefs is null or fullAccessPassword of prefs is null then error "missing full-access credentials" number 1024
 		
 		fmGUI_AppFrontMost()
-		if not fmGUI_isInFullAccessMode({}) then error "must be logged as full-access" number -1024
 		if fmGUI_NameOfFrontmostWindow() does not contain "Manage Security for" then
+			if not fmGUI_isInFullAccessMode({}) then error "must be logged as full-access" number -1024
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
 					
@@ -54,7 +55,7 @@ on fmGUI_ManageSecurity_Open(prefs)
 		return true
 		
 	on error errMsg number errNum
-		error "Couldn't open Manage Security - " & errMsg number errNum
+		error "Couldn't fmGUI_ManageSecurity_Open - " & errMsg number errNum
 	end try
 	
 end fmGUI_ManageSecurity_Open

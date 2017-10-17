@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1.1 - 2017-10-17 ( eshagdar ): pass oneTableRec as is, it's already a record.
 	1.1 - 2017-09-22 ( eshagdar ): added '_AllTables' to end of handler name. loop over list of records in recordAccess, calling a handler that handler one table.
 	1.0 - 2017-09-07 ( eshagdar ): moved from fmGUI_ManageSecurity_PrivSet_Update.
 
@@ -69,7 +70,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables(prefs)
 			-- look through each table, ensuring each type of access is set
 			repeat with oneTableRec in recordAccess of prefs
 				set oneTableRec to contents of oneTableRec
-				fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable({oneTableRec})
+				fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable(oneTableRec)
 			end repeat
 			fmGUI_ObjectClick_OkButton({})
 		end if
