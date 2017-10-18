@@ -9,14 +9,14 @@ HISTORY:
 
 
 on run
-	TextWrangler_upgrade_SQL_Query_to_newer_format({})
+	BBEdit_upgrade_SQL_Query_to_newer_format({})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on TextWrangler_upgrade_SQL_Query_to_newer_format({})
+on BBEdit_upgrade_SQL_Query_to_newer_format({})
 	
 	set regexSearch_SQL_Table to "Quote *\\( *TableNameOfField *\\( *([^\\)]+) \\) *\\)"
 	set regexReplace_SQL_Table to "SQL_Table ( \\1 )"
@@ -48,7 +48,7 @@ on TextWrangler_upgrade_SQL_Query_to_newer_format({})
 		
 		
 	end tell
-end TextWrangler_upgrade_SQL_Query_to_newer_format
+end BBEdit_upgrade_SQL_Query_to_newer_format
 
 --------------------
 -- END OF CODE
