@@ -14,7 +14,7 @@ REQUIRES:
 
 
 on run
-	windowWaitUntil_FrontNotIS({windowName:"Times Square"})
+	windowWaitUntil_FrontNotIS({windowName:"Manage Database for", waitCycleDelaySeconds:1, waitCycleMax:30 * minutes})
 end run
 
 --------------------

@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2017-10-18 ( eshagdar ): debugMode is a property. htcLib scriptName is 'htcLib', not 'main.scpt'.
 	2017-10-06 ( eshagdar ): added library folder to skip when generating htcLib. renamed variables for clarity.
 	2017-09-12 ( eshagdar ): attempt to de-select and re-select teh htcLib checkbox.
 	2017-06-29 ( eshagdar ): check to see if htcLib exists.
@@ -15,6 +16,9 @@
 	2016-03-14 ( eshagdar ): first created.
 *)
 
+
+
+property debugMode : true
 
 
 property LF : ASCII character 10
@@ -84,8 +88,8 @@ on run
 	set docCode to docCode & LF & "-- Run " & quoted form of thisFileName & " to after making changes in any .applescript file and after each git pull."
 	set docCode to docCode & LF & "-- Assumes file is located at '~/Code/applescript-fm-helper/'. If it is not, make sure to update clickCommandPosix property and 'vendor.sh' script."
 	set docCode to docCode & LF
-	set docCode to docCode & LF & "property DebugMode : false"
-	set docCode to docCode & LF & "property ScriptName : \"" & mainFileName & "\""
+	set docCode to docCode & LF & "property DebugMode : " & debugMode
+	set docCode to docCode & LF & "property ScriptName : \"" & appName & "\""
 	set docCode to docCode & LF & "property clickCommandPosix : POSIX path of (((path to home folder) as string)) & \"Code/applescript-fm-helper/vendor/cliclick/cliclick\""
 	
 	set tempCode to docCode & LF & LF & LF & tempCode

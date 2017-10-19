@@ -1,14 +1,16 @@
--- fmGUI_relogin({accountName:null, pwd:null})
+-- fmGUI_AuthenticateDialog({accountName:null, pwd:null, windowName:null})
 -- Erik Shagdar, NYHTC
--- re-login with specified credentials. must be triggered elsewhere - this handler only deals with the re-login window.
+-- authenticate with the provided credentials
 
 
 (*
 REQUIRES:
 	fmGUI_AppFrontMost
+	fmGUI_NameOfFrontmostWindow
 	fmGUI_ObjectClick_OkButton
 	fmGUI_TextFieldSet
 	windowWaitUntil
+	windowWaitUntil_FrontNotIS
 	
 
 HISTORY:
@@ -18,7 +20,7 @@ HISTORY:
 
 on run
 	
-	fmGUI_relogin({accountName:"admin", pwd:""})
+	fmGUI_AuthenticateDialog({accountName:"admin", pwd:"", windowName:"Authenticate"})
 	
 end run
 
@@ -26,34 +28,44 @@ end run
 -- START OF CODE
 --------------------
 
-on fmGUI_relogin(prefs)
+on fmGUI_AuthenticateDialog(prefs)
 	-- version 1.0
 	
-	set defaultPrefs to {accountName:null, pwd:null}
+	set defaultPrefs to {accountName:null, pwd:null, windowName:"Open"}
 	set prefs to prefs & defaultPrefs
+	
 	
 	try
 		fmGUI_AppFrontMost()
-		windowWaitUntil({windowname:"Open", windownameTest:"contains", whichWindow:"front"})
 		
-		
-		tell application "System Events"
-			tell process "FileMaker Pro"
-				set objAccount to text field "Account Name:" of window 1
-				set objPassword to text field "Password:" of window 1
+		set authWindowName to fmGUI_NameOfFrontmostWindow()
+		if authWindowName contains windowName of prefs then
+			set possibleAccountNameLabels to {"Account Name:", "User Name:", "Full Access Account:"}
+			tell application "System Events"
+				tell process "FileMaker Pro"
+					repeat with oneName in possibleAccountNameLabels
+						try
+							set objAccount to text field oneName of window 1
+							exit repeat
+						end try
+					end repeat
+					set objPassword to text field "Password:" of window 1
+				end tell
 			end tell
-		end tell
-		fmGUI_TextFieldSet({objRef:objAccount, objValue:accountName of prefs})
-		fmGUI_TextFieldSet({objRef:objPassword, objValue:pwd of prefs})
-		fmGUI_ObjectClick_OkButton({})
+			fmGUI_TextFieldSet({objRef:objAccount, objValue:accountName of prefs})
+			fmGUI_TextFieldSet({objRef:objPassword, objValue:pwd of prefs})
+			fmGUI_ObjectClick_OkButton({})
+			
+			if fmGUI_NameOfFrontmostWindow() is equal to "FileMaker Pro" then error "incorrect credentials" number -1024
+			
+			return windowWaitUntil_FrontNotIS({windowName:authWindowName})
+		end if
 		
-		
-		windowWaitUntil({windowname:"Open", windownameTest:"does not contain", whichWindow:"front"})
 		return true
 	on error errMsg number errNum
 		error "Unable to fmGUI_relogin - " & errMsg number errNum
 	end try
-end fmGUI_relogin
+end fmGUI_AuthenticateDialog
 
 --------------------
 -- END OF CODE
@@ -62,6 +74,10 @@ end fmGUI_relogin
 on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
+
+on fmGUI_NameOfFrontmostWindow()
+	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow
 
 on fmGUI_ObjectClick_OkButton(prefs)
 	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
@@ -75,6 +91,10 @@ end fmGUI_TextFieldSet
 on windowWaitUntil(prefs)
 	tell application "htcLib" to windowWaitUntil(prefs)
 end windowWaitUntil
+
+on windowWaitUntil_FrontNotIS(prefs)
+	tell application "htcLib" to windowWaitUntil_FrontNotIS(prefs)
+end windowWaitUntil_FrontNotIS
 
 
 

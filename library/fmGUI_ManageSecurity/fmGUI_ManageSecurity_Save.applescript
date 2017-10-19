@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.5 - 2017-10-19 ( eshagdar ): sub-handlers: button clicks, window checks, authentication.
 	1.4.2 - 2017-08-09 ( eshagdar ): instead of waiting for a set amount of time, wait until the frontmost window is not manage security ( it will either be the confirm full access window, or finished saving ).
 	1.4.1 - 2017-08-07 ( eshagdar ): added windowWaitUntil handler to execute sample code
 	1.4 - 2017-07-14 ( eshagdar ): renamed params: fullAccount -> fullAccessAccountName and fullPassword -> fullAccessPassword. wait until windows are gone.
@@ -15,10 +16,11 @@ HISTORY:
 
 
 REQUIRES:
-	clickObjectByCoords
 	fmGUI_AppFrontMost
-	windowWaitUntil
-*)
+	fmGUI_AuthenticateDialog
+	fmGUI_NameOfFrontmostWindow
+	fmGUI_ObjectClick_OkButton
+	windowWaitUntil*)
 
 
 on run
@@ -30,42 +32,27 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_Save(prefs)
-	--version 1.4.2
+	--version 1.5
 	
 	set defaulPrefs to {fullAccessAccountName:null, fullAccessPassword:null}
 	set prefs to prefs & defaulPrefs
 	
+	set authWindowName to "Confirm Full access Login"
+	set securityWindowName to "Manage Security for"
+	
 	try
 		fmGUI_AppFrontMost()
 		
-		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
-				if name of window 1 does not contain "Manage Security for" then error "Not in main Manage Security window." number 1024
-				set okButton to button "OK" of window 1
-			end tell
-		end tell
-		
 		-- save security changes
-		clickObjectByCoords(okButton)
+		fmGUI_ObjectClick_OkButton({})
 		
 		
 		-- confirm with full access account
-		windowWaitUntil({whichWindow:"front", windowNameTest:"does not start with", windowName:"Manage Security"})
-		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
-				if name of window 1 is "Confirm Full access Login" then
-					set value of text field "Full Access Account:" of window 1 to fullAccessAccountName of prefs
-					set value of text field "Password:" of window 1 to fullAccessPassword of prefs
-					set okButton to button "OK" of window 1
-				end if
-			end tell
-		end tell
-		clickObjectByCoords(okButton)
+		if fmGUI_NameOfFrontmostWindow() is equal to authWindowName then fmGUI_AuthenticateDialog({accountName:fullAccessAccountName of prefs, pwd:fullAccessPassword of prefs, windowname:authWindowName})
 		
 		
 		-- wait until window is gone
-		windowWaitUntil({whichWindow:"front", windowNameTest:"is not", windowName:"Confirm Full access Login"})
-		windowWaitUntil({whichWindow:"front", windowNameTest:"does not start with", windowName:"Manage Security"})
+		windowWaitUntil({whichWindow:"front", windowNameTest:"does not start with", windowname:securityWindowName})
 		
 		return true
 	on error errMsg number errNum
@@ -78,27 +65,22 @@ end fmGUI_ManageSecurity_Save
 -- END OF CODE
 --------------------
 
-on clickObjectByCoords(prefs)
-	tell application "htcLib" to clickObjectByCoords(my coerceToString(prefs))
-end clickObjectByCoords
-
 on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
+on fmGUI_AuthenticateDialog(prefs)
+	tell application "htcLib" to fmGUI_AuthenticateDialog(prefs)
+end fmGUI_AuthenticateDialog
+
+on fmGUI_NameOfFrontmostWindow()
+	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow
+
+on fmGUI_ObjectClick_OkButton(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+end fmGUI_ObjectClick_OkButton
+
 on windowWaitUntil(prefs)
 	tell application "htcLib" to windowWaitUntil(prefs)
 end windowWaitUntil
-
-
-
-on coerceToString(incomingObject)
-	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a coerceToString into this file for the sample to run ( instead of having a copy of the handler locally ).
-	
-	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
-	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
-	set codeCoerce to run script codeCoerce
-	tell codeCoerce to coerceToString(incomingObject)
-end coerceToString
-
