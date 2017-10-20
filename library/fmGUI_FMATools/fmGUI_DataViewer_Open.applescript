@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.0.2 - 2017-10-20 ( eshagdar ): FM16 renamed window, just look for a dialog box that begins with 'authenticate'
 	1.0.1 - 2017-10-19 ( eshagdar ): get button ref by description, not number. auth if unable to get the scroll area, not always.
 	1.0 - 2017-10-18 ( eshagdar ): first created
 
@@ -71,7 +72,7 @@ on fmGUI_DataViewer_Open(prefs)
 				end tell
 			end tell
 			clickObjectByCoords(authButton)
-			fmGUI_AuthenticateDialog({accountName:fullAccessAccountName of prefs, pwd:fullAccessPassword of prefs, windowname:"Authenticate Script Debugging"})
+			fmGUI_AuthenticateDialog({accountName:fullAccessAccountName of prefs, pwd:fullAccessPassword of prefs, windowname:"Authenticate"})
 		end try
 		
 		
