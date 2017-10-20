@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2017-10-20 ( eshagdar ): allow running with params. If ran with 'False', dialogs ( and re-enabling assistve devices ) is suppressed. 
 	2017-10-18 ( eshagdar ): debugMode is a property. htcLib scriptName is 'htcLib', not 'main.scpt'.
 	2017-10-06 ( eshagdar ): added library folder to skip when generating htcLib. renamed variables for clarity.
 	2017-09-12 ( eshagdar ): attempt to de-select and re-select teh htcLib checkbox.
@@ -29,7 +30,12 @@ property appExtension : ".app"
 
 
 
-on run
+on run prefs
+	set defaultPrefs to {true}
+	if class of prefs is script or prefs is equal to {} then set prefs to defaultPrefs
+	set showDialogs to ((item 1 of prefs) as boolean)
+	
+	
 	set folderName_library to "library:"
 	set folderName_toSkip to "standalone"
 	
@@ -128,51 +134,54 @@ on run
 		if exists pathTempCode then delete file pathTempCode
 	end tell
 	
-	
-	tell it to activate
-	set AsstAccessDlg to display dialog "You must enable assistive access for " & appName & "." with title appName buttons {"Open", "OK"} default button "OK"
-	
-	
-	-- navigate to security preference pane
-	if button returned of AsstAccessDlg is equal to "Open" then
-		tell application "System Preferences"
-			activate
-			set the current pane to pane id "com.apple.preference.security" of application "System Preferences"
-			delay 0.5
-		end tell
+	if showDialogs then
+		tell it to activate
+		set AsstAccessDlg to display dialog "You must enable assistive access for " & appName & "." with title appName buttons {"Open", "OK"} default button "OK"
 		
-		tell application "System Events"
-			tell process "System Preferences"
-				click radio button "Privacy" of tab group 1 of window 1
-				
-				-- get htcLib checkbox
-				set htcLibRow to (first row of table 1 of scroll area 1 of group 1 of tab group 1 of window 1 whose value of static text 1 of UI element 1 contains "htcLib")
-				set htcLibCheckbox to checkbox 1 of UI element 1 of htcLibRow
-				select htcLibRow
-				
-				-- unlock if needed
-				set canMakeChanges to enabled of htcLibCheckbox
-				if canMakeChanges is false then
-					click button 1 of window 1
-					display dialog "You must deselect, then reselect the HtcLib checkbox" buttons "OK" default button "OK"
-					return true
-				end if
-				
-				
-				-- uncheck, then recheck to re-allow control of htcLib
-				click htcLibCheckbox
+		
+		-- navigate to security preference pane
+		if button returned of AsstAccessDlg is equal to "Open" then
+			tell application "System Preferences"
+				activate
+				set the current pane to pane id "com.apple.preference.security" of application "System Preferences"
 				delay 0.5
-				click htcLibCheckbox
-				delay 0.5
-				set visible to false
 			end tell
-		end tell
-		
-		tell me to activate
-		display dialog "HtcLib is ready" buttons "OK" default button "OK"
+			
+			tell application "System Events"
+				tell process "System Preferences"
+					click radio button "Privacy" of tab group 1 of window 1
+					
+					-- get htcLib checkbox
+					set htcLibRow to (first row of table 1 of scroll area 1 of group 1 of tab group 1 of window 1 whose value of static text 1 of UI element 1 contains "htcLib")
+					set htcLibCheckbox to checkbox 1 of UI element 1 of htcLibRow
+					select htcLibRow
+					
+					-- unlock if needed
+					set canMakeChanges to enabled of htcLibCheckbox
+					if canMakeChanges is false then
+						click button 1 of window 1
+						display dialog "You must deselect, then reselect the HtcLib checkbox" buttons "OK" default button "OK"
+						return true
+					end if
+					
+					
+					-- uncheck, then recheck to re-allow control of htcLib
+					click htcLibCheckbox
+					delay 0.5
+					click htcLibCheckbox
+					delay 0.5
+					set visible to false
+				end tell
+			end tell
+			
+			tell me to activate
+			display dialog "HtcLib is ready" buttons "OK" default button "OK"
+		end if
+		return true
+	else
+		return "you must re-allow assistive devices to '" & appName & "'."
 	end if
 	
-	return true
 end run
 
 

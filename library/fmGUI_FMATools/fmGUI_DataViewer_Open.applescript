@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.0.1 - 2017-10-19 ( eshagdar ): get button ref by description, not number. auth if unable to get the scroll area, not always.
 	1.0 - 2017-10-18 ( eshagdar ): first created
 
 
@@ -61,11 +62,12 @@ on fmGUI_DataViewer_Open(prefs)
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
 					get scroll area 1 of tab group 1 of window 1
-					if value of radio button "Current" of tab group 1 of dvWindow is 1 then
-						set authButton to button 2 of tab group 1 of dvWindow
-					else if value of radio button "Watch" of tab group 1 of dvWindow is 1 then
-						set authButton to button 1 of tab group 1 of dvWindow
-					end if
+				end tell
+			end tell
+		on error
+			tell application "System Events"
+				tell application process "FileMaker Pro Advanced"
+					set authButton to first button of tab group 1 of dvWindow whose description contains "Auth"
 				end tell
 			end tell
 			clickObjectByCoords(authButton)

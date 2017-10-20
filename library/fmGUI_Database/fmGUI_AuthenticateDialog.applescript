@@ -14,13 +14,14 @@ REQUIRES:
 	
 
 HISTORY:
+	1.1 - 2017-10-20 ( eshagdar ): FM16 changed object names - determine fields by their description
 	1.0 - 2017-10-07 ( eshagdar ): created
 *)
 
 
 on run
 	
-	fmGUI_AuthenticateDialog({accountName:"admin", pwd:"", windowName:"Authenticate"})
+	fmGUI_AuthenticateDialog({accountName:"admin", pwd:"test", windowName:"Open"})
 	
 end run
 
@@ -31,8 +32,10 @@ end run
 on fmGUI_AuthenticateDialog(prefs)
 	-- version 1.0
 	
-	set defaultPrefs to {accountName:null, pwd:null, windowName:"Open"}
+	set defaultPrefs to {accountName:"admin", pwd:"test", windowName:"Open"}
 	set prefs to prefs & defaultPrefs
+	
+	set pwdFieldDesc to "secure text field"
 	
 	
 	try
@@ -40,16 +43,10 @@ on fmGUI_AuthenticateDialog(prefs)
 		
 		set authWindowName to fmGUI_NameOfFrontmostWindow()
 		if authWindowName contains windowName of prefs then
-			set possibleAccountNameLabels to {"Account Name:", "User Name:", "Full Access Account:"}
 			tell application "System Events"
 				tell process "FileMaker Pro"
-					repeat with oneName in possibleAccountNameLabels
-						try
-							set objAccount to text field oneName of window 1
-							exit repeat
-						end try
-					end repeat
-					set objPassword to text field "Password:" of window 1
+					set objAccount to first text field of window 1 whose description is not pwdFieldDesc
+					set objPassword to first text field of window 1 whose description is pwdFieldDesc
 				end tell
 			end tell
 			fmGUI_TextFieldSet({objRef:objAccount, objValue:accountName of prefs})
@@ -63,7 +60,7 @@ on fmGUI_AuthenticateDialog(prefs)
 		
 		return true
 	on error errMsg number errNum
-		error "Unable to fmGUI_relogin - " & errMsg number errNum
+		error "Unable to fmGUI_AuthenticateDialog - " & errMsg number errNum
 	end try
 end fmGUI_AuthenticateDialog
 
