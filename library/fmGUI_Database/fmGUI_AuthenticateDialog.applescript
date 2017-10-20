@@ -14,7 +14,7 @@ REQUIRES:
 	
 
 HISTORY:
-	1.1 - 2017-10-20 ( eshagdar ): FM16 changed object names - determine fields by their description
+	1.1 - 2017-10-20 ( eshagdar ): FM16 changed object names - determine fields by their description. button name changed from 'OK' to 'Sign In'.
 	1.0 - 2017-10-07 ( eshagdar ): created
 *)
 
@@ -30,7 +30,7 @@ end run
 --------------------
 
 on fmGUI_AuthenticateDialog(prefs)
-	-- version 1.0
+	-- version 1.1
 	
 	set defaultPrefs to {accountName:"admin", pwd:"test", windowName:"Open"}
 	set prefs to prefs & defaultPrefs
@@ -51,7 +51,11 @@ on fmGUI_AuthenticateDialog(prefs)
 			end tell
 			fmGUI_TextFieldSet({objRef:objAccount, objValue:accountName of prefs})
 			fmGUI_TextFieldSet({objRef:objPassword, objValue:pwd of prefs})
-			fmGUI_ObjectClick_OkButton({})
+			try
+				fmGUI_ObjectClick_OkButton({})
+			on error
+				fmGUI_ObjectClick_SignInButton({})
+			end try
 			
 			if fmGUI_NameOfFrontmostWindow() is equal to "FileMaker Pro" then error "incorrect credentials" number -1024
 			
