@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.5.1 - 2017-10-23 ( eshagdar ): FM16 renamed auth window name, so windw test is 'begins with' instead of 'is'
 	1.5 - 2017-10-19 ( eshagdar ): sub-handlers: button clicks, window checks, authentication.
 	1.4.2 - 2017-08-09 ( eshagdar ): instead of waiting for a set amount of time, wait until the frontmost window is not manage security ( it will either be the confirm full access window, or finished saving ).
 	1.4.1 - 2017-08-07 ( eshagdar ): added windowWaitUntil handler to execute sample code
@@ -32,12 +33,12 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_Save(prefs)
-	--version 1.5
+	--version 1.5.1
 	
 	set defaulPrefs to {fullAccessAccountName:null, fullAccessPassword:null}
 	set prefs to prefs & defaulPrefs
 	
-	set authWindowName to "Confirm Full access Login"
+	set authWindowName to "Confirm Full access"
 	set securityWindowName to "Manage Security for"
 	
 	try
@@ -48,7 +49,7 @@ on fmGUI_ManageSecurity_Save(prefs)
 		
 		
 		-- confirm with full access account
-		if fmGUI_NameOfFrontmostWindow() is equal to authWindowName then fmGUI_AuthenticateDialog({accountName:fullAccessAccountName of prefs, pwd:fullAccessPassword of prefs, windowname:authWindowName})
+		if fmGUI_NameOfFrontmostWindow() begins with authWindowName then fmGUI_AuthenticateDialog({accountName:fullAccessAccountName of prefs, pwd:fullAccessPassword of prefs, windowname:authWindowName})
 		
 		
 		-- wait until window is gone
