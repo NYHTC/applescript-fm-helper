@@ -10,7 +10,7 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_menuItemAvailable
+	fmGUI_Wait_MenuItemAvailable
 *)
 
 
@@ -35,11 +35,9 @@ on fmGUI_Cut()
 		end tell
 		
 		return fmGUI_ClickMenuItem({menuItemRef:cutMenuItem})
-		
 	on error errMsg number errNum
 		error "Couldn't fmGUI_SelectAll - " & errMsg number errNum
 	end try
-	
 end fmGUI_Cut
 
 --------------------

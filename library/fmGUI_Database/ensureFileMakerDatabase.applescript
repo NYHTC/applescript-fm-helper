@@ -60,7 +60,7 @@ on ensureFileMakerDatabase(prefs)
 		-- was already displayed
 		return true
 	on error errMsg number errNum
-		error "Unable to ensureFileMakerDatabase: " & errMsg number errNum
+		error "Unable to ensureFileMakerDatabase - " & errMsg number errNum
 	end try
 end ensureFileMakerDatabase
 

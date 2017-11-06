@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.5 - 2017-10-30 ( eshagdar ): FM interactions are done via sub-handlers.
 	1.4 - 2016-06-29 ( eshagdar ): wait until the close/save is complete
 	1.3 - 
 	1.2 - 
@@ -15,22 +16,23 @@ HISTORY:
 REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_ManageDb_RelationshipsTab
+	fmGUI_NameOfFrontmostWindow
+	fmGUI_ObjectClick_OkButton
 *)
 
 
 on run
-	fmGUI_ManageDB_Save({})
+	fmGUI_ManageDb_Save({})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_ManageDB_Save(prefs)
-	-- version 1.4
+on fmGUI_ManageDb_Save(prefs)
+	-- version 1.5
 	
 	set defaultPrefs to {notInManageDbIsError:true}
-	
 	set prefs to prefs & defaultPrefs
 	
 	
@@ -42,43 +44,33 @@ on fmGUI_ManageDB_Save(prefs)
 	
 	try
 		fmGUI_AppFrontMost()
-		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
-				if name of window 1 starts with manageDbWindowNamePrefix then
-					try
-						set manageDbWindowName to name of window 1
-						click (button "OK" of window 1)
-						delay 1 -- let click register.
-						-- will continue below to wait for window to close
-						
-					on error errMsg number errNum
-						error "Couldn't save Manage Database - " & errMsg number errNum
-					end try
-				else
-					if notInManageDbIsError of prefs then
-						error "Manage Database window wasn't open, so nothing to close." number 1024
-					else
-						-- Not in Manage Database, but that is OK.
-						return true
-					end if
-				end if
-				
-			end tell
-			
-			my windowWaitUntil({windowName:manageDbWindowName, windowNameTest:"does not contain", whichWindow:"any", waitCycleDelaySeconds:waitCycleDelaySeconds, waitCycleMax:waitCycleMax})
-			
-			delay 1 -- let normal window come to front. 
-			
-			return true
-			
-		end tell
+		set frontmostWindowName to fmGUI_NameOfFrontmostWindow()
+		if frontmostWindowName starts with manageDbWindowNamePrefix then
+			try
+				fmGUI_ObjectClick_OkButton({})
+				delay 1 -- let click register. will continue below to wait for window to close
+			on error errMsg number errNum
+				error "Couldn't save Manage Database - " & errMsg number errNum
+			end try
+		else
+			if notInManageDbIsError of prefs then
+				error "Manage Database window wasn't open, so nothing to close." number 1024
+			else
+				-- Not in Manage Database, but that is OK.
+				return true
+			end if
+		end if
 		
 		
+		-- wait until the the changes are commited
+		windowWaitUntil({windowName:frontmostWindowName, windowNameTest:"does not contain", whichWindow:"any", waitCycleDelaySeconds:waitCycleDelaySeconds, waitCycleMax:waitCycleMax})
+		delay 1 -- let normal window come to front. 
+		
+		return true
 	on error errMsg number errNum
-		error "Couldn't save Manage Database - " & errMsg number errNum
+		error "unable to fmGUI_ManageDB_Save - " & errMsg number errNum
 	end try
-	
-end fmGUI_ManageDB_Save
+end fmGUI_ManageDb_Save
 
 --------------------
 -- END OF CODE
@@ -87,6 +79,14 @@ end fmGUI_ManageDB_Save
 on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
+
+on fmGUI_NameOfFrontmostWindow()
+	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow
+
+on fmGUI_ObjectClick_OkButton(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+end fmGUI_ObjectClick_OkButton
 
 on windowWaitUntil(prefs)
 	tell application "htcLib" to windowWaitUntil(prefs)

@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3.1 - 2017-11-06 ( eshagdar ): try block encompasses param declaration. added clipboardClear to helper fucntions.
 	1.3 - 2016-10-18 ( eshagdar ): use fmGUI_clickMenuItem handler
 	1.2 - 2016-10-18 ( eshagdar ): make sure the menu item is available again
 	1.1 - 2016-10-14 ( eshagdar ): 1.0 was looking only for script steps. now looks at non-zero length
@@ -12,12 +13,12 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_menuItemAvailable
+	fmGUI_Wait_MenuItemAvailable
 *)
 
 
 on run
-	fmGUI_CopySelected()
+	fmGUI_CopySelected({})
 end run
 
 --------------------
@@ -25,14 +26,16 @@ end run
 --------------------
 
 on fmGUI_CopySelected(prefs)
-	-- version 1.3, Erik Shagdar
-	
-	set defaultPrefs to {}
-	set prefs to prefs & defaultPrefs
+	-- version 1.3.1, Erik Shagdar
 	
 	try
-		clipboardClear() -- want clipboard to be EMPTY before we copy, so we can check for copied scripts.
+		set defaultPrefs to {}
+		set prefs to prefs & defaultPrefs
+		
+		
 		fmGUI_AppFrontMost()
+		clipboardClear() -- want clipboard to be EMPTY before we copy, so we can check for copied scripts.
+		
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
@@ -40,12 +43,11 @@ on fmGUI_CopySelected(prefs)
 			end tell
 		end tell
 		
-		return fmGUI_clickMenuItem({menuItemRef:copyMenuItem})
 		
+		return fmGUI_clickMenuItem({menuItemRef:copyMenuItem, waitForMenuAvailable:true})
 	on error errMsg number errNum
 		error "Couldn't fmGUI_CopySelected - " & errMsg number errNum
 	end try
-	
 end fmGUI_CopySelected
 
 --------------------
@@ -56,10 +58,14 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_ClickMenuItem(prefs)
+on clipboardClear()
+	tell application "htcLib" to clipboardClear()
+end clipboardClear
+
+on fmGUI_clickMenuItem(prefs)
 	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
-	tell application "htcLib" to fmGUI_ClickMenuItem(prefs)
-end fmGUI_ClickMenuItem
+	tell application "htcLib" to fmGUI_clickMenuItem(prefs)
+end fmGUI_clickMenuItem
 
 
 

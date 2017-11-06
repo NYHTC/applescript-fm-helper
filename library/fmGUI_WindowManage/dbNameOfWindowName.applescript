@@ -19,7 +19,11 @@ REQUIRES:
 
 
 on run
-	tell application "FileMaker Pro Advanced" to set frontmostWindowName to name of window 1
+	tell application "System Events"
+		tell process "FileMaker Pro Advanced"
+			set frontmostWindowName to name of window 1
+		end tell
+	end tell
 	dbNameOfWindowName(frontmostWindowName)
 end run
 

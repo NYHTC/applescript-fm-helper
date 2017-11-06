@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4 - 2017-11-06 ( eshagdar ): inaccurate history - start a new version.
 	1.3 - 2016-10-18 ( eshagdar ): use fmGUI_clickMenuItem handler
 	1.2 - 2016-10-18 ( eshagdar ): make sure the menu item is available again
 	1.1 - 2016-10-14 ( eshagdar ): 1.0 was looking only for script steps. now looks at non-zero length
@@ -12,7 +13,7 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_menuItemAvailable
+	fmGUI_ClickMenuItem
 *)
 
 
@@ -25,7 +26,7 @@ end run
 --------------------
 
 on fmGUI_SelectAll()
-	-- version 1.1, Erik Shagdar
+	-- version 1.4, Erik Shagdar
 	
 	try
 		fmGUI_AppFrontMost()
@@ -36,12 +37,10 @@ on fmGUI_SelectAll()
 			end tell
 		end tell
 		
-		return fmGUI_ClickMenuItem({menuItemRef:SelectAllMenuItem})
-		
+		return fmGUI_ClickMenuItem({menuItemRef:SelectAllMenuItem, waitForMenuAvailable:true})
 	on error errMsg number errNum
 		error "Couldn't fmGUI_SelectAll - " & errMsg number errNum
 	end try
-	
 end fmGUI_SelectAll
 
 --------------------

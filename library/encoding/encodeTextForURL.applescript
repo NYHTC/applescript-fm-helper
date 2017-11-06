@@ -14,7 +14,7 @@ REQUIRES:
 
 
 on run
-	encodeTextForURL("hello;here", true, false)
+	encodeTextForURL("a00_TIMESSQUARE", true, false)
 end run
 
 --------------------

@@ -5,7 +5,12 @@
 
 (*
 HISTORY:
+	1.1 - 2017-11-03 ( eshagdar ): pass first letter to textUpper handler to capitalize. wrap with a try block.
 	1.0 - 2017-08-22 ( eshagdar ): created
+	
+
+REQUIRES:
+	textUpper
 *)
 
 
@@ -19,16 +24,26 @@ end run
 --------------------
 
 on upperFirstLetter(prefs)
-	-- version 1.0
+	-- version 1.1
 	
-	set defaultPrefs to {str:""}
-	set prefs to prefs & defaultPrefs
+	try
+		set defaultPrefs to {str:""}
+		set prefs to prefs & defaultPrefs
 	
-	set firstLetter to text 1 of str of prefs
-	set remainingString to text 2 thru -1 of str of prefs
-	return (do shell script ("echo " & firstLetter & " | tr a-z A-Z;")) & remainingString
+			
+		set firstLetter to text 1 of str of prefs
+		set remainingString to text 2 thru -1 of str of prefs
+		
+		return textUpper({str:firstLetter}) & remainingString
+	on error errMsg number errNum
+		error "unable to upperFirstLetter - " & errMsg number errNum
+	end try
 end upperFirstLetter
 
 --------------------
 -- END OF CODE
 --------------------
+
+on textUpper()
+	tell application "htcLib" to textUpper(prefs)
+end textUpper

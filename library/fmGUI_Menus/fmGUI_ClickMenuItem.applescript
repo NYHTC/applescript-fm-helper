@@ -1,16 +1,16 @@
--- fmGUI_ClickMenuItem({menuItemRef:null})
+-- fmGUI_ClickMenuItem({menuItemRef:null, waitForMenuAvailable: null})
 -- Erik Shagdar, NYHTC
 -- click on a menu item in FileMaker
 
 
 (*
 HISTORY:
+	1.1 - 2017-11-06 ( eshagdar ): we should not wait for the menu item to be available since clicking it may disable it ( e.g. manage DB ). Instead, briefly delay, then exit.
 	1.0 - 2016-10-18 ( eshagdar ): first created
 
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_menuItemAvailable
 *)
 
 
@@ -31,21 +31,27 @@ end run
 --------------------
 
 on fmGUI_ClickMenuItem(prefs)
-	-- version 1.0, Erik Shagdar
+	-- version 1.1, Erik Shagdar
 	
-	set defaultPrefs to {menuItemRef:null}
+	set defaultPrefs to {menuItemRef:null, waitForMenuAvailable:false}
 	set prefs to prefs & defaultPrefs
 	set menuItemRef to ensureObjectRef(menuItemRef of prefs)
 	
 	try
 		fmGUI_AppFrontMost()
+		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
 				click menuItemRef
 			end tell
 		end tell
-		return fmGUI_menuItemAvailable(prefs)
 		
+		
+		if waitForMenuAvailable of prefs then return fmGUI_Wait_MenuItemAvailable({menuItemRef:menuItemRef})
+		
+		
+		delay 0.1 -- pause to give a chance for menus to redraw
+		return true
 	on error errMsg number errNum
 		error "Unable to fmGUI_ClickMenuItem - " & errMsg number errNum
 	end try
@@ -59,10 +65,10 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_menuItemAvailable(prefs)
+on fmGUI_Wait_MenuItemAvailable(prefs)
 	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
-	tell application "htcLib" to fmGUI_menuItemAvailable(prefs)
-end fmGUI_menuItemAvailable
+	tell application "htcLib" to fmGUI_Wait_MenuItemAvailable(prefs)
+end fmGUI_Wait_MenuItemAvailable
 
 
 
@@ -87,5 +93,3 @@ on ensureObjectRef(someObjectRef)
 	set codeEnsureObj to run script codeEnsureObj
 	tell codeEnsureObj to ensureObjectRef(someObjectRef)
 end ensureObjectRef
-
-

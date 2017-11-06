@@ -1,46 +1,47 @@
--- fmGUI_ClearContents()
+-- fmGUI_Menu_OpenLayouts({})
 -- Erik Shagdar, NYHTC
--- Clear contents/selected objects
+-- Click Open Manage Layouts menu item
 
 
 (*
 HISTORY:
-	1.0.1 - 2017-11-06 ( eshagdar ): updated handler to wait for the menu item.
-	1.0 - 2016-10-28 ( eshagdar ): first created
+	1.0 - 2017-11-03 ( eshagdar ): copied logic from fmGUI_Menu_OpenDB
 
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_ClickMenuItem
+	fmGUI_menuItemAvailable
+	windowWaitUntil
 *)
 
 
 on run
-	fmGUI_ClearContents()
+	fmGUI_Menu_OpenLayouts({})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_ClearContents()
-	-- version 1.0.1, Erik Shagdar
+on fmGUI_Menu_OpenLayouts(prefs)
+	-- version 1.0, Erik Shagdar
 	
 	try
 		fmGUI_AppFrontMost()
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				set ClearMenuItem to first menu item of menu 1 of menu bar item "Edit" of menu bar 1 whose name is "Clear"
+				set openManageLayoutsMenuItem to first menu item of menu 1 of menu item "Manage" of menu 1 of menu bar item "File" of menu bar 1 whose name starts with "Layouts"
 			end tell
 		end tell
+		fmGUI_ClickMenuItem({menuItemRef:openManageLayoutsMenuItem})
+		delay 0.25
 		
-		return fmGUI_ClickMenuItem({menuItemRef:ClearMenuItem})
+		return windowWaitUntil({windowName:"Manage Layouts"})
 	on error errMsg number errNum
-		error "Couldn't fmGUI_ClearContents - " & errMsg number errNum
+		error "Couldn't fmGUI_Menu_OpenLayouts - " & errMsg number errNum
 	end try
-	
-end fmGUI_ClearContents
+end fmGUI_Menu_OpenLayouts
 
 --------------------
 -- END OF CODE
@@ -54,6 +55,11 @@ on fmGUI_ClickMenuItem(prefs)
 	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
 	tell application "htcLib" to fmGUI_ClickMenuItem(prefs)
 end fmGUI_ClickMenuItem
+
+on windowWaitUntil(prefs)
+	tell application "htcLib" to windowWaitUntil(prefs)
+end windowWaitUntil
+
 
 
 

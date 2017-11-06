@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3 - 2017-11-06 ( eshagdar ): return instead of setting variables to return. wrap handler in try-block.
 	1.2 - 2016-10-14 ( eshagdar ): use clipboardClear handler
 	1.1 - 2016-10-13 ( eshagdar ): replaced select all and copy with handlers
 	1.0 - 2016-06-28 ( eshagdar ): first created
@@ -27,37 +28,33 @@ end run
 --------------------
 
 on fmGUI_SelectAllAndCopy()
-	-- version 1.2, Erik Shagdar
+	-- version 1.3, Erik Shagdar
 	
-	clipboardClear()
-	set clipboardChanged to false
-	
-	
-	fmGUI_AppFrontMost()
-	fmGUI_SelectAll()
-	tell application "System Events" to delay 0.5
-	fmGUI_CopySelected({})
-	
-	
-	tell application "System Events"
-		repeat 50 times
-			try
-				-- We set the clipboard to an empty string. Once utf8 is no longer in it (or isn't empty), we must have picked up the objects copied above.
-				get the clipboard as Çclass utf8È
-				if length of result is greater than 0 then
-					set clipboardChanged to true
-					exit repeat
-				end if
-			on error
-				set clipboardChanged to true
-				exit repeat
-			end try
-			delay 0.5
-		end repeat
-	end tell
-	
-	return clipboardChanged
-	
+	try
+		clipboardClear()
+		fmGUI_AppFrontMost()
+		fmGUI_SelectAll()
+		delay 0.5
+		fmGUI_CopySelected({})
+		
+		
+		tell application "System Events"
+			repeat 50 times
+				try
+					-- We set the clipboard to an empty string. Once utf8 is no longer in it (or isn't empty), we must have picked up the objects copied above.
+					get the clipboard as Çclass utf8È
+					if length of result is greater than 0 then return true
+				on error
+					return true -- there is data, but it's some other class
+				end try
+				delay 0.5
+			end repeat
+		end tell
+		
+		return false
+	on error errMsg number errNum
+		error "Couldn't fmGUI_SelectAllAndCopy - " & errMsg number errNum
+	end try
 end fmGUI_SelectAllAndCopy
 
 --------------------
@@ -72,8 +69,8 @@ on clipboardClear()
 	tell application "htcLib" to clipboardClear()
 end clipboardClear
 
-on fmGUI_CopySelected()
-	tell application "htcLib" to fmGUI_CopySelected()
+on fmGUI_CopySelected(prefs)
+	tell application "htcLib" to fmGUI_CopySelected(prefs)
 end fmGUI_CopySelected
 
 on fmGUI_SelectAll()

@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3.1 - 2017-11-06 ( eshagdar ): wait for the paste to finish.
 	1.3 - 2016-10-27 ( eshagdar ): added try block.
 	1.2 - 2016-10-18 ( eshagdar ): call fmGUI_clickMenuItem handler
 	1.1 - 2016-09-29 ( eshagdar ): HTC is converting 'Paste' menu item to 'Paste Styled Text'. The default 'Paste' shortcut is pasting plain text. This tries the default 'Paste' command, and then uses 'Paste Styled Text' if needed.
@@ -26,7 +27,7 @@ end run
 --------------------
 
 on fmGUI_PasteFromClipboard()
-	-- version 1.3, Erik Shagdar
+	-- version 1.3.1, Erik Shagdar
 	
 	try
 		fmGUI_AppFrontMost()
@@ -43,7 +44,7 @@ on fmGUI_PasteFromClipboard()
 			end tell
 		end tell
 		
-		return fmGUI_ClickMenuItem({menuItemRef:pasteMenuItem})
+		return fmGUI_ClickMenuItem({menuItemRef:pasteMenuItem, waitForMenuAvailable:true})
 	on error errMsg number errNum
 		error "Couldn't fmGUI_CopySelected - " & errMsg number errNum
 	end try

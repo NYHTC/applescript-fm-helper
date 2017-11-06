@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.0.1 - 2017-11-01 ( eshagdar ): updated error message
 	1.0 - 201x-xx-xx ( eshagdar ): created
 
 
@@ -23,7 +24,7 @@ end run
 --------------------
 
 on fmGUI_isInFullAccessMode(prefs)
-	--version 1.0, Erik Shagdar
+	--version 1.0.1, Erik Shagdar
 	
 	fmGUI_AppFrontMost()
 	--fmGUI_ManageLayouts_Close({})
@@ -37,7 +38,7 @@ on fmGUI_isInFullAccessMode(prefs)
 		
 		return canAccessManageDB
 	on error errMsg number errNum
-		error "Unable to fmGUI_MenuItemAvailable - " & errMsg number errNum
+		error "Unable to fmGUI_isInFullAccessMode - " & errMsg number errNum
 	end try
 	
 end fmGUI_isInFullAccessMode

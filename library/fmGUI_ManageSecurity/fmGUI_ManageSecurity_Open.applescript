@@ -1,4 +1,4 @@
--- fmGUI_ManageSecurity_Open(fullAccessAccountName:null, fullAccessPassword:null)
+-- fmGUI_ManageSecurity_Open({fullAccessAccountName:null, fullAccessPassword:null})
 -- Daniel A. Shockley, NYHTC
 -- Open Manage Security window
 

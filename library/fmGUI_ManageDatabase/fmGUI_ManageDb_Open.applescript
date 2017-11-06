@@ -1,6 +1,6 @@
 -- fmGUI_ManageDb_Open(prefs)
 -- Daniel A. Shockley, NYHTC
--- Close ( and save ) Manage Database
+-- Open Manage Database
 
 
 (*
@@ -46,7 +46,7 @@ on fmGUI_ManageDb_Open(prefs)
 			return true
 		else
 			fmGUI_Menu_OpenDB({})
-
+			
 			
 			-- dismiss any initial xDBC connection errors
 			fmGUI_ManageDb_DismissXDBCDialog({})
@@ -67,7 +67,7 @@ on fmGUI_ManageDb_Open(prefs)
 			delay 1
 			fmGUI_ManageDb_DismissXDBCDialog({})
 			
-
+			
 			-- zoom back in
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
