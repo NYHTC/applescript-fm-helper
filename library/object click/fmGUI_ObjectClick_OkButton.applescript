@@ -1,4 +1,4 @@
--- fmGUI_ObjectClick_OkButton({buttonRef:null, windowNameThatCloses:null})
+-- fmGUI_ObjectClick_OkButton({buttonRef:nul
 -- Erik Shagdar, NYHTC
 -- Wrapper method for clicking the ok button and waiting for the window to close
 

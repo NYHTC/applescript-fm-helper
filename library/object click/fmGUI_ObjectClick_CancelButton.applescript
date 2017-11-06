@@ -1,4 +1,4 @@
--- fmGUI_ObjectClick_CancelButton({buttonRef:null, windowNameThatCloses:null})
+-- fmGUI_ObjectClick_CancelButton({buttonRef:null})
 -- Erik Shagdar, NYHTC
 -- Wrapper method for clicking the cancel button and waiting for the window to close
 

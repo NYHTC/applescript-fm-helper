@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1.1 - 2017-11-06 ( eshagdar ): updated sub-handler name.
 	1.1 - 2017-09-07 ( eshagdar ): click cancel button via handler. init data access vars, then update privSetInfo once instead of after every type of data access.
 	1.0.1 - 2017-09-05 ( eshagdar ): renamed 'extendedPrivs' to 'extendedPrivList'
 	1.0 - 2017-06-29 ( eshagdar ):created
@@ -69,7 +70,7 @@ on fmGUI_ManageSecurity_PrivSet_GetInfo(prefs)
 						click menu item customPriv of menu 1 of popUpButtonRef
 					end tell
 				end tell
-				set recordAccess to fmGUI_ManageSecurity_AccessRecord_GetInfo({})
+				set recordAccess to fmGUI_ManageSecurity_AccessRecord_GetInfo_AllTables({})
 				fmGUI_ObjectClick_CancelButton({})
 			end if
 			
@@ -144,9 +145,9 @@ on fmGUI_ManageSecurity_AccessLayout_GetInfo(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_AccessLayout_GetInfo(prefs)
 end fmGUI_ManageSecurity_AccessLayout_GetInfo
 
-on fmGUI_ManageSecurity_AccessRecord_GetInfo(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_AccessRecord_GetInfo(prefs)
-end fmGUI_ManageSecurity_AccessRecord_GetInfo
+on fmGUI_ManageSecurity_AccessRecord_GetInfo_AllTables(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_AccessRecord_GetInfo_AllTables(prefs)
+end fmGUI_ManageSecurity_AccessRecord_GetInfo_AllTables
 
 on fmGUI_ManageSecurity_AccessScripts_GetInfo(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_AccessScripts_GetInfo(prefs)

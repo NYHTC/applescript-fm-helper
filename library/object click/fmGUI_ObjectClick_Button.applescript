@@ -1,4 +1,4 @@
--- fmGUI_ObjectClick_Button({buttonName:null, buttonRef:null, windowNameThatCloses:null})
+-- fmGUI_ObjectClick_Button({buttonName:null, buttonRef:null, windowNameThatCloses:null, windowNameThatOpens:null})
 -- Erik Shagdar, NYHTC
 -- Wrapper method for clicking the ok button and waiting for the window to close
 
@@ -9,18 +9,18 @@ REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_NameOfFrontmostWindow
 	windowWaitUntil_FrontNotIS
+	windowWaitUntil_FrontIS
 	
 
 HISTORY:
-	1.1 - made into a general use handler that can take a button name.
+	1.2 - 2017-11-06 ( eshagdar ): added windowNameThatOpens.
+	1.1 - 2017-xx-xx ( eshagdar): made into a general use handler that can take a button name.
 	1.0 - 2017-09-06 ( eshagdar ): created
 *)
 
 
 on run
-	
-	fmGUI_ObjectClick_Button({})
-	
+	fmGUI_ObjectClick_Button({buttonName:"Edit", windowNameThatOpens:"Layout Setup"})
 end run
 
 --------------------
@@ -28,19 +28,16 @@ end run
 --------------------
 
 on fmGUI_ObjectClick_Button(prefs)
-	-- version 1.1
+	-- version 1.2
 	
-	set defaultPrefs to {buttonName:null, buttonRef:null, windowNameThatCloses:null}
+	set defaultPrefs to {buttonName:null, buttonRef:null, windowNameThatCloses:null, windowNameThatOpens:null}
 	set prefs to prefs & defaultPrefs
 	set buttonRef to ensureObjectRef(buttonRef of prefs)
 	set windowNameThatCloses to windowNameThatCloses of prefs
+	set windowNameThatOpens to windowNameThatOpens of prefs
 	
 	try
 		fmGUI_AppFrontMost()
-		
-		
-		-- get frontmost window name if not specified
-		if windowNameThatCloses is null then set windowNameThatCloses to fmGUI_NameOfFrontmostWindow()
 		
 		
 		-- use the most commonly found button reference ( unless specified )
@@ -53,9 +50,13 @@ on fmGUI_ObjectClick_Button(prefs)
 		end if
 		
 		
-		-- click button and wait for it to close
+		-- click button		
 		clickObjectByCoords(buttonRef)
-		windowWaitUntil_FrontNotIS({windowName:windowNameThatCloses})
+		
+		
+		-- wait for window
+		if windowNameThatCloses is not null then windowWaitUntil_FrontNotIS({windowName:windowNameThatCloses})
+		if windowNameThatOpens is not null then windowWaitUntil_FrontIS({windowName:windowNameThatOpens})
 		
 		return true
 	on error errMsg number errNum
@@ -82,6 +83,10 @@ end fmGUI_NameOfFrontmostWindow
 on windowWaitUntil_FrontNotIS(prefs)
 	tell application "htcLib" to windowWaitUntil_FrontNotIS(prefs)
 end windowWaitUntil_FrontNotIS
+
+on windowWaitUntil_FrontIS(prefs)
+	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+end windowWaitUntil_FrontIS
 
 
 
