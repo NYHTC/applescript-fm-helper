@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1.2 - 2017-11-07 ( eshagdar ): open custom record privileges via handler.
 	1.1.1 - 2017-10-17 ( eshagdar ): pass oneTableRec as is, it's already a record.
 	1.1 - 2017-09-22 ( eshagdar ): added '_AllTables' to end of handler name. loop over list of records in recordAccess, calling a handler that handler one table.
 	1.0 - 2017-09-07 ( eshagdar ): moved from fmGUI_ManageSecurity_PrivSet_Update.
@@ -27,7 +28,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables(prefs)
-	-- version 1.1
+	-- version 1.1.2
 	
 	set defaultPrefs to {accessRecord:null, recordAccess:null}
 	set prefs to prefs & defaultPrefs
@@ -37,23 +38,11 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables(prefs)
 	
 	try
 		fmGUI_AppFrontMost()
-		
-		tell application "System Events"
-			tell process "FileMaker Pro"
-				set windowName to name of window 1
-				set recordsPopup to pop up button "Records:" of window 1
-			end tell
-		end tell
+		fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open({accessRecord:accessRecord of prefs})
 		
 		
-		-- ensure we're starting on edit PrivSet window
-		if windowName is not windowNameEditPrivSet then error "do not have " & windowNameEditPrivSet & " window open" number -1024
-		
-		
-		-- set record access, setting custom privileges if needed
-		fmGUI_Popup_SelectByCommand({objRef:recordsPopup, objValue:accessRecord of prefs} & popUpExtras)
+		-- update custom privileges
 		if accessRecord of prefs begins with "Custom privileges" then
-			windowWaitUntil_FrontIS({windowName:"Custom Record Privileges"})
 			
 			-- get button refs to edit each row
 			tell application "System Events"

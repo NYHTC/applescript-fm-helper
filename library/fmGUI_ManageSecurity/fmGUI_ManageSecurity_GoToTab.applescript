@@ -44,7 +44,7 @@ on fmGUI_ManageSecurity_GoToTab(prefs)
 			end tell
 		end tell
 	on error errMsg number errNum
-		error "Couldn't go to tab in Manage Security - " & errMsg number errNum
+		error "unable to fmGUI_ManageSecurity_GoToTab - " & errMsg number errNum
 	end try
 	
 end fmGUI_ManageSecurity_GoToTab

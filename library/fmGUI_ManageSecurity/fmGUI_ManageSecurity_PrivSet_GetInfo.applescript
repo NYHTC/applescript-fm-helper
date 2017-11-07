@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1.2 - 2017-11-07 ( eshagdar ): open custom privileges window via handler.
 	1.1.1 - 2017-11-06 ( eshagdar ): updated sub-handler name.
 	1.1 - 2017-09-07 ( eshagdar ): click cancel button via handler. init data access vars, then update privSetInfo once instead of after every type of data access.
 	1.0.1 - 2017-09-05 ( eshagdar ): renamed 'extendedPrivs' to 'extendedPrivList'
@@ -13,8 +14,13 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
+	fmGUI_ManageSecurity_AccessLayout_GetInfo
+	fmGUI_ManageSecurity_AccessRecord_GetInfo_AllTables
+	fmGUI_ManageSecurity_AccessScripts_GetInfo
+	fmGUI_ManageSecurity_AccessValueList_GetInfo
+	fmGUI_ManageSecurity_PrivSet_OpenSelected
+	fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open
 	fmGUI_ObjectClick_CancelButton
-	fmGUI_ManageSecurity_OpenSelectedPrivSet
 *)
 
 
@@ -63,13 +69,7 @@ on fmGUI_ManageSecurity_PrivSet_GetInfo(prefs)
 			
 			-- record level
 			if accessRecord of privSetInfo is equal to customPriv then
-				tell application "System Events"
-					tell process "FileMaker Pro"
-						set popUpButtonRef to pop up button "Records:" of window 1
-						click popUpButtonRef
-						click menu item customPriv of menu 1 of popUpButtonRef
-					end tell
-				end tell
+				fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open({accessRecord:customPriv})
 				set recordAccess to fmGUI_ManageSecurity_AccessRecord_GetInfo_AllTables({})
 				fmGUI_ObjectClick_CancelButton({})
 			end if
@@ -133,14 +133,6 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_ObjectClick_CancelButton(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_CancelButton(prefs)
-end fmGUI_ObjectClick_CancelButton
-
-on fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
-end fmGUI_ManageSecurity_PrivSet_OpenSelected
-
 on fmGUI_ManageSecurity_AccessLayout_GetInfo(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_AccessLayout_GetInfo(prefs)
 end fmGUI_ManageSecurity_AccessLayout_GetInfo
@@ -156,3 +148,15 @@ end fmGUI_ManageSecurity_AccessScripts_GetInfo
 on fmGUI_ManageSecurity_AccessValueList_GetInfo(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_AccessValueList_GetInfo(prefs)
 end fmGUI_ManageSecurity_AccessValueList_GetInfo
+
+on fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
+end fmGUI_ManageSecurity_PrivSet_OpenSelected
+
+on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open(prefs)
+end fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open
+
+on fmGUI_ObjectClick_CancelButton(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_CancelButton(prefs)
+end fmGUI_ObjectClick_CancelButton

@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3.1 - 2017-11-07 ( eshagdar ): test all windows, not just the first one to determine if we're already in manage security. wait until window renders.
 	1.3 - 2017-10-19 ( eshagdar ): authentication done via sub-hndler. no need to test for credentails since that test happens later on. click menu item via sub-handler. test auth via sub-handler.
 	1.2 - 2017-10-17 ( eshagdar ): updated error message. full-access test should run ONLY if not already in manage security.
 	1.1 - 2017-06-28 ( eshagdar ): updated for Fm15 ( authenticate up-front )
@@ -16,7 +17,9 @@ REQUIRES:
 	fmGUI_AuthenticateDialog
 	fmGUI_ClickMenuItem
 	fmGUI_isInFullAccessMode
-	fmGUI_NameOfFrontmostWindow*)
+	fmGUI_NameOfFrontmostWindow
+	windowWaitUntil
+*)
 
 
 on run
@@ -34,10 +37,25 @@ on fmGUI_ManageSecurity_Open(prefs)
 	set prefs to prefs & defaultPrefs
 	
 	set authWindowName to "Enter credentials for"
+	set securityWindowName to "Manage Security for"
+	set securityWindowNames to {}
 	
 	try
 		fmGUI_AppFrontMost()
-		if fmGUI_NameOfFrontmostWindow() does not contain "Manage Security for" then
+		
+		-- test to see if ANY window has 'manage security for' as the name - this may NOT be the frontmost window
+		try
+			tell application "System Events"
+				tell process "FileMaker Pro"
+					set alreadyInManageSecurity to exists (get first window whose name contains securityWindowName)
+				end tell
+			end tell
+		on error
+			set alreadyInManageSecurity to false
+		end try
+		
+		
+		if not alreadyInManageSecurity then
 			if not fmGUI_isInFullAccessMode({}) then error "must be logged as full-access" number -1024
 			
 			
@@ -52,13 +70,14 @@ on fmGUI_ManageSecurity_Open(prefs)
 			
 			-- enter credentials
 			if fmGUI_NameOfFrontmostWindow() starts with authWindowName then fmGUI_AuthenticateDialog({accountName:fullAccessAccountName of prefs, pwd:fullAccessPassword of prefs, windowname:authWindowName})
+			
+			windowWaitUntil({windowname:securityWindowName, windowNameTest:"contains", whichWindow:"any"})
 		end if
 		
 		return true
 	on error errMsg number errNum
 		error "Couldn't fmGUI_ManageSecurity_Open - " & errMsg number errNum
 	end try
-	
 end fmGUI_ManageSecurity_Open
 
 --------------------
@@ -82,9 +101,9 @@ on fmGUI_isInFullAccessMode(prefs)
 	tell application "htcLib" to fmGUI_isInFullAccessMode(prefs)
 end fmGUI_isInFullAccessMode
 
-on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
-end fmGUI_NameOfFrontmostWindow
+on windowWaitUntil(prefs)
+	tell application "htcLib" to windowWaitUntil(prefs)
+end windowWaitUntil
 
 
 

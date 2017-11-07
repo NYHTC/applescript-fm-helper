@@ -5,14 +5,14 @@
 
 (*
 HISTORY:
+	1.0.1 - 2017-11-07 ( eshagdar ): open privSet via wrapper.
 	1.0 - 2017-08-29 ( eshagdar ): taken most logic from fmGUI_ManageSecurity_PrivSets_CustomizeALL ( TuneUp Tool ).
 
 
 REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_CheckboxSet
-	fmGUI_ManageSecurity_PrivSet_OpenSelected
-	fmGUI_ManageSecurity_PrivSet_Select
+	fmGUI_ManageSecurity_PrivSet_OpenForEdit
 	fmGUI_ManageSecurity_PrivSet_Update_AccessLayout
 	fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables
 	fmGUI_ManageSecurity_PrivSet_Update_AccessScript
@@ -33,6 +33,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_PrivSet_Update(prefs)
+	-- version 1.0.1
 	
 	set defaultPrefs to {privSetName:null, privSetDesc:null, accessRecord:null, accessLayouts:null, accessVL:null, accessScripts:null, extendedPrivList:null, allowPrinting:null, allowExporting:null, mangeExtPriv:null, allowOverride:null, disconnectIdle:null, modifyPwd:null, menuCommands:null, recordAccess:null, layoutAccess:null, vlAccess:null, scriptsAccess:null, fullAccessAccountName:null, fullAccessPassword:""}
 	set prefs to prefs & defaultPrefs
@@ -54,8 +55,7 @@ on fmGUI_ManageSecurity_PrivSet_Update(prefs)
 			end tell
 		end tell
 		if windowName is not editPrivSetWindowName then
-			fmGUI_ManageSecurity_PrivSet_Select(fullAccessCredentials & {privSetName:privSetName})
-			fmGUI_ManageSecurity_PrivSet_OpenSelected({})
+			fmGUI_ManageSecurity_PrivSet_OpenForEdit(fullAccessCredentials & {privSetName:privSetName})
 			
 			-- now check again since we should have opened the privSet
 			tell application "System Events"
@@ -140,13 +140,9 @@ on fmGUI_CheckboxSet(prefs)
 	tell application "htcLib" to fmGUI_CheckboxSet({objRef:objRefStr} & prefs)
 end fmGUI_CheckboxSet
 
-on fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_OpenSelected(prefs)
-end fmGUI_ManageSecurity_PrivSet_OpenSelected
-
-on fmGUI_ManageSecurity_PrivSet_Select(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_Select(prefs)
-end fmGUI_ManageSecurity_PrivSet_Select
+on fmGUI_ManageSecurity_PrivSet_OpenForEdit(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_OpenForEdit(prefs)
+end fmGUI_ManageSecurity_PrivSet_OpenForEdit
 
 on fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)

@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.5.2 - 2017-11-07 ( eshagdar ): click 'allow' to get past the 'full access accounts with no password' prompt.
 	1.5.1 - 2017-10-23 ( eshagdar ): FM16 renamed auth window name, so windw test is 'begins with' instead of 'is'
 	1.5 - 2017-10-19 ( eshagdar ): sub-handlers: button clicks, window checks, authentication.
 	1.4.2 - 2017-08-09 ( eshagdar ): instead of waiting for a set amount of time, wait until the frontmost window is not manage security ( it will either be the confirm full access window, or finished saving ).
@@ -20,8 +21,10 @@ REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_AuthenticateDialog
 	fmGUI_NameOfFrontmostWindow
+	fmGUI_ObjectClick_Button
 	fmGUI_ObjectClick_OkButton
-	windowWaitUntil*)
+	windowWaitUntil
+*)
 
 
 on run
@@ -33,7 +36,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_Save(prefs)
-	--version 1.5.1
+	--version 1.5.2
 	
 	set defaulPrefs to {fullAccessAccountName:null, fullAccessPassword:null}
 	set prefs to prefs & defaulPrefs
@@ -49,6 +52,7 @@ on fmGUI_ManageSecurity_Save(prefs)
 		
 		
 		-- confirm with full access account
+		if fmGUI_NameOfFrontmostWindow() is equal to "FileMaker Pro" then fmGUI_ObjectClick_Button({buttonName:"Allow"})
 		if fmGUI_NameOfFrontmostWindow() begins with authWindowName then fmGUI_AuthenticateDialog({accountName:fullAccessAccountName of prefs, pwd:fullAccessPassword of prefs, windowname:authWindowName})
 		
 		
@@ -77,6 +81,10 @@ end fmGUI_AuthenticateDialog
 on fmGUI_NameOfFrontmostWindow()
 	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow
+
+on fmGUI_ObjectClick_Button(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_Button(prefs)
+end fmGUI_ObjectClick_Button
 
 on fmGUI_ObjectClick_OkButton(prefs)
 	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
