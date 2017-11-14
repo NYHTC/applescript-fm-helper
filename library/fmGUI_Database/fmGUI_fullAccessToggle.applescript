@@ -5,14 +5,14 @@
 
 (*
 HISTORY:
-	2017-10-18 ( eshagdar ): added debugging logging. added parenthesis around prefs value extraction.
-	2017-10-17 ( eshagdar ): added ensureMode, script_enterFullAccess, script_leaveFullAccess params. fallback to running toggle script via scripts menu if FM privSet doesn't allow applescript events.
-	2017-10-06 ( eshagdar ): created
+	1.2 - 2017-11-10 ( eshagdar ): run script via sub-handler. renamed varaibles for clarification.
+	1.1.1 - 2017-10-18 ( eshagdar ): added debugging logging. added parenthesis around prefs value extraction.
+	1.1 -2017-10-17 ( eshagdar ): added ensureMode, script_enterFullAccess, script_leaveFullAccess params. fallback to running toggle script via scripts menu if FM privSet doesn't allow applescript events.
+	1.0 - 2017-10-06 ( eshagdar ): created
 
 REQUIRES:
-	fmGUI_AppFrontMost
-	fmGUI_ClickMenuItem
 	fmGUI_isInFullAccessMode
+	fmGUI_NameOfFrontmostWindow
 	fmGUI_Relogin
 	xor
 *)
@@ -33,55 +33,42 @@ end run
 --------------------
 
 on fmGUI_fullAccessToggle(prefs)
-	-- version 1.1, Erik Shagdar, NYHTC
+	-- version 1.2
 	
 	try
 		set defaultPrefs to {ensureMode:null, script_enterFullAccess:"Full Access Switch ON", script_leaveFullAccess:"Full Access Switch OFF", scriptFolderName:"Shortcuts", fullAccessAccountName:null, fullAccessPassword:null, userAccountName:null, userPassword:null}
 		set prefs to prefs & defaultPrefs
 		
-		set startInFullAccess to fmGUI_isInFullAccessMode({})
+		set alreadyInUserMode to not fmGUI_isInFullAccessMode({})
 		
 		if ensureMode of prefs is equal to "user" then
 			set ensureUserMode to true
 		else if ensureMode of prefs is equal to "full" then
 			set ensureUserMode to false
 		else
-			set ensureUserMode to startInFullAccess
+			set ensureUserMode to not alreadyInUserMode
 		end if
 		if debugMode then logConsole(scriptName, "fmGUI_fullAccessToggle ensureUserMode: " & ensureUserMode)
 		
 		
-		if ensureUserMode then
+		if ensureUserMode and not alreadyInUserMode then
 			-- LEAVE full access
 			
-			tell application "System Events"
-				tell process "FileMaker Pro"
-					set windowNames to name of every window
+			try
+				tell application "FileMaker Pro Advanced"
+					do script (first FileMaker script whose name contains (script_leaveFullAccess of prefs))
+					if debugMode then logConsole(scriptName, "fmGUI_fullAccessToggle ran script: " & script_leaveFullAccess)
 				end tell
-			end tell
+			on error
+				-- privSet doesn't allow applescript events, so try to run via menu
+				if debugMode then logConsole(scriptName, "fmGUI_fullAccessToggle failed to run script via app, trying via menu")
+				fmGUI_Menu_RunScript({scriptName:script_leaveFullAccess of prefs, scriptFolderList:{scriptFolderName of prefs}})
+			end try
+			if fmGUI_NameOfFrontmostWindow() does not start with "Open" then error "re-login script error" number -1024
+			fmGUI_Relogin({accountName:userAccountName of prefs, pwd:userPassword of prefs})
 			
-			if windowNames contains "Full Access" then
-				try
-					tell application "FileMaker Pro Advanced"
-						do script (first FileMaker script whose name contains (script_leaveFullAccess of prefs))
-						if debugMode then logConsole(scriptName, "fmGUI_fullAccessToggle ran script: " & script_leaveFullAccess)
-					end tell
-				on error
-					-- privSet doesn't allow applescript events, so try to run via menu
-					if debugMode then logConsole(scriptName, "fmGUI_fullAccessToggle failed to run script via app, trying via menu")
-					tell application "System Events"
-						tell process "FileMaker Pro"
-							-- the scripts should inside a 'Shortcuts' folder
-							set menuItem_toggleAccess to first menu item of menu (scriptFolderName of prefs) of menu item (scriptFolderName of prefs) of menu "Scripts" of menu bar item "Scripts" of menu bar 1 whose name contains (script_leaveFullAccess of prefs)
-						end tell
-					end tell
-					fmGUI_ClickMenuItem({menuItemRef:menuItem_toggleAccess})
-				end try
-				fmGUI_Relogin({accountName:userAccountName of prefs, pwd:userPassword of prefs})
-			end if
-			
-		else if startInFullAccess is false then
-			-- enter full access			
+		else if not ensureUserMode and alreadyInUserMode then
+			-- ENTER full access			
 			
 			try
 				tell application "FileMaker Pro Advanced"
@@ -91,26 +78,19 @@ on fmGUI_fullAccessToggle(prefs)
 			on error
 				-- privSet doesn't allow applescript events, so try to run via menu
 				if debugMode then logConsole(scriptName, "fmGUI_fullAccessToggle failed to run script via app, trying via menu")
-				tell application "System Events"
-					tell process "FileMaker Pro"
-						-- the scripts should inside a 'Shortcuts' folder
-						set menuItem_toggleAccess to first menu item of menu (scriptFolderName of prefs) of menu item (scriptFolderName of prefs) of menu "Scripts" of menu bar item "Scripts" of menu bar 1 whose name contains (script_enterFullAccess of prefs)
-					end tell
-				end tell
-				fmGUI_ClickMenuItem({menuItemRef:menuItem_toggleAccess})
+				fmGUI_Menu_RunScript({scriptName:script_enterFullAccess of prefs, scriptFolderList:{scriptFolderName of prefs}})
 			end try
-			
-			if debugMode then logConsole(scriptName, "fmGUI_fullAccessToggle about to re-login")
+			if fmGUI_NameOfFrontmostWindow() does not start with "Open" then error "re-login script error" number -1024
 			fmGUI_Relogin({accountName:fullAccessAccountName of prefs, pwd:fullAccessPassword of prefs})
 			
 		end if
 		
-		set endInFullAccess to fmGUI_isInFullAccessMode({})
-		set modeSwitch to xor(startInFullAccess, endInFullAccess)
-		if endInFullAccess then
-			set exitMode to "full"
-		else
+		set didEndInUserMode to not fmGUI_isInFullAccessMode({})
+		set modeSwitch to xor(alreadyInUserMode, didEndInUserMode)
+		if didEndInUserMode then
 			set exitMode to "user"
+		else
+			set exitMode to "full"
 		end if
 		
 		return {modeSwitch:modeSwitch, exitMode:exitMode}
@@ -123,18 +103,17 @@ end fmGUI_fullAccessToggle
 -- END OF CODE
 --------------------
 
-on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
-end fmGUI_AppFrontMost
-
-on fmGUI_ClickMenuItem(prefs)
-	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
-	tell application "htcLib" to fmGUI_ClickMenuItem(prefs)
-end fmGUI_ClickMenuItem
-
 on fmGUI_isInFullAccessMode(prefs)
 	tell application "htcLib" to fmGUI_isInFullAccessMode(prefs)
 end fmGUI_isInFullAccessMode
+
+on fmGUI_NameOfFrontmostWindow()
+	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow
+
+on fmGUI_Menu_RunScript(prefs)
+	tell application "htcLib" to fmGUI_Menu_RunScript(prefs)
+end fmGUI_Menu_RunScript
 
 on fmGUI_Relogin(prefs)
 	tell application "htcLib" to fmGUI_Relogin(prefs)
@@ -147,17 +126,3 @@ end logConsole
 on xor(firstBoolean, secondBoolean)
 	tell application "htcLib" to xor(firstBoolean, secondBoolean)
 end xor
-
-
-
-on coerceToString(incomingObject)
-	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a coerceToString into this file for the sample to run ( instead of having a copy of the handler locally ).
-	
-	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
-	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
-	set codeCoerce to run script codeCoerce
-	tell codeCoerce to coerceToString(incomingObject)
-end coerceToString
-
-

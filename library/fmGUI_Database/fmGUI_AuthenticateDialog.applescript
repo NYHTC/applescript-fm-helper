@@ -10,10 +10,10 @@ REQUIRES:
 	fmGUI_ObjectClick_OkButton
 	fmGUI_TextFieldSet
 	windowWaitUntil
-	windowWaitUntil_FrontNotIS
 	
 
 HISTORY:
+	1.2 - 2017-11-10 ( eshagdar ): wait until teh window renders
 	1.1 - 2017-10-20 ( eshagdar ): FM16 changed object names - determine fields by their description. button name changed from 'OK' to 'Sign In'.
 	1.0 - 2017-10-07 ( eshagdar ): created
 *)
@@ -30,7 +30,7 @@ end run
 --------------------
 
 on fmGUI_AuthenticateDialog(prefs)
-	-- version 1.1
+	-- version 1.2
 	
 	set defaultPrefs to {accountName:"admin", pwd:"test", windowName:"Open"}
 	set prefs to prefs & defaultPrefs
@@ -41,28 +41,31 @@ on fmGUI_AuthenticateDialog(prefs)
 	try
 		fmGUI_AppFrontMost()
 		
-		set authWindowName to fmGUI_NameOfFrontmostWindow()
-		if authWindowName contains windowName of prefs then
-			tell application "System Events"
-				tell process "FileMaker Pro"
-					set objAccount to first text field of window 1 whose description is not pwdFieldDesc
-					set objPassword to first text field of window 1 whose description is pwdFieldDesc
-				end tell
-			end tell
-			fmGUI_TextFieldSet({objRef:objAccount, objValue:accountName of prefs})
-			fmGUI_TextFieldSet({objRef:objPassword, objValue:pwd of prefs})
-			try
-				fmGUI_ObjectClick_OkButton({})
-			on error
-				fmGUI_ObjectClick_SignInButton({})
-			end try
-			
-			if fmGUI_NameOfFrontmostWindow() is equal to "FileMaker Pro" then error "incorrect credentials" number -1024
-			
-			return windowWaitUntil_FrontNotIS({windowName:authWindowName})
-		end if
 		
-		return true
+		-- wait for window to render
+		windowWaitUntil({windowName:windowName of prefs, windowNameTest:"starts with", whichWindow:"front"})
+		
+		
+		-- enter credentials
+		tell application "System Events"
+			tell process "FileMaker Pro"
+				set objAccount to first text field of window 1 whose description is not pwdFieldDesc
+				set objPassword to first text field of window 1 whose description is pwdFieldDesc
+			end tell
+		end tell
+		fmGUI_TextFieldSet({objRef:objAccount, objValue:accountName of prefs})
+		fmGUI_TextFieldSet({objRef:objPassword, objValue:pwd of prefs})
+		try
+			fmGUI_ObjectClick_OkButton({})
+		on error
+			fmGUI_ObjectClick_SignInButton({})
+		end try
+		
+		
+		-- wait for window to close
+		if fmGUI_NameOfFrontmostWindow() is equal to "FileMaker Pro" then error "incorrect credentials" number -1024
+		
+		return windowWaitUntil({windowName:windowName of prefs, windowNameTest:"does not start with", whichWindow:"front"})
 	on error errMsg number errNum
 		error "Unable to fmGUI_AuthenticateDialog - " & errMsg number errNum
 	end try
@@ -92,10 +95,6 @@ end fmGUI_TextFieldSet
 on windowWaitUntil(prefs)
 	tell application "htcLib" to windowWaitUntil(prefs)
 end windowWaitUntil
-
-on windowWaitUntil_FrontNotIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontNotIS(prefs)
-end windowWaitUntil_FrontNotIS
 
 
 
