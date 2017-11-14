@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2017-11-14 ( dshockley ): open system preference pane even from command line. 
 	2017-10-20 ( eshagdar ): allow running with params. If ran with 'False', dialogs ( and re-enabling assistve devices ) is suppressed. 
 	2017-10-18 ( eshagdar ): debugMode is a property. htcLib scriptName is 'htcLib', not 'main.scpt'.
 	2017-10-06 ( eshagdar ): added library folder to skip when generating htcLib. renamed variables for clarity.
@@ -27,7 +28,7 @@ property tempFileName : "temp.applescript"
 property mainFileName : "main.scpt"
 property appName : "htcLib"
 property appExtension : ".app"
-
+property securityPrefPanePosix : "/System/Library/PreferencePanes/Security.prefPane"
 
 
 on run prefs
@@ -141,11 +142,10 @@ on run prefs
 		
 		-- navigate to security preference pane
 		if button returned of AsstAccessDlg is equal to "Open" then
-			tell application "System Preferences"
-				activate
-				set the current pane to pane id "com.apple.preference.security" of application "System Preferences"
-				delay 0.5
-			end tell
+			
+			tell application "System Preferences" to activate
+			do shell script "open " & quoted form of securityPrefPanePosix
+			
 			
 			tell application "System Events"
 				tell process "System Preferences"
@@ -179,7 +179,12 @@ on run prefs
 		end if
 		return true
 	else
+		
+		tell application "System Preferences" to activate
+		do shell script "open " & quoted form of securityPrefPanePosix
+		
 		return "you must re-allow assistive devices to '" & appName & "'."
+		
 	end if
 	
 end run
