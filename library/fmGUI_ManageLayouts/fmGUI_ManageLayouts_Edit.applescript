@@ -28,7 +28,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageLayouts_Edit({layoutName:"Selector", layoutOldName:"Selector2", baseTableName:"Selector", doNotChangeExisting:true})
+	fmGUI_ManageLayouts_Edit({layoutName:"Directory", layoutOldName:"Directory2", baseTableName:"ZZ_INTERFACE", doNotChangeExisting:true})
 end run
 
 --------------------
@@ -48,6 +48,7 @@ on fmGUI_ManageLayouts_Edit(prefs)
 		
 		
 		-- already have edit window open, so need to check if we should be using this window or re-selecting another window
+		-- todo: check for first STANDARD window
 		if fmGUI_NameOfFrontmostWindow() is equal to editWindowName then
 			tell application "System Events"
 				tell process "FileMaker Pro"

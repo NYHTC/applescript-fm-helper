@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4 - 2017-11-20 ( eshagdar ): make sure we're talking to the correct window - there may be several windows 'in front of' the manage layouts window.
 	1.3 - 2017-11-06 ( eshagdar ): select layout by filtering for  it instead of having to expand every folder and search in scroll area.
 	1.2 - 2017-04-04 ( eshagdar ): convert to dictionary
 	1.1 - 
@@ -17,7 +18,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageLayouts_Select({layoutName:"Selector"})
+	fmGUI_ManageLayouts_Select({layoutName:"Directory"})
 end run
 
 --------------------
@@ -25,21 +26,23 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_Select(prefs)
-	-- version 1.0
+	-- version 1.4
 	
 	try
 		set defaultPrefs to {layoutName:null}
 		set prefs to prefs & defaultPrefs
 		set layoutName to layoutName of prefs
 		if layoutName is null then error "must specify layout name" number -1024
+		set layoutWindowName to "Manage Layouts"
 		
 		
 		fmGUI_ManageLayouts_Open({})
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				set searchTextField to text field 1 of window 1
-				set searchButton to button 1 of text field 1 of window 1
+				set contextWindow to first window whose name begins with layoutWindowName
+				set searchTextField to text field 1 of contextWindow
+				set searchButton to button 1 of text field 1 of contextWindow
 			end tell
 		end tell
 		fmGUI_TextFieldSet({objRef:searchTextField, objValue:layoutName})
@@ -51,20 +54,18 @@ on fmGUI_ManageLayouts_Select(prefs)
 		try
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
-					set clearButton to button 2 of text field 1 of window 1
-					select (first row of outline 1 of scroll area 1 of window 1 whose value of text field 1 is layoutName)
+					set clearButton to button 2 of text field 1 of contextWindow
+					select (first row of outline 1 of scroll area 1 of contextWindow whose value of text field 1 is layoutName)
 				end tell
 			end tell
 			fmGUI_ObjectClick_Button({buttonRef:clearButton})
 			fmGUI_ManageLayouts_LayoutListFocus({})
 			return true
-		on error
-			fmGUI_ObjectClick_Button({buttonRef:clearButton})
-			return false
 		end try
 		
-		
-		return true
+		-- failed to select layout by name
+		fmGUI_ObjectClick_Button({buttonRef:clearButton})
+		return false
 	on error errMsg number errNum
 		error "unable to fmGUI_ManageLayouts_Select - " & errMsg number errNum
 	end try

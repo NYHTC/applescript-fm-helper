@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3 - 2017-11-20 ( eshagdar ): make sure we're talking to the correct window - there may be several windows 'in front of' the manage layouts window.
 	1.2 - 2017-11-06 ( eshagdar ): added to htcLib. button click via handler. wait until window closes.
 	1.1 - 201x-xx-xx ( xxxxx ): 
 	1.0 - 201x-xx-xx ( xxxxx ): created
@@ -26,7 +27,7 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_Close(prefs)
-	-- version 1.2
+	-- version 1.3
 	
 	try
 		set windowNamePart to "Manage Layouts"
@@ -36,7 +37,8 @@ on fmGUI_ManageLayouts_Close(prefs)
 		if fmGUI_NameOfFrontmostWindow() starts with windowNamePart then
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
-					set closeButton to first button of window 1 whose description is "close button"
+					set contextWindow to first window whose name begins with layoutWindowName
+					set closeButton to first button of contextWindow whose description is "close button"
 				end tell
 			end tell
 			fmGUI_ObjectClick_Button({buttonRef:closeButton})

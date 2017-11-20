@@ -20,7 +20,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageSecurity_CopyTableForAllPrivSets({sourceTable:"table", effectTable:"FOO", fullAccessAccountName:"admin", fullAccessPassword:""})
+	fmGUI_ManageSecurity_CopyTableForAllPrivSets({sourceTable:"SomeSourceTableName", effectTable:"NameOfTableToUpdate", fullAccessAccountName:"admin", fullAccessPassword:""})
 end run
 
 --------------------
