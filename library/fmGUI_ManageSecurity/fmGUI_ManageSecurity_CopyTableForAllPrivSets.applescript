@@ -46,12 +46,12 @@ on fmGUI_ManageSecurity_CopyTableForAllPrivSets(prefs)
 			else
 				--update 
 				fmGUI_ManageSecurity_PrivSet_OpenForEdit({privSetName:onePrivSetName} & credentials)
-				if accessRecord of fmGUI_ManageSecurity_PrivSet_GetInfo({getAccessInfo:false}) contains customPrivileges then
-					-- update custom privileges
-					fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open({accessRecord:customPrivileges})
-					fmGUI_ManageSecurity_AccessRecord_CopyTable({sourceTable:sourceTable of prefs, effectTable:effectTable of prefs})
-					fmGUI_ObjectClick_OkButton({})
-				end if
+					if accessRecord of fmGUI_ManageSecurity_PrivSet_GetInfo({getAccessInfo:false}) contains customPrivileges then
+						-- update custom privileges
+						fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open({accessRecord:customPrivileges})
+						fmGUI_ManageSecurity_AccessRecord_CopyTable({sourceTable:sourceTable of prefs, effectTable:effectTable of prefs})
+						fmGUI_ObjectClick_OkButton({})
+					end if
 				fmGUI_ObjectClick_OkButton({})
 			end if
 		end repeat

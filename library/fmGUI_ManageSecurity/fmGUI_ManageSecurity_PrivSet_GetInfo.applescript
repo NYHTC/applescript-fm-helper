@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1.3 - 2017-11-28 ( eshagdar ): added longer timeout for gather
 	1.1.2 - 2017-11-07 ( eshagdar ): open custom privileges window via handler.
 	1.1.1 - 2017-11-06 ( eshagdar ): updated sub-handler name.
 	1.1 - 2017-09-07 ( eshagdar ): click cancel button via handler. init data access vars, then update privSetInfo once instead of after every type of data access.
@@ -33,7 +34,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_PrivSet_GetInfo(prefs)
-	-- version 1.0
+	-- version 1.1.3
 	
 	set defaultPrefs to {getAccessInfo:false}
 	set prefs to prefs & defaultPrefs
@@ -70,7 +71,10 @@ on fmGUI_ManageSecurity_PrivSet_GetInfo(prefs)
 			-- record level
 			if accessRecord of privSetInfo is equal to customPriv then
 				fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open({accessRecord:customPriv})
-				set recordAccess to fmGUI_ManageSecurity_AccessRecord_GetInfo_AllTables({})
+				with timeout of (30 * 60) seconds
+					-- event times out if this is a big file with many tables or complex security
+					set recordAccess to fmGUI_ManageSecurity_AccessRecord_GetInfo_AllTables({})
+				end timeout
 				fmGUI_ObjectClick_CancelButton({})
 			end if
 			

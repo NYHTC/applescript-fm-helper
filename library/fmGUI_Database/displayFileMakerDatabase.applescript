@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.5.2 - 2017-11-20 ( eshagdar ): disable logging
 	1.5.1 - 2017-10-25 ( eshagdar ): updated defaultPrefs. updated helper handlers. added delay, more debugging messages. get list of document names instead of documents - we don't need to get the name later.
 	1.5 - added a time-out loop for dealing with delay in being able to get list of databases. 
 	1.4 - added error-handling
@@ -32,7 +33,7 @@ end run
 --------------------
 
 on displayFileMakerDatabase(prefs)
-	-- version 1.5.1
+	-- version 1.5.2
 	
 	try
 		set defaultPrefs to {dbName:null, fmAppType:"Pro", waitCycleDelaySeconds:5, waitSaveTotalSeconds:2 * minutes}
@@ -77,7 +78,7 @@ on displayFileMakerDatabase(prefs)
 			
 			delay waitCycleDelaySeconds
 		end repeat
-		if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase docNameList: " & my coerceToString(docNameList))
+		--if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase docNameList: " & my coerceToString(docNameList))
 		
 		
 		--loop through available document and bring the specified to the front
@@ -95,9 +96,9 @@ on displayFileMakerDatabase(prefs)
 					--if debugMode then log "SAME"
 					using terms from application "FileMaker Pro Advanced"
 						tell application ID fmAppBundleID
-							if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase about to show oneDocName: " & oneDocName)
+							--if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase about to show oneDocName: " & oneDocName)
 							show document oneDocName
-							if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase oneDocName: " & oneDocName)
+							if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase: " & oneDocName)
 						end tell
 					end using terms from
 					return true

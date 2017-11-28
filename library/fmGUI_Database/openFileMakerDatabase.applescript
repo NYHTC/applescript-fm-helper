@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4.1 - 2017-11-20 ( eshagdar ): disable logging
 	1.4 - narrowed scope
 	1.3 - now takes record param: {serverIP:, mainDbName:, customLinkReceiverScriptName:, dbName: }
 	1.2 - be sure to send the ShowWindow param.
@@ -34,7 +35,7 @@ end run
 --------------------
 
 on openFileMakerDatabase(prefs)
-	-- version 1.4
+	-- version 1.4.1
 	
 	try
 		set customURL to "htclink://AccessFile?FileName=" & dbName of prefs & "&Command=Open&SilentOpen=1&ShowWindow=1"
@@ -44,7 +45,7 @@ on openFileMakerDatabase(prefs)
 		set fmpURL to replaceSimple({fmpURL, "%3D", "%253D"})
 		set fmpURL to replaceSimple({fmpURL, "%26", "%2526"})
 		
-		if debugMode then logConsole(ScriptName, "openFileMakerDatabase fmpURL: " & fmpURL)
+		--if debugMode then logConsole(ScriptName, "openFileMakerDatabase fmpURL: " & fmpURL)
 		
 		tell application "System Events" to open location fmpURL
 		
