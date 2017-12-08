@@ -30,12 +30,7 @@ end run
 
 on getTextBetween(prefs)
 	-- version 1.7
-	
-	
-	set debugMode to true
-	
-	
-	
+		
 	set defaultPrefs to {sourceTEXT:null, beforeText:null, afterText:null, textItemNum:2, includeMarkers:false, behaveAsExpectedByIgnoringAdditionalBeforeTextOccurrences:false}
 	
 	if (class of prefs is not list) and ((class of prefs) as string is not "record") then
@@ -70,7 +65,6 @@ on getTextBetween(prefs)
 		
 	on error errMsg number errNum
 		set AppleScript's text item delimiters to oldDelims
-		if debugMode then error errMsg number errNum
 		-- 	tell me to log "Error in getTextBetween() : " & errMsg
 		set the finalResult to "" -- return nothing if the surrounding text is not found
 	end try
