@@ -74,15 +74,15 @@ on run prefs
 				set pathOneFileinOneLibrary to pathOneLibrary & ":" & (item fileCount of fileNamesInOneLibrary)
 				set oneFileRawCode to read file pathOneFileinOneLibrary
 				if oneFileRawCode contains codeStart and oneFileRawCode contains codeEnd then
-					set oneFileCodeToAd to getTextBetween({oneFileRawCode, codeStart, codeEnd})
+					set oneHandlerCode to getTextBetween({oneFileRawCode, codeStart, codeEnd})
 				else
-					set oneFileCodeToAd to oneFileRawCode
+					set oneHandlerCode to oneFileRawCode
 				end if
-				set oneFileCodeToAd to removeLF(oneFileCodeToAd)
+				set oneHandlerCode to trimWhitespace(oneHandlerCode)
 				
 				-- now append
 				if (length of tempCode) is greater than 0 then set tempCode to tempCode & return & return & return
-				set tempCode to tempCode & oneFileCodeToAd
+				set tempCode to tempCode & oneHandlerCode
 			end repeat
 		end if
 	end repeat
@@ -265,16 +265,48 @@ on getTextBetween(prefs)
 end getTextBetween
 
 
-on removeLF(someText)
-	-- Erik Shagdar, 1.0
-	repeat until someText does not start with LF
-		set someText to text 2 thru -1 of someText
+on trimWhitespace(inputString)
+	-- version 1.2: 
+	
+	set whiteSpaceAsciiNumbers to {13, 10, 32, 9} -- characters that count as whitespace.
+	
+	set textLength to length of inputString
+	if textLength is 0 then return ""
+	set endSpot to -textLength -- if only whitespace is found, will chop whole string
+	
+	-- chop from end
+	set i to -1
+	repeat while -i is less than or equal to textLength
+		set testChar to text i thru i of inputString
+		if whiteSpaceAsciiNumbers does not contain (ASCII number testChar) then
+			set endSpot to i
+			exit repeat
+		end if
+		set i to i - 1
 	end repeat
 	
-	repeat until someText does not end with LF
-		set someText to text 1 thru -2 of someText
+	
+	if -endSpot is equal to textLength then
+		if whiteSpaceAsciiNumbers contains (ASCII number testChar) then return ""
+	end if
+	
+	set inputString to text 1 thru endSpot of inputString
+	set textLength to length of inputString
+	set newStart to 1
+	
+	-- chop from beginning
+	set i to 1
+	repeat while i is less than or equal to textLength
+		set testChar to text i thru i of inputString
+		if whiteSpaceAsciiNumbers does not contain (ASCII number testChar) then
+			set newStart to i
+			exit repeat
+		end if
+		set i to i + 1
 	end repeat
 	
-	return someText
-end removeLF
-
+	set inputString to text newStart thru textLength of inputString
+	
+	return inputString
+	
+end trimWhitespace

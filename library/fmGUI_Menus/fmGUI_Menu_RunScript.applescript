@@ -1,11 +1,12 @@
--- fmGUI_Menu_RunScript({})
+-- fmGUI_Menu_RunScript({scriptName:null, scriptFolderList:{}, partialMatch:false})
 -- Erik Shagdar, NYHTC
 -- Run FM script from the menu
 
 
 (*
 HISTORY:
-	1.0 - 2017-11-10 ( eshagdar ): created
+	1.1 - 2017-11-16 ( dshockley,eshagdar ): added partialMatch flag, give error if Script Workspace. 
+	1.0 - 2017-11-10 ( eshagdar ): created. 
 
 
 REQUIRES:
@@ -15,7 +16,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_Menu_RunScript({scriptName:"Full Access Switch OFF", scriptFolderList:{"Shortcuts"}})
+	fmGUI_Menu_RunScript({scriptName:"Full Access Switch ON", scriptFolderList:{"Shortcuts"}, partialMatch:true})
 end run
 
 --------------------
@@ -23,25 +24,27 @@ end run
 --------------------
 
 on fmGUI_Menu_RunScript(prefs)
-	-- version 1.0
+	-- version 1.1
 	
 	try
-		set defaultPrefs to {scriptName:null, scriptFolderList:{}}
+		set defaultPrefs to {scriptName:null, scriptFolderList:{}, partialMatch:false}
 		set prefs to prefs & defaultPrefs
 		
 		
 		fmGUI_AppFrontMost()
+		delay 0.1
 		
 		tell application "System Events"
 			tell process "FileMaker Pro"
 				
-				-- put script workspace in the background if it's the frontmost window. we now will have access to the scripts menu
-				try
-					set scriptsMenu to menu "Scripts" of menu bar item "Scripts" of menu bar 1
-				on error
-					perform action "AXRaise" of (first window whose name does not start with "Script Workspace" and role description is "standard window")
-				end try
-				
+				-- IF script workspace is the frontmost window, tell the user don't do that: 
+				(* for some insane reason, the class of the checkmark character is print settings. 
+					Had to use class, since the ascii value and string value both failed. 
+					Directly using the character itself for a match caused the source file to be UTF-16, which we want to avoid for now.
+					Reason to avoid UTF-16 is that the code files are loaded together and compiled. 
+				*)
+				set selectedWindowName to title of first menu item of menu "Window" of menu bar item "Window" of menu bar 1 whose (class of value of attribute "AXMenuItemMarkChar" is print settings)
+				if selectedWindowName starts with "Script Workspace" then error "Pick a database window other than Script Workspace" number -1024
 				
 				-- iterate through list of script folders, then get the script
 				set scriptsMenu to menu "Scripts" of menu bar item "Scripts" of menu bar 1
@@ -51,12 +54,17 @@ on fmGUI_Menu_RunScript(prefs)
 						set scriptsMenu to menu oneParentFolderName of menu item oneParentFolderName of scriptsMenu
 					end repeat
 				end try
-				set scriptItem to first menu item of scriptsMenu whose name contains (scriptName of prefs)
+				if partialMatch of prefs then
+					set scriptItem to first menu item of scriptsMenu whose name contains (scriptName of prefs)
+				else
+					set scriptItem to first menu item of scriptsMenu whose name is (scriptName of prefs)
+				end if
 				
 			end tell
 		end tell
 		
 		return fmGUI_ClickMenuItem({menuItemRef:scriptItem})
+		
 	on error errMsg number errNum
 		error "Couldn't fmGUI_Menu_RunScript - " & errMsg number errNum
 	end try

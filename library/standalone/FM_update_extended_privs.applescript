@@ -3,14 +3,14 @@ set pwd to ""
 
 
 set privSet to "[Full Access]"
-set credentails to {fullAccessAccountName:acct, fullAccessPassword:pwd}
+set credentials to {fullAccessAccountName:acct, fullAccessPassword:pwd}
 set removePrivName to "fmscriptdisabled"
 set updatePrivName to "fmextscriptaccess"
 set editExtPrivWindow to "Edit Extended Privilege"
 set debugMode to false
 
 
-tell application "htcLib" to fmGUI_ManageSecurity_GoToTab_ExtendedPrivs(credentails)
+tell application "htcLib" to fmGUI_ManageSecurity_GoToTab_ExtendedPrivs(credentials)
 
 -- delete deprecated extended privilege	
 try
@@ -48,7 +48,7 @@ try
 end try
 
 
-tell application "htcLib" to fmGUI_ManageSecurity_Save(credentails)
+tell application "htcLib" to fmGUI_ManageSecurity_Save(credentials)
 
 -- now close the file
 tell application "htcLib" to set dbName to databaseNameOfFrontWindow({fmAppType:"Adv"})
