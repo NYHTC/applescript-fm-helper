@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.7 - 2017-12-08 ( dshockley ): added option to behaveAsExpectedByIgnoringAdditionalBeforeTextOccurrences (so that, for example, {"abcdabcdef","a","f"} returns "bcdabcde" instead of "bcd"). 
 	1.6 - option to INCLUDE the before and after strings. Default is FALSE. Must use record parameter to use this feature. 
 	1.5 - use 'class of prefs as string' to test, since FileMaker wrecks the term record
 	1.1 - 
@@ -18,7 +19,9 @@ USAGE:
 
 
 on run
-	getTextBetween({"one-two&three", "-", "&"})
+	set AppleScript's text item delimiters to {""}
+	
+	getTextBetween({sourceTEXT:"abcdabcdef", beforeText:"a", afterText:"f", behaveAsExpectedByIgnoringAdditionalBeforeTextOccurrences:true})
 end run
 
 --------------------
@@ -26,9 +29,14 @@ end run
 --------------------
 
 on getTextBetween(prefs)
-	-- version 1.6
+	-- version 1.7
 	
-	set defaultPrefs to {textItemNum:2, includeMarkers:false}
+	
+	set debugMode to true
+	
+	
+	
+	set defaultPrefs to {sourceTEXT:null, beforeText:null, afterText:null, textItemNum:2, includeMarkers:false, behaveAsExpectedByIgnoringAdditionalBeforeTextOccurrences:false}
 	
 	if (class of prefs is not list) and ((class of prefs) as string is not "record") then
 		error "getTextBetween FAILED: parameter should be a record or list. If it is multiple items, just make it into a list to upgrade to this handler." number 1024
@@ -48,7 +56,12 @@ on getTextBetween(prefs)
 	
 	try
 		set {oldDelims, AppleScript's text item delimiters} to {AppleScript's text item delimiters, beforeText}
-		set the prefixRemoved to text item textItemNum of sourceTEXT
+		if behaveAsExpectedByIgnoringAdditionalBeforeTextOccurrences of prefs then
+			set prefixRemoved to text items textItemNum thru -1 of sourceTEXT
+			set prefixRemoved to prefixRemoved as string
+		else
+			set the prefixRemoved to text item textItemNum of sourceTEXT
+		end if
 		set AppleScript's text item delimiters to afterText
 		set the finalResult to text item 1 of prefixRemoved
 		set AppleScript's text item delimiters to oldDelims
@@ -57,6 +70,7 @@ on getTextBetween(prefs)
 		
 	on error errMsg number errNum
 		set AppleScript's text item delimiters to oldDelims
+		if debugMode then error errMsg number errNum
 		-- 	tell me to log "Error in getTextBetween() : " & errMsg
 		set the finalResult to "" -- return nothing if the surrounding text is not found
 	end try
