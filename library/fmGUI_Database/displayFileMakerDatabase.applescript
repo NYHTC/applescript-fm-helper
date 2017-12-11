@@ -25,7 +25,7 @@ property debugMode : true
 property ScriptName : "displayFileMakerDatabase_TEST"
 
 on run
-	displayFileMakerDatabase({dbName:"a08_PROCESS", fmAppType:"Adv"})
+	displayFileMakerDatabase({dbName:"b02_BridgeyMcBridgeFace", fmAppType:"Adv"})
 end run
 
 --------------------
