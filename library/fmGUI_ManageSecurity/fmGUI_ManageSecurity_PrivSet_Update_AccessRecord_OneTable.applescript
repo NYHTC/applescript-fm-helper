@@ -1,10 +1,11 @@
--- fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable({baseTable:null, viewAccess:null, editAccess:null, createAccess:null, deleteAccess:null, fieldAccess:null, viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null})
+-- fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable({baseTable:null, viewAccess:null, editAccess:null, createAccess:null, deleteAccess:null, fieldAccess:null, viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null, allowFieldAccessOverride:false})
 -- Erik Shagdar, NYHTC
 -- update record access for the specified base table.
 
 
 (*
 HISTORY:
+	1.1 - 2017-12-21 ( eshagdar ): added allowFieldAccessOverride param that overrides tells sub-handler to override field access type in the fieldCalc record.
 	1.0.1 - 2017-10-17 ( eshagdar ): removed unused variable.
 	1.0 - 2017-09-22 ( eshagdar ): moved from fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_AllTables handler
 
@@ -28,7 +29,7 @@ end run
 on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable(prefs)
 	-- version 1.0.1
 	
-	set defaultPrefs to {baseTable:null, viewAccess:null, editAccess:null, createAccess:null, deleteAccess:null, fieldAccess:null, viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null}
+	set defaultPrefs to {baseTable:null, viewAccess:null, editAccess:null, createAccess:null, deleteAccess:null, fieldAccess:null, viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null, allowFieldAccessOverride:false}
 	set prefs to prefs & defaultPrefs
 	
 	set popUpExtras to {selectCommand:"contains", clickIfAlreadySet:true}
@@ -89,9 +90,36 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable(prefs)
 		end if
 		
 		
+		-- if there is a list of fields with specific privileges, ask user if this table can ignore the fields specified, and force it's own field to be a specific type ( generally this is due to the privSet being copied from one table to another ).
+		set extraFieldPrivs to {}
+		try
+			if allowFieldAccessPrompt of prefs then
+				if fieldAccess of prefs contains "limited" and fieldCalc of prefs is not null then
+					set privTypes to {}
+					repeat with oneFieldRec in fieldCalc of prefs
+						set oneFieldRec to contents of oneFieldRec
+						set oneFieldPriv to fieldPriv of oneFieldRec
+						if oneFieldPriv is not in privTypes then copy oneFieldPriv to end of privTypes
+					end repeat
+					
+					if (count of privTypes) is equal to 1 then
+						set privTypes to item 1 of privTypes
+						if privTypes is equal to "modifiable" then
+							set extraFieldPrivs to {FieldsModifiable:true}
+						else if privTypes is equal to "view only" then
+							set extraFieldPrivs to {FieldsViewOnly:true}
+						else if privTypes is equal to "no access" then
+							set extraFieldPrivs to {FieldsNoAccess:true}
+						end if
+					end if
+				end if
+			end if
+		end try
+		
+		
 		-- field access
 		fmGUI_PopupSet({objRef:fieldAccessButton, objValue:fieldAccess of prefs})
-		if fieldCalc of prefs is not null then fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv({fieldList:fieldCalc of prefs})
+		if fieldCalc of prefs is not null then fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv({fieldList:fieldCalc of prefs} & extraFieldPrivs)
 		
 		
 		return true

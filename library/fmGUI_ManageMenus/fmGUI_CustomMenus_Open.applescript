@@ -1,48 +1,57 @@
--- fmGUI_SelectAll({})
--- Erik Shagdar, NYHTC
--- Copy the selected objects in the current window in FileMaker
+-- fmGUI_CustomMenus_Open({})
+-- Dan Shockley, NYHTC
+-- Open Manage Custom Menus window
 
 
 (*
 HISTORY:
-	1.4.1 - 2018-01-18 ( eshagdar ): get menu item directly instead of finding it using 'whose'.
-	1.4 - 2017-11-06 ( eshagdar ): inaccurate history - start a new version.
-	1.3 - 2016-10-18 ( eshagdar ): use fmGUI_clickMenuItem handler
-	1.2 - 2016-10-18 ( eshagdar ): make sure the menu item is available again
-	1.1 - 2016-10-14 ( eshagdar ): 1.0 was looking only for script steps. now looks at non-zero length
+	1.2 - 2017-12-18 ( eshagdar ): copied from manage custom functions
+	1.1 - 
+	1.0 - created
 
 
 REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_ClickMenuItem
+	fmGUI_NameOfFrontmostWindow
+	windowWaitUntil_FrontIS
 *)
 
 
 on run
-	fmGUI_SelectAll()
+	fmGUI_CustomMenus_Open({})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_SelectAll()
-	-- version 1.4.1, Erik Shagdar
+on fmGUI_CustomMenus_Open(prefs)
+	-- version 1.2
+	
 	
 	try
 		fmGUI_AppFrontMost()
-		
-		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
-				set SelectAllMenuItem to menu item "Select All" of menu 1 of menu bar item "Edit" of menu bar 1
+		if fmGUI_NameOfFrontmostWindow() starts with "Manage Custom Menus" then
+			return true
+		else
+			-- open manage custom menus
+			tell application "System Events"
+				tell application process "FileMaker Pro Advanced"
+					set manageMenusMenuItem to first menu item of menu 1 of menu item "Manage" of menu 1 of menu bar item "File" of menu bar 1 whose name starts with "Custom Menus"
+				end tell
 			end tell
-		end tell
-		
-		return fmGUI_ClickMenuItem({menuItemRef:SelectAllMenuItem, waitForMenuAvailable:true})
+			fmGUI_ClickMenuItem({menuItemRef:manageMenusMenuItem})
+			windowWaitUntil_FrontIS({windowName:"Manage Custom Menus"})
+			
+			
+			return true
+		end if
 	on error errMsg number errNum
-		error "Couldn't fmGUI_SelectAll - " & errMsg number errNum
+		error "unable to fmGUI_CustomMenus_Open - " & errMsg number errNum
 	end try
-end fmGUI_SelectAll
+	
+end fmGUI_CustomMenus_Open
 
 --------------------
 -- END OF CODE
@@ -56,6 +65,14 @@ on fmGUI_ClickMenuItem(prefs)
 	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
 	tell application "htcLib" to fmGUI_ClickMenuItem(prefs)
 end fmGUI_ClickMenuItem
+
+on fmGUI_NameOfFrontmostWindow()
+	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow
+
+on windowWaitUntil_FrontIS(prefs)
+	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+end windowWaitUntil_FrontIS
 
 
 

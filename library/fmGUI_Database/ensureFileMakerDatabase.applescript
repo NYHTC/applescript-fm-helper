@@ -20,10 +20,10 @@ REQUIRES:
 
 
 property ScriptName : "ensureFileMakerDatabase_Test"
-property DebugMode : true
+property debugMode : true
 
 on run
-	ensureFileMakerDatabase({mainDbName:"a00_TIMESSQUARE", dbName:"WUSHOP", fmAppType:"Adv", serverIP:"192.168.254.6", customLinkReceiverScriptName:"ReceiveSomeLink_DO_NOT_RENAME"})
+	ensureFileMakerDatabase({mainDbName:"a00_TIMESSQUARE", dbName:"a32_OPCENTRAL", fmAppType:"Adv", serverIP:"192.168.254.6", customLinkReceiverScriptName:"ReceiveSomeLink_DO_NOT_RENAME"})
 end run
 
 
@@ -40,15 +40,15 @@ on ensureFileMakerDatabase(prefs)
 	
 	try
 		set isDisplayed to displayFileMakerDatabase({dbName:dbName, fmAppType:"Adv"}) -- first, just see if one is available.
-		if DebugMode then logConsole(ScriptName, "Tried to display: " & dbName)
+		if debugMode then logConsole(ScriptName, "Tried to display: " & dbName)
 		
 		if not isDisplayed then
-			if DebugMode then logConsole(ScriptName, "About to try to open: " & dbName)
+			if debugMode then logConsole(ScriptName, "About to try to open: " & dbName)
 			
 			if openFileMakerDatabase(prefs) then
 				-- was able to open it, so NOW display window.
 				delay 0.5
-				if DebugMode then logConsole(ScriptName, "Tried to open, now try again to display: " & dbName)
+				if debugMode then logConsole(ScriptName, "Tried to open, now try again to display: " & dbName)
 				set isDisplayed to displayFileMakerDatabase({dbName:dbName, fmAppType:"Adv"})
 				return isDisplayed
 			else

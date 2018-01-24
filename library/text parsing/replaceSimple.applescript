@@ -14,7 +14,8 @@ HISTORY:
 
 
 on run
-	replaceSimple({sourceTEXT:"hello", oldChars:"l", newChars:"r"})
+	--replaceSimple({sourceTEXT:"hello", oldChars:"l", newChars:"r"})
+	replaceSimple({"hello", ASCII character 0, ""})
 end run
 
 

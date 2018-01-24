@@ -37,7 +37,7 @@ on fmGUI_ManageScripts_ListOfScriptNames(someDbName)
 		error "Could not get ManageScripts_ListOfScriptNames of database specified: " & someDbName & "." number 1024
 	end tell
 	
-end ManageScripts_ListOfScriptNames
+end fmGUI_ManageScripts_ListOfScriptNames
 
 --------------------
 -- END OF CODE

@@ -5,16 +5,18 @@
 
 (*
 REQUIRES:
+	fmGUI_CustomFunctions_EditFunction
 	fmGUI_CustomFunctions_Open
 	fmGUI_CustomFunctions_SelectFunction
-	fmGUI_ObjectClick_AffectsWindow
+	fmGUI_ObjectClick_Button
+	fmGUI_ObjectClick_CancelButton
+	fmGUI_ObjectClick_OkButton
 	getTextBetween
 	parseChars
 	windowWaitUntil
-	windowWaitUntil_FrontIS
-
 
 HISTORY:
+	1.5 - 2018-01-18 ( eshagdar ): ok/cancel buttons have dedicated handlers. new/edit button clicks done via handler that also waits for specified window name. doNotChangeExisting param throws an error - why even bother calling this handler.
 	1.4 - 2017-08-14 ( eshagdar ): wait until windows render
 	1.3 - 2017-06-14 ( eshagdar ): narrowed scope
 	1.2 - 2016-06-30 ( eshagdar ): wait for the manage functions to become the frontmost window after saving changes.
@@ -34,36 +36,36 @@ end run
 --------------------
 
 on fmGUI_CustomFunctions_EditFunction(prefs)
-	-- version 1.3
+	-- version 1.5
 	
 	set defaultPrefs to {functionName:null, functionOldName:null, doNotChangeExisting:false, availability:"ALL", parameterList:{}, calcCode:null, doNotUpdateIfVersion:null}
 	set prefs to prefs & defaultPrefs
 	
 	try
-		--if debugMode then logLEVEL(5, "params: " & coerceToString(prefs))
 		fmGUI_CustomFunctions_Open({})
+		
+		
+		-- deprecated param - why even bother calling this handler?
+		if doNotChangeExisting of prefs then error "found function '" & functionName of prefs & "', but not allowed to change, so handler should not be called" number -1024
+		
 		
 		set foundFunction to false
 		set renameFunction to false
 		set editWindowName to "Edit Custom Function"
+		tell application "System Events"
+			tell application process "FileMaker Pro Advanced"
+				set editButton to first button of window 1 whose name is "Edit…"
+				set newButton to first button of window 1 whose name is "New…"
+			end tell
+		end tell
+		
 		
 		
 		-- try editing by selecting standard name
 		set functionSelectedByStandardName to fmGUI_CustomFunctions_SelectFunction({functionName:functionName of prefs})
 		if functionSelectedByStandardName then
-			--Edit the function:
 			set foundFunction to true
-			if doNotChangeExisting of prefs then
-				-- Found it, but DO NOT EDIT.
-			else
-				tell application "System Events"
-					tell application process "FileMaker Pro Advanced"
-						set editButton to first button of window 1 whose name is "Edit…"
-					end tell
-				end tell
-				clickObjectByCoords(editButton)
-				windowWaitUntil_FrontIS({windowName:editWindowName})
-			end if
+			fmGUI_ObjectClick_Button({buttonRef:editButton, windowNameThatOpens:editWindowName})
 		end if
 		
 		
@@ -71,15 +73,9 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 		if not foundFunction and functionOldName of prefs is not null then
 			set functionSelectedByOldName to fmGUI_CustomFunctions_SelectFunction({functionName:functionOldName of prefs})
 			if functionSelectedByOldName then
-				tell application "System Events"
-					tell application process "FileMaker Pro Advanced"
-						set editButton to first button of window 1 whose name is "Edit…"
-					end tell
-				end tell
-				fmGUI_ObjectClick_AffectsWindow(editButton)
-				windowWaitUntil_FrontIS({windowName:editWindowName})
 				set foundFunction to true
 				set renameFunction to true
+				fmGUI_ObjectClick_Button({buttonRef:editButton, windowNameThatOpens:editWindowName})
 			end if
 		end if
 		
@@ -87,13 +83,7 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 		-- Did not exist with "new" OR "old" name so we need to create NEW:		
 		if not foundFunction then
 			set renameFunction to true
-			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
-					set newButton to first button of window 1 whose name is "New…"
-				end tell
-			end tell
-			fmGUI_ObjectClick_AffectsWindow(newButton)
-			windowWaitUntil_FrontIS({windowName:editWindowName})
+			fmGUI_ObjectClick_Button({buttonRef:newButton, windowNameThatOpens:editWindowName})
 		end if
 		
 		
@@ -121,12 +111,7 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 			
 			-- Can SKIP making edits, so cancel: 
 			if cfExistingVersion is equal to doNotUpdateIfVersion of prefs then
-				tell application "System Events"
-					tell application process "FileMaker Pro Advanced"
-						set cancelButton to first button of window 1 whose name is "Cancel"
-					end tell
-				end tell
-				fmGUI_ObjectClick_AffectsWindow(cancelButton)
+				fmGUI_ObjectClick_CancelButton({})
 				delay 0.05
 				return false -- did NOT need to update.
 			end if
@@ -177,12 +162,7 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 		
 		
 		-- SAVE edits: click OK
-		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
-				set okButton to first button of window 1 whose name is "OK"
-			end tell
-		end tell
-		fmGUI_ObjectClick_AffectsWindow(okButton)
+		fmGUI_ObjectClick_OkButton({})
 		windowWaitUntil({windowName:"Manage Custom Functions for", windowNameTest:"contains", whichWindow:"front"})
 		delay 0.2
 		
@@ -205,17 +185,21 @@ on fmGUI_CustomFunctions_SelectFunction(prefs)
 	tell application "htcLib" to fmGUI_CustomFunctions_SelectFunction(prefs)
 end fmGUI_CustomFunctions_SelectFunction
 
-on fmGUI_ObjectClick_AffectsWindow(buttonRef)
-	tell application "htcLib" to fmGUI_ObjectClick_AffectsWindow(my coerceToString(buttonRef))
-end fmGUI_ObjectClick_AffectsWindow
+on fmGUI_ObjectClick_Button(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_Button({buttonRef:my coerceToString(buttonRef of prefs)} & prefs)
+end fmGUI_ObjectClick_Button
+
+on fmGUI_ObjectClick_CancelButton(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_CancelButton(prefs)
+end fmGUI_ObjectClick_CancelButton
+
+on fmGUI_ObjectClick_OkButton(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+end fmGUI_ObjectClick_OkButton
 
 on getTextBetween(prefs)
 	tell application "htcLib" to getTextBetween(prefs)
 end getTextBetween
-
-on logLEVEL(level, someMsg)
-	tell application "htcLib" to logLEVEL(level, someMsg)
-end logLEVEL
 
 on parseChars(prefs)
 	tell application "htcLib" to parseChars(prefs)
@@ -224,10 +208,6 @@ end parseChars
 on windowWaitUntil(prefs)
 	tell application "htcLib" to windowWaitUntil(prefs)
 end windowWaitUntil
-
-on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
-end windowWaitUntil_FrontIS
 
 
 
@@ -240,4 +220,3 @@ on coerceToString(incomingObject)
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString
-

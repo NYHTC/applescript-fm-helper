@@ -1,48 +1,57 @@
--- fmGUI_SelectAll({})
--- Erik Shagdar, NYHTC
--- Copy the selected objects in the current window in FileMaker
+-- fmGUI_CustomMenus_Update(prefs)
+-- NYHTC
+-- Gets any updates from FileMaker to the standard available menu objects. 
 
 
 (*
 HISTORY:
-	1.4.1 - 2018-01-18 ( eshagdar ): get menu item directly instead of finding it using 'whose'.
-	1.4 - 2017-11-06 ( eshagdar ): inaccurate history - start a new version.
-	1.3 - 2016-10-18 ( eshagdar ): use fmGUI_clickMenuItem handler
-	1.2 - 2016-10-18 ( eshagdar ): make sure the menu item is available again
-	1.1 - 2016-10-14 ( eshagdar ): 1.0 was looking only for script steps. now looks at non-zero length
+	1.2 - 2017-12-18 ( eshagdar ): narrowed scope. button clicking via sub-hander
+	1.1 - 201x-xx-xx ( xxxxx ): 
+	1.0 - 201x-xx-xx ( xxxxx ): created
 
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_ClickMenuItem
+	fmGUI_CustomMenus_Open
+	fmGUI_ObjectClick_Button
 *)
 
 
 on run
-	fmGUI_SelectAll()
+	fmGUI_CustomMenus_Update({})
 end run
 
 --------------------
 -- START OF CODE
 --------------------
 
-on fmGUI_SelectAll()
-	-- version 1.4.1, Erik Shagdar
+on fmGUI_CustomMenus_Update(prefs)
+	-- version 1.2
 	
 	try
+		fmGUI_CustomMenus_Open({})
 		fmGUI_AppFrontMost()
+		
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				set SelectAllMenuItem to menu item "Select All" of menu 1 of menu bar item "Edit" of menu bar 1
+				set updateButton to first button of window 1 whose name is "Update"
+				set isButtonEnabled to enabled of updateButton
 			end tell
 		end tell
 		
-		return fmGUI_ClickMenuItem({menuItemRef:SelectAllMenuItem, waitForMenuAvailable:true})
+		
+		-- click update button. There may be a window that comes up, and we may need to click an ok/confirm button
+		if isButtonEnabled then fmGUI_ObjectClick_Button(updateButton)
+		
+		
+		return true
 	on error errMsg number errNum
-		error "Couldn't fmGUI_SelectAll - " & errMsg number errNum
+		error "unable to fmGUI_CustomMenus_Update - " & errMsg number errNum
 	end try
-end fmGUI_SelectAll
+	
+end fmGUI_CustomMenus_Update
+
 
 --------------------
 -- END OF CODE
@@ -52,10 +61,16 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_ClickMenuItem(prefs)
-	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
-	tell application "htcLib" to fmGUI_ClickMenuItem(prefs)
-end fmGUI_ClickMenuItem
+on fmGUI_CustomMenus_Open(prefs)
+	tell application "htcLib" to fmGUI_CustomMenus_Open(prefs)
+end fmGUI_CustomMenus_Open
+
+on fmGUI_ObjectClick_Button(prefs)
+	set buttonRef to my coerceToString(buttonRef of prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_Button({buttonRef:buttonRef} & prefs)
+end fmGUI_ObjectClick_Button
+
+
 
 
 

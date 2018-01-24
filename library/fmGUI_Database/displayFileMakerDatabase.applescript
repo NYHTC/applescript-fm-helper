@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.5.3 - 2018-01-18 ( eshagdar ): capture privSet violation error
 	1.5.2 - 2017-11-20 ( eshagdar ): disable logging
 	1.5.1 - 2017-10-25 ( eshagdar ): updated defaultPrefs. updated helper handlers. added delay, more debugging messages. get list of document names instead of documents - we don't need to get the name later.
 	1.5 - added a time-out loop for dealing with delay in being able to get list of databases. 
@@ -33,7 +34,7 @@ end run
 --------------------
 
 on displayFileMakerDatabase(prefs)
-	-- version 1.5.2
+	-- version 1.5.3
 	
 	try
 		set defaultPrefs to {dbName:null, fmAppType:"Pro", waitCycleDelaySeconds:5, waitSaveTotalSeconds:2 * minutes}
@@ -71,6 +72,8 @@ on displayFileMakerDatabase(prefs)
 			on error errMsg number errNum
 				if errNum is -10011 then
 					-- just keep trying - this error can be caused when a database is opening and the open script takes a bit too long to finish, or something in the FM interface is slow to respond. 
+				else if errNum is -10004 then
+					error "privSet violation in some FM file..." & errNum number errNum
 				else
 					error "Error getting list of databases already open - " & errMsg number errNum
 				end if

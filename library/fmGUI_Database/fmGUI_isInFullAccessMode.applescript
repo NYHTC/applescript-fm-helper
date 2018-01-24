@@ -30,6 +30,9 @@ on fmGUI_isInFullAccessMode(prefs)
 	--fmGUI_ManageLayouts_Close({})
 	
 	try
+		set listOfFullAccessWindowNames to {}
+		if fmGUI_NameOfFrontmostWindow() contains listOfFullAccessWindowNames then return true
+		
 		tell application "System Events"
 			tell process "FileMaker Pro"
 				set canAccessManageDB to enabled of first menu item of menu 1 of menu item "Manage" of menu "File" of menu bar item "File" of menu bar 1 whose name begins with "Database"

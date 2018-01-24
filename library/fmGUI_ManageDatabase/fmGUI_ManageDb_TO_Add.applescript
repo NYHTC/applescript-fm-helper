@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4.3 - 2018-01-17 ( eshagdar ): button clicking by reference and wait for window instead of calling affects window via button handler. use okButton handler instead of passing reference
 	1.4.2 - 2017-09-06 ( eshagdar ): updated error message. updated call to pop up set.
 	1.4.1 - 2017-08-23 ( eshagdar ): must pass credentials when going to relationships tab of manage DB
 	1.4 - 2016-08-23 ( eshagdar ): declare all params. fixed error message.
@@ -19,8 +20,10 @@ REQUIRES:
 	fmGUI_ManageDataSources_EnsureExists
 	fmGUI_ManageDataSources_Save
 	fmGUI_ManageDb_GoToTab_Relationships
-	fmGUI_ObjectClick_AffectsWindow
+	fmGUI_ObjectClick_Button
+	fmGUI_ObjectClick_OKButton
 	fmGUI_PopupSet
+	windowWaitUntil_FrontIS
 *)
 
 
@@ -54,8 +57,8 @@ on fmGUI_ManageDb_TO_Add(prefs)
 				set addTocButton to first button of tab group 1 of window 1 whose description contains "Add a table"
 			end tell
 		end tell
-		fmGUI_ObjectClick_AffectsWindow(addTocButton)
-		delay 1
+		fmGUI_ObjectClick_Button({buttonRef:addTocButton})
+		windowWaitUntil_FrontIS({windowName:"Specify Table"})
 		
 		
 		-- specify Db of new TO
@@ -103,12 +106,7 @@ on fmGUI_ManageDb_TO_Add(prefs)
 			end tell
 		end tell
 		if debugMode then logLEVEL(5, "TO added: '" & TOName & "'")
-		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
-				set okButton to button "OK" of window 1
-			end tell
-		end tell
-		fmGUI_ObjectClick_AffectsWindow(okButton)
+		fmGUI_ObjectClick_OkButton({})
 		
 		return true
 	on error errMsg number errNum
@@ -137,14 +135,22 @@ on fmGUI_ManageDb_GoToTab_Relationships(prefs)
 	tell application "htcLib" to fmGUI_ManageDb_GoToTab_Relationships(prefs)
 end fmGUI_ManageDb_GoToTab_Relationships
 
-on fmGUI_ObjectClick_AffectsWindow(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_AffectsWindow(prefs)
-end fmGUI_ObjectClick_AffectsWindow
+on fmGUI_ObjectClick_Button(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_Button({buttonRef:my coerceToString(buttonRef of prefs)} & prefs)
+end fmGUI_ObjectClick_Button
+
+on fmGUI_ObjectClick_OkButton(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+end fmGUI_ObjectClick_OkButton
 
 on fmGUI_PopupSet(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
 	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
 end fmGUI_PopupSet
+
+on windowWaitUntil_FrontIS(prefs)
+	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+end windowWaitUntil_FrontIS
 
 
 

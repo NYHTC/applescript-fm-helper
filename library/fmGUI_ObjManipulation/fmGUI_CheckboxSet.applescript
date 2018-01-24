@@ -15,9 +15,7 @@ on run
 	tell application "System Events"
 		tell process "FileMaker Pro"
 			set frontmost to true
-			--set checkboxRef to checkbox "Creation" of tab group 1 of window 1
-			--set checkboxRef to checkbox 1 of window 1
-			set checkboxRef to checkbox "Allow printing" of window 1 -- allow printing checkbox in privSet
+			set checkboxRef to checkbox "Item Name:" of window 1
 		end tell
 	end tell
 	

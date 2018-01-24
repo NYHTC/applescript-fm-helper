@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1 - 2017-12-21 ( eshagdar ): added params to force all fields in a table to a specific privilege
 	1.0 - 2017-09-06 ( eshagdar ):created
 
 
@@ -18,6 +19,7 @@ REQUIRES:
 
 on run
 	fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv({fieldList:{}})
+	-- sample fieldList: {{fieldName:"myField", fieldPriv:"view only"}, {fieldName:"anotherField", fieldPriv:"modifiable"}}
 end run
 
 --------------------
@@ -25,10 +27,11 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv(prefs)
-	-- version 1.0
+	-- version 1.1
 	
-	set defaultPrefs to {fieldList:{}}
+	set defaultPrefs to {fieldList:{}, FieldsModifiable:false, FieldsViewOnly:false, FieldsNoAccess:false}
 	set prefs to prefs & defaultPrefs
+	set fieldList to fieldList of prefs
 	
 	set windowNameFieldPriv to "Custom Field Privileges"
 	
@@ -36,7 +39,31 @@ on fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv(prefs)
 		fmGUI_AppFrontMost()
 		windowWaitUntil_FrontIS({windowName:windowNameFieldPriv})
 		
-		repeat with oneFieldRec in fieldList of prefs
+		
+		-- if true, then force every field in this table to be ViewOnly
+		if FieldsViewOnly of prefs or FieldsModifiable of prefs or FieldsNoAccess of prefs then
+			tell application "System Events"
+				tell process "FileMaker Pro"
+					set fieldsInTable to value of static text 1 of rows of table 1 of scroll area 1 of window 1
+				end tell
+			end tell
+			if FieldsViewOnly of prefs then
+				set action to "view only"
+			else if FieldsModifiable of prefs then
+				set action to "modifiable"
+			else if FieldsNoAccess of prefs then
+				set action to "no access"
+			else
+				error "unable to set action" number -1024
+			end if
+			repeat with field in fieldsInTable
+				set field to contents of field
+				copy {fieldName:field, fieldPriv:action} to end of fieldList
+			end repeat
+		end if
+		
+		
+		repeat with oneFieldRec in fieldList
 			set oneFieldRec to contents of oneFieldRec
 			tell application "System Events"
 				tell process "FileMaker Pro"

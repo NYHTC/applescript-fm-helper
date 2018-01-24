@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2017-12-18 ( eshagdar ): skip files whose name begins wtih 'WIP_' ( work in progress ).
 	2017-11-14 ( dshockley ): open system preference pane even from command line. 
 	2017-10-20 ( eshagdar ): allow running with params. If ran with 'False', dialogs ( and re-enabling assistve devices ) is suppressed. 
 	2017-10-18 ( eshagdar ): debugMode is a property. htcLib scriptName is 'htcLib', not 'main.scpt'.
@@ -39,6 +40,7 @@ on run prefs
 	
 	set folderName_library to "library:"
 	set folderName_toSkip to "standalone"
+	set fileNamePrefix_toSkip to "WIP_"
 	
 	set tempCode to ""
 	set commentBreaker to "--------------------"
@@ -70,19 +72,23 @@ on run prefs
 			
 			-- append all libraries into a single file
 			repeat with fileCount from 1 to count of fileNamesInOneLibrary
-				-- read one file and get everything above the helper methods
-				set pathOneFileinOneLibrary to pathOneLibrary & ":" & (item fileCount of fileNamesInOneLibrary)
-				set oneFileRawCode to read file pathOneFileinOneLibrary
-				if oneFileRawCode contains codeStart and oneFileRawCode contains codeEnd then
-					set oneHandlerCode to getTextBetween({oneFileRawCode, codeStart, codeEnd})
-				else
-					set oneHandlerCode to oneFileRawCode
-				end if
-				set oneHandlerCode to trimWhitespace(oneHandlerCode)
 				
-				-- now append
-				if (length of tempCode) is greater than 0 then set tempCode to tempCode & return & return & return
-				set tempCode to tempCode & oneHandlerCode
+				-- read one file and get everything above the helper methods
+				set oneFileName to item fileCount of fileNamesInOneLibrary
+				if oneFileName does not start with fileNamePrefix_toSkip then
+					set pathOneFileinOneLibrary to pathOneLibrary & ":" & oneFileName
+					set oneFileRawCode to read file pathOneFileinOneLibrary
+					if oneFileRawCode contains codeStart and oneFileRawCode contains codeEnd then
+						set oneHandlerCode to getTextBetween({oneFileRawCode, codeStart, codeEnd})
+					else
+						set oneHandlerCode to oneFileRawCode
+					end if
+					set oneHandlerCode to trimWhitespace(oneHandlerCode)
+					
+					-- now append
+					if (length of tempCode) is greater than 0 then set tempCode to tempCode & return & return & return
+					set tempCode to tempCode & oneHandlerCode
+				end if
 			end repeat
 		end if
 	end repeat

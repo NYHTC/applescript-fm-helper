@@ -1,4 +1,4 @@
--- fmGUI_ObjectClick_OkButton({buttonRef:nul
+-- fmGUI_ObjectClick_OkButton({buttonRef:null})
 -- Erik Shagdar, NYHTC
 -- Wrapper method for clicking the ok button and waiting for the window to close
 
@@ -40,4 +40,4 @@ end fmGUI_ObjectClick_OkButton
 
 on fmGUI_ObjectClick_Button(prefs)
 	tell application "htcLib" to fmGUI_ObjectClick_Button(prefs)
-end fmGUI_ObjectClick_SignInButton
+end fmGUI_ObjectClick_Button

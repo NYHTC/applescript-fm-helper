@@ -1,10 +1,11 @@
--- fmGUI_ManageSecurity_AccessRecord_CopyTable({sourceTable:null, effectTable:null})
+-- fmGUI_ManageSecurity_AccessRecord_CopyTable({sourceTable:null, effectTable:null, allowFieldAccessOverride: false})
 -- Erik Shagdar, NYHTC
 -- copy record-access priviledges from from one table to another
 
 
 (*
 HISTORY:
+	1.1 - 2017-12-21 ( eshagdar ): allow for overriding the field privileges when copying a table
 	1.0 - 2017-11-06 ( eshagdar ):created
 
 
@@ -24,13 +25,15 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_AccessRecord_CopyTable(prefs)
-	set defaultPrefs to {sourceTable:null, effectTable:null}
+	-- version 1.1
+	
+	set defaultPrefs to {sourceTable:null, effectTable:null, allowFieldAccessOverride:false}
 	set prefs to prefs & defaultPrefs
 	
 	try
 		fmGUI_AppFrontMost()
 		set currentAccess to fmGUI_ManageSecurity_AccessRecord_GetInfo_OneTable({tableName:sourceTable of prefs})
-		fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable({baseTable:effectTable of prefs} & currentAccess)
+		fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable({baseTable:effectTable of prefs, allowFieldAccessOverride:allowFieldAccessOverride of prefs} & currentAccess)
 		
 		return true
 	on error errMsg number errNum
