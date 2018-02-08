@@ -17,7 +17,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageSecurity_AccessRecord_GetInfo_OneTable({tableName:"Selector"})
+	fmGUI_ManageSecurity_AccessRecord_GetInfo_OneTable({tableName:"E_DEVELOPER"})
 end run
 
 --------------------

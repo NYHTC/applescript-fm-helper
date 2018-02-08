@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.2.1 - 2018-01-25 ( eshagdar ): get list of tables via handler
 	1.2 - 2017-11-06 ( eshagdar ): this handler is only for looping. Getting info for one table is a sub-handler. loop by selecting the table name, not row number.
 	1.1 - 2017-09-06 ( eshagdar ): return a null value for calc if there isn't one. get access values from button value, not row ( rows render ellipsis, whereas the buttons use 3 dots ).
 	1.0 - 2017-06-29 ( eshagdar ):created
@@ -13,6 +14,7 @@ HISTORY:
 REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_ManageSecurity_AccessRecord_GetInfo_OneTable
+	fmGUI_ManageSecurity_AccessRecord_GetTablesNames
 	windowWaitUntil_FrontIS
 *)
 
@@ -37,11 +39,7 @@ on fmGUI_ManageSecurity_AccessRecord_GetInfo_AllTables(prefs)
 		
 		
 		-- get number of number of tables to loop over
-		tell application "System Events"
-			tell process "FileMaker Pro"
-				set tableNames to value of static text 1 of rows of table 1 of scroll area 1 of window 1
-			end tell
-		end tell
+		set tableNames to fmGUI_ManageSecurity_AccessRecord_GetTablesNames({})
 		
 		
 		-- loop over tables
@@ -70,6 +68,10 @@ end fmGUI_AppFrontMost
 on fmGUI_ManageSecurity_AccessRecord_GetInfo_OneTable(prefs)
 	tell application "htcLib" to fmGUI_ManageSecurity_AccessRecord_GetInfo_OneTable(prefs)
 end fmGUI_ManageSecurity_AccessRecord_GetInfo_OneTable
+
+on fmGUI_ManageSecurity_AccessRecord_GetTablesNames(prefs)
+	tell application "htcLib" to fmGUI_ManageSecurity_AccessRecord_GetTablesNames(prefs)
+end fmGUI_ManageSecurity_AccessRecord_GetTablesNames
 
 on windowWaitUntil_FrontIS(prefs)
 	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)

@@ -1,10 +1,11 @@
--- fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open({accessRecord:null, recordAccess:null})
+-- fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open({})
 -- Erik Shagdar, NYHTC
 -- select the specified item from the record access pop up. opens the custom privileges window if needed.
 
 
 (*
 HISTORY:
+	1.0.1 - 2018-01-25 ( eshagdar ): set default for accessRecord key to custom privileges since that is the only way to open.
 	1.0 - 2017-11-07 ( eshagdar ): created
 
 
@@ -17,7 +18,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open({accessRecord:"Custom privileges..."})
+	fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open({})
 end run
 
 --------------------
@@ -28,7 +29,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_Open(prefs)
 	-- version 1.0
 	
 	try
-		set defaultPrefs to {accessRecord:null}
+		set defaultPrefs to {accessRecord:"Custom privileges..."}
 		set prefs to prefs & defaultPrefs
 		
 		
