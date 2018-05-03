@@ -5,6 +5,8 @@
 
 (*
 HISTORY:
+	1.1 - 2018-05-02 ( eshagdar ): keep trying to click tab until it changes ( relationship graph can take a bit to load ).
+	1.0.1 - 2018-04-30 ( eshagdar ): updated error message
 	1.0 - 2016-06-30 ( eshagdar ): first created. Modeled from fmGUI_ManageDb_GoToTab_Fields version 1.3
 
 
@@ -23,25 +25,31 @@ end run
 --------------------
 
 on fmGUI_ManageDb_GoToTab(prefs)
-	-- version 1.0
+	-- version 1.1
 	
 	set defaultPrefs to {tabName:"Tables"}
 	set prefs to prefs & defaultPrefs
+	set tabName to tabName of prefs
 	
 	try
 		fmGUI_AppFrontMost()
 		fmGUI_ManageDb_Open({})
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				set tabObject to a reference to (first radio button of tab group 1 of window 1 whose title contains tabName of prefs)
-				if value of tabObject is not 1 then
+				set tabObject to a reference to (first radio button of tab group 1 of window 1 whose title contains tabName)
+				repeat 100 times
 					click tabObject
-				end if
-				return true
+					if value of tabObject is 1 then exit repeat
+					delay 0.1
+				end repeat
+				
+				if value of tabObject is 0 then error "time out trying to change tab" number -1024
 			end tell
 		end tell
+		
+		return true
 	on error errMsg number errNum
-		error "Couldn't go to the '" & tabName of prefs & "' tab - " & errMsg number errNum
+		error "unable to fmGUI_ManageDb_GoToTab ( couldn't go to the '" & tabName of prefs & "' tab ) - " & errMsg number errNum
 	end try
 end fmGUI_ManageDb_GoToTab
 

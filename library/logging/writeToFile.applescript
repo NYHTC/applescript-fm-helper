@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.2.1 - 2018-04-17 ( eshagdar ): allow fullFilePath to be a POSIX path
 	1.2 - 2017-07-14 ( eshagdar ): allow appending to file ( appends a new line by default )
 	1.1 - 2017-06-29 ( eshagdar ): changed default outputFile name
 	1.0 - 2016-06-29 ( eshagdar ): first created
@@ -39,9 +40,15 @@ on writeToFile(prefs)
 	end if
 	
 	
+	
+	
 	-- now write output text to file
 	try
-		set fileReference to open for access file outputFile with write permission
+		try
+			set fileReference to open for access file outputFile with write permission
+		on error
+			set fileReference to open for access POSIX file outputFile with write permission
+		end try
 		if appendText of prefs is false then
 			set eof of the fileReference to 0
 		else if appendLine of prefs is true then

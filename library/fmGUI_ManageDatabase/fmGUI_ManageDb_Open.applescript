@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3 - 2018-04-30 ( eshagdar ): get window name via handler.
 	1.2 - added xDBC connection error trapping
 	1.1 - 
 	1.0 - created
@@ -17,6 +18,7 @@ TODO:
 REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_ManageDb_RelationshipsTab
+	fmGUI_NameOfFrontmostWindow
 *)
 
 
@@ -29,19 +31,14 @@ end run
 --------------------
 
 on fmGUI_ManageDb_Open(prefs)
-	-- version 1.2
+	-- version 1.3
 	
 	try
 		fmGUI_AppFrontMost()
 		
 		
-		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
-				set windowName to name of window 1
-			end tell
-		end tell
-		
 		-- try to open Manage DB
+		set windowName to fmGUI_NameOfFrontmostWindow()
 		if windowName starts with "Manage Database for" then
 			return true
 		else
@@ -96,3 +93,7 @@ end fmGUI_AppFrontMost
 on fmGUI_ManageDb_RelationshipsTab(prefs)
 	tell application "htcLib" to fmGUI_ManageDb_RelationshipsTab(prefs)
 end fmGUI_ManageDb_RelationshipsTab
+
+on fmGUI_NameOfFrontmostWindow()
+	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow

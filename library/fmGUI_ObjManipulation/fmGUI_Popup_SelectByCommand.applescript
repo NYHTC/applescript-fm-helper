@@ -1,4 +1,4 @@
--- fmGUI_Popup_SelectByCommand(objRef:"", objValue:"", calcValue:null, selectCommand:"", clickIfAlreadySet:"")
+-- fmGUI_Popup_SelectByCommand({objRef:"", objValue:"", calcValue:null, selectCommand:"", clickIfAlreadySet:""})
 -- Daniel A. Shockley, NYHTC
 -- Selects a choice from a popup menu
 
@@ -10,6 +10,7 @@ REQUIRES:
 	
 	 
 HISTORY:
+	1.4.1 - 2018-04-30 ( eshagdar ): tell FM to click on the value since it might not be visible ( and unclickable by CLI ).
 	1.4 - 2017-09-22 ( eshagdar ): set calc using handler.
 	1.3 - 2017-09-06 ( eshagdar ): added calcValue param that sets a calc in the 'Specify Calculation' that comes up.
 	1.2 - 2017-09-05 ( eshagdar ): clicking done by handler
@@ -36,7 +37,7 @@ end run
 --------------------
 
 on fmGUI_Popup_SelectByCommand(prefs)
-	-- version 1.3
+	-- version 1.4.1
 	
 	set defaultPrefs to {objRef:null, objValue:null, calcValue:null, selectCommand:"is", clickIfAlreadySet:false}
 	set prefs to prefs & defaultPrefs
@@ -102,6 +103,20 @@ on fmGUI_Popup_SelectByCommand(prefs)
 				clickObjectByCoords(objRef)
 				
 				
+				--wait until menu is available
+				repeat 100 times
+					try
+						tell application "System Events"
+							tell application process "FileMaker Pro"
+								if exists (menu 1 of objRef) then exit repeat
+							end tell
+						end tell
+					on error
+						delay 0.5
+					end try
+				end repeat
+				
+				
 				-- now pick an item from the pop up
 				tell application "System Events"
 					objRef
@@ -116,8 +131,14 @@ on fmGUI_Popup_SelectByCommand(prefs)
 					else
 						error "unable to pick objValue because select command is failed" number -1024
 					end if
+					
+					tell process "FileMaker Pro"
+						click objValue
+					end tell
 				end tell
-				clickObjectByCoords(objValue)
+				
+				-- must tell FM to click since the value might now be available ( need to scroll )
+				--clickObjectByCoords(objValue)
 			end if
 			
 			

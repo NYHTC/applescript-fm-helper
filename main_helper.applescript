@@ -9,7 +9,7 @@
 	2017-10-20 ( eshagdar ): allow running with params. If ran with 'False', dialogs ( and re-enabling assistve devices ) is suppressed. 
 	2017-10-18 ( eshagdar ): debugMode is a property. htcLib scriptName is 'htcLib', not 'main.scpt'.
 	2017-10-06 ( eshagdar ): added library folder to skip when generating htcLib. renamed variables for clarity.
-	2017-09-12 ( eshagdar ): attempt to de-select and re-select teh htcLib checkbox.
+	2017-09-12 ( eshagdar ): attempt to de-select and re-select the htcLib checkbox.
 	2017-06-29 ( eshagdar ): check to see if htcLib exists.
 	2017-06-26 ( eshagdar ): quit the app before deleting it.
 	2017-06-14 ( eshagdar ): also make an app.

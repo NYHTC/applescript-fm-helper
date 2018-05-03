@@ -16,11 +16,12 @@ REQUIRES:
 	fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv
 	fmGUI_NameOfFrontmostWindow
 	fmGUI_Popup_SelectByCommand
-	fmGUI_PopupSet*)
+*)
 
 
 on run
 	fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable({baseTable:"ZZ_GLOBALS", viewAccess:"yes", editAccess:"yes", createAccess:"yes", deleteAccess:"yes", fieldAccess:"all", viewCalc:null, editCalc:null, createCalc:null, deleteCalc:null, fieldCalc:null})
+	
 end run
 
 --------------------
@@ -103,7 +104,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable(prefs)
 		if fieldAccess of prefs is not null then
 			set extraFieldPrivs to {}
 			try
-				if allowFieldAccessPrompt of prefs then
+				if allowFieldAccessOverride of prefs then
 					if fieldAccess of prefs contains "limited" and fieldCalc of prefs is not null then
 						set privTypes to {}
 						repeat with oneFieldRec in fieldCalc of prefs
@@ -128,7 +129,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessRecord_OneTable(prefs)
 			
 			
 			-- field access
-			fmGUI_PopupSet({objRef:fieldAccessButton, objValue:fieldAccess of prefs})
+			fmGUI_Popup_SelectByCommand({objRef:fieldAccessButton, objValue:fieldAccess of prefs, clickIfAlreadySet:true})
 			if fieldCalc of prefs is not null then fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv({fieldList:fieldCalc of prefs} & extraFieldPrivs)
 		end if
 		
@@ -159,11 +160,6 @@ on fmGUI_Popup_SelectByCommand(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
 	tell application "htcLib" to fmGUI_Popup_SelectByCommand({objRef:objRefStr} & prefs)
 end fmGUI_Popup_SelectByCommand
-
-on fmGUI_PopupSet(prefs)
-	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
-end fmGUI_PopupSet
 
 
 

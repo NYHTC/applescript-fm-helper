@@ -5,6 +5,9 @@
 
 (*
 HISTORY:
+	1.2.1 - 2018-04-30 ( eshagdar ): updated error message.
+	1.2 - 
+	1.1 - 
 	1.0 - created
 
 
@@ -36,7 +39,7 @@ on fmGUI_ManageDb_ListOfXDBCTableNames(prefs)
 			end tell
 		end tell
 	on error errMsg number errNum
-		error "Couldn't get list of table names - " & errMsg number errNum
+		error "unable to fmGUI_ManageDb_ListOfXDBCTableNames - " & errMsg number errNum
 	end try
 end fmGUI_ManageDb_ListOfXDBCTableNames
 

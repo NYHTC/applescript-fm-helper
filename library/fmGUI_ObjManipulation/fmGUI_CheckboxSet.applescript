@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.2 - 2018-05-03 ( eshagdar ): allow objValue to be a boolean.
 	1.1 - 2017-09-05 ( eshagdar ): converted prefs to record.
 	1.0 - created
 
@@ -27,12 +28,12 @@ end run
 --------------------
 
 on fmGUI_CheckboxSet(prefs)
-	-- version 1.1
+	-- version 1.2
 	
 	set defaultPrefs to {objRef:null, objValue:null}
 	set prefs to prefs & defaultPrefs
 	set objRef to ensureObjectRef(objRef of prefs)
-	set objValue to objValue of prefs
+	set objValue to (objValue of prefs) as integer
 	
 	try
 		using terms from application "System Events"

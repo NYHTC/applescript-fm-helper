@@ -1,4 +1,4 @@
--- fmGUI_NameOfFrontmostWindow()
+-- fmGUI_CustomFunctions_EditFunction({functionName:null, functionOldName:null, doNotChangeExisting:false, availability:"ALL", parameterList:{}, calcCode:null, doNotUpdateIfVersion:null})
 -- Daniel A. Shockley, Erik Shagdar, NYHTC
 -- Edits the custom function
 
@@ -14,8 +14,11 @@ REQUIRES:
 	getTextBetween
 	parseChars
 	windowWaitUntil
+	windowWaitUntil_FrontIS
 
 HISTORY:
+	1.6.1 - 2018-05-01 ( eshagdar ): fuzzy search on the button names. added 
+	1.6 - 2018-04-30 ( eshagdar ): wait explicitly until window renders instead of relying on waiting after the new/edit button click.
 	1.5 - 2018-01-18 ( eshagdar ): ok/cancel buttons have dedicated handlers. new/edit button clicks done via handler that also waits for specified window name. doNotChangeExisting param throws an error - why even bother calling this handler.
 	1.4 - 2017-08-14 ( eshagdar ): wait until windows render
 	1.3 - 2017-06-14 ( eshagdar ): narrowed scope
@@ -36,64 +39,63 @@ end run
 --------------------
 
 on fmGUI_CustomFunctions_EditFunction(prefs)
-	-- version 1.5
+	-- version 1.6
 	
 	set defaultPrefs to {functionName:null, functionOldName:null, doNotChangeExisting:false, availability:"ALL", parameterList:{}, calcCode:null, doNotUpdateIfVersion:null}
 	set prefs to prefs & defaultPrefs
 	
 	try
-		fmGUI_CustomFunctions_Open({})
-		
-		
-		-- deprecated param - why even bother calling this handler?
-		if doNotChangeExisting of prefs then error "found function '" & functionName of prefs & "', but not allowed to change, so handler should not be called" number -1024
-		
-		
+		-- init vars		
 		set foundFunction to false
 		set renameFunction to false
 		set editWindowName to "Edit Custom Function"
+		set functionName to functionName of prefs
+		
+		
+		-- deprecated param - why even bother calling this handler?
+		if doNotChangeExisting of prefs then error "found function '" & functionName & "', but not allowed to change, so handler should not be called" number -1024
+		
+		
+		-- open list of functions and get objects
+		fmGUI_CustomFunctions_Open({})
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				set editButton to first button of window 1 whose name is "Edit…"
-				set newButton to first button of window 1 whose name is "New…"
+				set editButton to first button of window 1 whose name begins with "Edit"
+				set newButton to first button of window 1 whose name begins with "New"
 			end tell
 		end tell
 		
 		
 		
 		-- try editing by selecting standard name
-		set functionSelectedByStandardName to fmGUI_CustomFunctions_SelectFunction({functionName:functionName of prefs})
-		if functionSelectedByStandardName then
+		if fmGUI_CustomFunctions_SelectFunction({functionName:functionName}) then
 			set foundFunction to true
-			fmGUI_ObjectClick_Button({buttonRef:editButton, windowNameThatOpens:editWindowName})
+			set clickCondition to "found by standard name"
+			fmGUI_ObjectClick_Button({buttonRef:editButton})
 		end if
 		
 		
 		-- try editing by selecting old name
 		if not foundFunction and functionOldName of prefs is not null then
-			set functionSelectedByOldName to fmGUI_CustomFunctions_SelectFunction({functionName:functionOldName of prefs})
-			if functionSelectedByOldName then
+			if fmGUI_CustomFunctions_SelectFunction({functionName:functionOldName of prefs}) then
 				set foundFunction to true
 				set renameFunction to true
-				fmGUI_ObjectClick_Button({buttonRef:editButton, windowNameThatOpens:editWindowName})
+				set clickCondition to "found by OLD name"
+				fmGUI_ObjectClick_Button({buttonRef:editButton})
 			end if
 		end if
 		
 		
-		-- Did not exist with "new" OR "old" name so we need to create NEW:		
+		-- Did not exist with "new" AND "old" name so we need to create NEW:		
 		if not foundFunction then
 			set renameFunction to true
-			fmGUI_ObjectClick_Button({buttonRef:newButton, windowNameThatOpens:editWindowName})
+			set clickCondition to "new function"
+			fmGUI_ObjectClick_Button({buttonRef:newButton})
 		end if
 		
 		
-		-- now get the name to make sure the edit window opened
-		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
-				set frontmostWindowName to name of window 1
-			end tell
-		end tell
-		if frontmostWindowName is not equal to editWindowName then error "unable to open '" & editWindowName & "' window" number -1024
+		-- ensure the edit window opened
+		if not windowWaitUntil_FrontIS({windowName:editWindowName}) then error "window wait timed out from condition: " & clickCondition number -1024
 		
 		
 		-- TEST for acceptable version to NOT edit: 
@@ -119,11 +121,11 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 		
 		
 		-- ensure standard name
-		if functionName of prefs is not null then
+		if functionName is not null then
 			if renameFunction then
 				tell application "System Events"
 					tell application process "FileMaker Pro Advanced"
-						set value of text field 1 of window 1 to functionName of prefs
+						set value of text field 1 of window 1 to functionName
 					end tell
 				end tell
 			end if
@@ -168,7 +170,7 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 		
 		return true
 	on error errMsg number errNum
-		error "Couldn't fmGUI_CustomFunctions_EditFunction '" & functionName of prefs & "' - " & errMsg number errNum
+		error "unable to  fmGUI_CustomFunctions_EditFunction '" & functionName & "' - " & errMsg number errNum
 	end try
 	
 end fmGUI_CustomFunctions_EditFunction
@@ -208,6 +210,10 @@ end parseChars
 on windowWaitUntil(prefs)
 	tell application "htcLib" to windowWaitUntil(prefs)
 end windowWaitUntil
+
+on windowWaitUntil_FrontIS(prefs)
+	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+end windowWaitUntil_FrontIS
 
 
 

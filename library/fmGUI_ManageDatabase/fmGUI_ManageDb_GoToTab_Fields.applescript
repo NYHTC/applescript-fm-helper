@@ -30,7 +30,7 @@ on fmGUI_ManageDb_GoToTab_Fields(prefs)
 	
 	fmGUI_ManageDb_GoToTab({tabName:"Fields"})
 	
-end fmGUI_ManageDb_GoToTab_Tables
+end fmGUI_ManageDb_GoToTab_Fields
 
 --------------------
 -- END OF CODE

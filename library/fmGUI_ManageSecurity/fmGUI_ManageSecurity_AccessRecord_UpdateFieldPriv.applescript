@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1.1 - 2018-03-05 ( eshagdar ): error if window does not match ( instead of waiting for the window ). FM15 - radio button UI objects are actaully radio buttons ( not checkboxes ). Clear passed in field list if FieldsViewOnly, FieldsModifiable, or FieldsNoAccess param is specified; gather fields and create a new list here.
 	1.1 - 2017-12-21 ( eshagdar ): added params to force all fields in a table to a specific privilege
 	1.0 - 2017-09-06 ( eshagdar ):created
 
@@ -13,7 +14,7 @@ REQUIRES:
 	clickObjectByCoords
 	fmGUI_AppFrontMost
 	fmGUI_ObjectClick_OkButton
-	windowWaitUntil_FrontIS
+	fmGUI_NameOfFrontmostWindow
 *)
 
 
@@ -27,7 +28,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv(prefs)
-	-- version 1.1
+	-- version 1.1.1
 	
 	set defaultPrefs to {fieldList:{}, FieldsModifiable:false, FieldsViewOnly:false, FieldsNoAccess:false}
 	set prefs to prefs & defaultPrefs
@@ -37,7 +38,7 @@ on fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv(prefs)
 	
 	try
 		fmGUI_AppFrontMost()
-		windowWaitUntil_FrontIS({windowName:windowNameFieldPriv})
+		if fmGUI_NameOfFrontmostWindow() is not equal to windowNameFieldPriv then error "must have '" & windowNameFieldPriv & "' window open" number -1024
 		
 		
 		-- if true, then force every field in this table to be ViewOnly
@@ -56,6 +57,7 @@ on fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv(prefs)
 			else
 				error "unable to set action" number -1024
 			end if
+			set fieldList to {}
 			repeat with field in fieldsInTable
 				set field to contents of field
 				copy {fieldName:field, fieldPriv:action} to end of fieldList
@@ -68,7 +70,7 @@ on fmGUI_ManageSecurity_AccessRecord_UpdateFieldPriv(prefs)
 			tell application "System Events"
 				tell process "FileMaker Pro"
 					select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is fieldName of oneFieldRec)
-					set fieldPrivObj to (first checkbox of window 1 whose name contains fieldPriv of oneFieldRec)
+					set fieldPrivObj to (first radio button of window 1 whose name contains fieldPriv of oneFieldRec)
 				end tell
 			end tell
 			clickObjectByCoords(fieldPrivObj)
@@ -99,9 +101,9 @@ on fmGUI_ObjectClick_OkButton(prefs)
 	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
 end fmGUI_ObjectClick_OkButton
 
-on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
-end windowWaitUntil_FrontIS
+on fmGUI_NameOfFrontmostWindow()
+	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow
 
 
 
