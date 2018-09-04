@@ -4,6 +4,7 @@
 
 (*
 HISTORY:
+	1.3 - 2018-09-04 ( dshockley ): fix for optional space at end of SQL_Field line in whereEqualsClause regex search. 
 	1.2 - 2018-05-22 ( dshockley ): modified to also convert the query to use List to separate the components of the query. 
 	1.1 - 2017-12-11 ( dshockley ): disable the usually no-longer-needed SQL_EscapeString, but WARN and comment, since it might sitll be needed when using with something OTHER THAN SQL_Where criteria. 
 	1.0 - 2017-09-15 ( dshockley ): first created. 
@@ -28,7 +29,7 @@ on BBEdit_upgrade_SQL_Query_to_newer_format({})
 	
 	
 	
-	set regexSearch_WhereEqualsClause to "^([\\t ]*)& *SQL_Field *\\( *([^\\)]+) *\\) 
+	set regexSearch_WhereEqualsClause to "^([\\t ]*)& *SQL_Field *\\( *([^\\)]+) *\\) *
 [\\t ]*& \" *= *\" 
 [\\t ]*& ([^\\r]+)\\r"
 	
