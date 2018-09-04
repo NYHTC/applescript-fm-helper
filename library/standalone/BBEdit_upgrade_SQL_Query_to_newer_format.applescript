@@ -4,7 +4,7 @@
 
 (*
 HISTORY:
-	1.3 - 2018-09-04 ( dshockley ): fix for optional space at end of SQL_Field line in whereEqualsClause regex search. 
+	1.3 - 2018-09-04 ( dshockley ): Added regex to remove extra spaces before semicolons. Fix for optional space at end of SQL_Field line in whereEqualsClause regex search. 
 	1.2 - 2018-05-22 ( dshockley ): modified to also convert the query to use List to separate the components of the query. 
 	1.1 - 2017-12-11 ( dshockley ): disable the usually no-longer-needed SQL_EscapeString, but WARN and comment, since it might sitll be needed when using with something OTHER THAN SQL_Where criteria. 
 	1.0 - 2017-09-15 ( dshockley ): first created. 
@@ -40,6 +40,9 @@ on BBEdit_upgrade_SQL_Query_to_newer_format({})
 	
 	set regexReplace_EscapeStringWARN to "\\1 /* WARNING!! Had SQL_EscapeString probably NO LONGER NEEDED, so DISABLED! */"
 	
+	set regexSearch_ExtraSpacesBeforeSemicolon to "([^\r])  +;"
+	
+	set regexReplace_ExtraSpacesBeforeSemicolon to "\\1 ;"
 	
 	tell application "BBEdit"
 		activate
@@ -52,6 +55,7 @@ on BBEdit_upgrade_SQL_Query_to_newer_format({})
 			
 			replace regexSearch_WhereEqualsClause using regexReplace_WhereEqualsClause options {search mode:grep, starting at top:true}
 			replace regexSearch_EscapeStringWARN using regexReplace_EscapeStringWARN options {search mode:grep, starting at top:true}
+			replace regexSearch_ExtraSpacesBeforeSemicolon using regexReplace_ExtraSpacesBeforeSemicolon options {search mode:grep, starting at top:true}
 			
 			
 			try
