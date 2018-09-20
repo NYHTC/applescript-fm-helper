@@ -4,6 +4,8 @@
 
 (*
 HISTORY:
+	1.3 - 2018-09-04 ( dshockley ): Added regex to remove extra spaces before semicolons. Fix for optional space at end of SQL_Field line in whereEqualsClause regex search. 
+	1.2 - 2018-05-22 ( dshockley ): modified to also convert the query to use List to separate the components of the query. 
 	1.1 - 2017-12-11 ( dshockley ): disable the usually no-longer-needed SQL_EscapeString, but WARN and comment, since it might sitll be needed when using with something OTHER THAN SQL_Where criteria. 
 	1.0 - 2017-09-15 ( dshockley ): first created. 
 *)
@@ -27,7 +29,7 @@ on BBEdit_upgrade_SQL_Query_to_newer_format({})
 	
 	
 	
-	set regexSearch_WhereEqualsClause to "^([\\t ]*)& *SQL_Field *\\( *([^\\)]+) *\\) 
+	set regexSearch_WhereEqualsClause to "^([\\t ]*)& *SQL_Field *\\( *([^\\)]+) *\\) *
 [\\t ]*& \" *= *\" 
 [\\t ]*& ([^\\r]+)\\r"
 	
@@ -37,6 +39,10 @@ on BBEdit_upgrade_SQL_Query_to_newer_format({})
 	set regexSearch_EscapeStringWARN to "SQL_EscapeString *\\( *([^\\)]+) *\\)"
 	
 	set regexReplace_EscapeStringWARN to "\\1 /* WARNING!! Had SQL_EscapeString probably NO LONGER NEEDED, so DISABLED! */"
+	
+	set regexSearch_ExtraSpacesBeforeSemicolon to "([^\r])  +;"
+	
+	set regexReplace_ExtraSpacesBeforeSemicolon to "\\1 ;"
 	
 	tell application "BBEdit"
 		activate
@@ -49,11 +55,30 @@ on BBEdit_upgrade_SQL_Query_to_newer_format({})
 			
 			replace regexSearch_WhereEqualsClause using regexReplace_WhereEqualsClause options {search mode:grep, starting at top:true}
 			replace regexSearch_EscapeStringWARN using regexReplace_EscapeStringWARN options {search mode:grep, starting at top:true}
+			replace regexSearch_ExtraSpacesBeforeSemicolon using regexReplace_ExtraSpacesBeforeSemicolon options {search mode:grep, starting at top:true}
+			
+			
+			try
+				(* convert to using List ( ) for whitespace formatting of query: *)
+				set stringStartQuery to "; sqlQuery = "
+				set stringEndQuery to "^([\\t]+); sqlResult = "
+				set posQueryStart to characterOffset of found object of (find stringStartQuery)
+				set posQueryEnd to (characterOffset of found object of (find stringEndQuery options {search mode:grep})) - 1
+				select (characters posQueryStart through posQueryEnd)
+				
+				
+				replace "\"SELECT" using "List ( \\r\\t\\t  \"SELECT" searching in selection options {search mode:grep}
+				replace "^([\\t]+)& " using "\\t\\t; " searching in selection options {search mode:grep}
+				
+				set character posQueryEnd to return & tab & tab & ")" & (contents of character posQueryEnd)
+				
+			end try
 			
 		end tell
 		
-		
 	end tell
+	
+	
 end BBEdit_upgrade_SQL_Query_to_newer_format
 
 --------------------
