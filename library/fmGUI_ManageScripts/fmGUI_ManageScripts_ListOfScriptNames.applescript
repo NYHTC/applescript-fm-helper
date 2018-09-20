@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3 - 2018-09-20 ( eshagdar ): FileMaker 17 has only version so talk to it by name.
 	1.2 - 2016-07-08 ( eshagdar ): Renamed from 'namesOfScriptsOfDatabase' to 'fmGUI_ManageScripts_ListOfScriptNames'
 	1.1 - handles when there are NO script, even though db exists. 
 	1.0 - 201x-xx-xx ( dshcokley ): first created
@@ -25,9 +26,9 @@ end run
 --------------------
 
 on fmGUI_ManageScripts_ListOfScriptNames(someDbName)
-	-- version 1.2
+	-- version 1.3
 	
-	tell application id "com.filemaker.client.advanced12"
+	tell application "Filemaker Pro"
 		if (count of every FileMaker script of database someDbName) is equal to 0 then
 			return {}
 		else

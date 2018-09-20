@@ -5,6 +5,7 @@
 
 (* 
 HISTORY:
+	1.7 - 2018-09-20 ( eshagdar ): FileMaker 17 has only version so talk to it by name.
 	1.6 - switch to 'path to me' since Mavericks BROKE 'name of me' completely 
 	1.5 - allow specification of which FileMaker: Pro/Adv/Unk 
 	1.4 - store the backslash character for escaping to avoid getting mangled 
@@ -27,11 +28,8 @@ on sendToFMP(someData)
 	-- version 1.6
 	
 	try
-		-- someData MIGHT be a record that looks like this: {fmType:"Adv", someData:"BLAH BLAH BLAH"} 
-		set fmType to fmType of someData
+		-- someData MIGHT be a record that looks like this: {someData:"BLAH BLAH BLAH"} 
 		set someData to someData of someData
-	on error
-		set fmType to "Unk"
 	end try
 	
 	set asTransfer to "AppleScript_Transfer-DO_NOT_RENAME"
@@ -40,13 +38,7 @@ on sendToFMP(someData)
 		tell application "System Events"
 			set fmpActiveName to displayed name of (first application process whose displayed name begins with fmpName)
 		end tell
-		if fmType is "Unk" then
-			set beginTellFM to "tell app \"" & fmpActiveName & "\"" & return
-		else if fmType is "Adv" then
-			set beginTellFM to "tell app id \"com.filemaker.client.advanced12\"" & return
-		else if fmType is "Pro" then
-			set beginTellFM to "tell app id \"com.filemaker.client.pro12\"" & return
-		end if
+		set beginTellFM to "tell app id \"com.filemaker.client.pro12\"" & return
 		
 		set endTellFM to return & "end tell"
 	else

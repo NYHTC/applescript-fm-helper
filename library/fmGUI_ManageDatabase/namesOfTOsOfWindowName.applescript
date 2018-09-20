@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.2 - 2018-09-20 ( eshagdar ): FileMaker 17 has only version so talk to it by name.
 	1.1 - 2017-06-26 ( eshagdar ): cleaned up code
 	1.0 - 201x-xx-xx ( dshockley ): created.
 *)
@@ -22,7 +23,7 @@ end run
 on namesOfTOsOfWindowName(someWindowName)
 	-- version 1.1
 	
-	tell application id "com.filemaker.client.advanced12"
+	tell application "Filemaker Pro"
 		set dbCount to count of every database
 		repeat with dbNum from 1 to dbCount
 			-- might not HAVE any windows:

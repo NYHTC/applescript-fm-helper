@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.6 - 2018-09-20 ( eshagdar ): FileMaker 17 has only version so talk to it by name.
 	1.5 - added a time-out loop for dealing with delay in being able to get list of databases. 
 	1.4 - added error-handling
 	1.3 - 
@@ -19,7 +20,7 @@ REQUIRES:
 
 
 on run
-	databaseNamesOfVisibleWindows({fmAppType:"Adv"})
+	databaseNamesOfVisibleWindows({})
 end run
 
 --------------------
@@ -27,22 +28,14 @@ end run
 --------------------
 
 on databaseNamesOfVisibleWindows(prefs)
-	-- version 1.3, Daniel A. Shockley
+	-- version 1.6
 	
-	-- If open, then display first window this finds and return true, else return false.
-	
-	set defaultPrefs to {fmAppType:"Pro"}
+	set defaultPrefs to {}
 	set prefs to prefs & defaultPrefs
 	
-	
-	if fmAppType of prefs is "Adv" then
-		set fmAppBundleID to "com.filemaker.client.advanced12"
-	else
-		set fmAppBundleID to "com.filemaker.client.pro12"
-	end if
-	
+		
 	using terms from application "FileMaker Pro Advanced"
-		tell application ID fmAppBundleID
+		tell application ID "com.filemaker.client.pro12"
 			set visibleWindowNames to name of every window whose visible is true
 		end tell
 		

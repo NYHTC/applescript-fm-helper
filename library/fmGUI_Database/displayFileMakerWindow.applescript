@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.7 - 2018-09-20 ( eshagdar ): FileMaker 17 has only version so talk to it by name.
 	1.6 - get list of window names of open files from the menu instead of asking FM for document names.
 	1.5.2 - 2017-11-20 ( eshagdar ): disable logging
 	1.5.1 - 2017-10-25 ( eshagdar ): updated defaultPrefs. updated helper handlers. added delay, more debugging messages. get list of document names instead of documents - we don't need to get the name later.
@@ -28,7 +29,7 @@ property debugMode : true
 property ScriptName : "displayFileMakerWindow_TEST"
 
 on run
-	displayFileMakerWindow({windowName:"a01_PERSON", fmAppType:"Adv"})
+	displayFileMakerWindow({windowName:"a01_PERSON"})
 end run
 
 --------------------
@@ -36,10 +37,10 @@ end run
 --------------------
 
 on displayFileMakerWindow(prefs)
-	-- version 1.6
+	-- version 1.7
 	
 	try
-		set defaultPrefs to {windowName:null, fmAppType:"Adv", waitCycleDelaySeconds:5, waitSaveTotalSeconds:2 * minutes}
+		set defaultPrefs to {windowName:null, waitCycleDelaySeconds:5, waitSaveTotalSeconds:2 * minutes}
 		set prefs to prefs & defaultPrefs
 		
 		--if debugMode then logConsole(ScriptName, "displayFileMakerDatabase prefs: " & coerceToString(prefs))
@@ -51,17 +52,9 @@ on displayFileMakerWindow(prefs)
 		set waitCycleMax to round (waitSaveTotalSeconds / waitCycleDelaySeconds) rounding down
 		
 		
-		-- determine bundle name		
-		if fmAppType of prefs is "Adv" then
-			set fmAppBundleID to "com.filemaker.client.advanced12"
-		else
-			set fmAppBundleID to "com.filemaker.client.pro12"
-		end if
-		
-		
 		-- get name of all documents
 		tell application "System Events"
-			tell (first process whose bundle identifier is fmAppBundleID)
+			tell process "Filemaker Pro")
 				set windowMenu to menu 1 of menu bar item "Window" of menu bar 1
 				set hiddenWindowMenu to menu 1 of menu item "Show Window" of windowMenu
 				set windowMenuItems to name of menu items of windowMenu

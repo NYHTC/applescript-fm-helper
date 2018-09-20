@@ -17,7 +17,7 @@ REQUIRES:
 
 
 on run
-	databaseNameOfFrontWindow({fmAppType:"Adv"})
+	databaseNameOfFrontWindow({})
 end run
 
 
@@ -28,18 +28,12 @@ end run
 on databaseNameOfFrontWindow(prefs)
 	-- version 1.3
 	
-	set defaultPrefs to {fmAppType:"Pro"}
+	set defaultPrefs to {}
 	set prefs to prefs & defaultPrefs
 	
 	
-	if fmAppType of prefs is "Adv" then
-		set fmAppBundleID to "com.filemaker.client.advanced12"
-	else
-		set fmAppBundleID to "com.filemaker.client.pro12"
-	end if
-	
 	using terms from application "FileMaker Pro Advanced"
-		tell application ID fmAppBundleID
+		tell application ID "com.filemaker.client.pro12"
 			set frontWindowName to name of window 1
 		end tell
 	end using terms from

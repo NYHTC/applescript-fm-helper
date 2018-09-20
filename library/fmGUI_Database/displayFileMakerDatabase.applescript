@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.6 - 2018-09-20 ( eshagdar ): FileMaker 17 has only version so talk to it by name.
 	1.5.3 - 2018-01-18 ( eshagdar ): capture privSet violation error
 	1.5.2 - 2017-11-20 ( eshagdar ): disable logging
 	1.5.1 - 2017-10-25 ( eshagdar ): updated defaultPrefs. updated helper handlers. added delay, more debugging messages. get list of document names instead of documents - we don't need to get the name later.
@@ -34,7 +35,7 @@ end run
 --------------------
 
 on displayFileMakerDatabase(prefs)
-	-- version 1.5.3
+	-- version 1.6
 	
 	try
 		set defaultPrefs to {dbName:null, fmAppType:"Pro", waitCycleDelaySeconds:5, waitSaveTotalSeconds:2 * minutes}
@@ -49,21 +50,13 @@ on displayFileMakerDatabase(prefs)
 		set waitCycleMax to round (waitSaveTotalSeconds / waitCycleDelaySeconds) rounding down
 		
 		
-		-- determine bundle name		
-		if fmAppType of prefs is "Adv" then
-			set fmAppBundleID to "com.filemaker.client.advanced12"
-		else
-			set fmAppBundleID to "com.filemaker.client.pro12"
-		end if
-		
-		
 		-- get name of all documents
 		delay 0.25
 		repeat waitCycleMax times
 			set docNameList to null
 			try
 				using terms from application "FileMaker Pro Advanced"
-					tell application ID fmAppBundleID
+					tell application ID "com.filemaker.client.pro12"
 						set docNameList to name of every document
 					end tell
 				end using terms from

@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1 - 2018-09-20 ( eshagdar ): FM17 has only 1 version of FM so talk to it by name
 	1.0 - created
 *)
 
@@ -19,10 +20,9 @@ end run
 --------------------
 
 on dbNumberOfWindowName(someWindowName)
-	-- version 1.0
+	-- version 1.1
 	
-	tell application id "com.filemaker.client.advanced12"
-		
+	tell application "FileMaker Pro Advanced"
 		set dbCount to count of every database
 		repeat with dbNum from 1 to dbCount
 			try
