@@ -30,7 +30,7 @@ on fmGUI_ManageSecurity_ListOfAccountsAndPrivileges(prefs)
 		fmGUI_ManageSecurity_GoToTab_Accounts({prefs})
 		
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				set accountsTable to table 1 of scroll area 1 of tab group 1 of window 1
 				
 				set accountNamesList to value of static text 1 of every row of accountsTable

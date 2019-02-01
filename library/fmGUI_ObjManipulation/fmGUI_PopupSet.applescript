@@ -16,7 +16,7 @@ HISTORY:
 
 on run
 	tell application "System Events"
-		tell application process "FileMaker Pro"
+		tell application process "FileMaker Pro Advanced"
 			set frontmost to true
 			--set TablePopupOnFieldTabOfManageDatabase to (pop up button "Table:" of tab group 1 of window 1)
 			set popUpButtonRef to pop up button "Available menu commands:" of window 1

@@ -1,10 +1,12 @@
--- displayFileMakerDatabase({dbName:"", fmAppType:"", waitCycleDelaySeconds:"", waitSaveTotalSeconds:""})
+-- displayFileMakerDatabase({dbName:"", waitCycleDelaySeconds:"", waitSaveTotalSeconds:""})
 -- Dan Shockley, NYHTC
 -- If open, then display first window this finds and return true, else return false.
 
 
 (*
 HISTORY:
+	1.6.2 - 2018-12-07 ( eshagdar ): don't both using case, terms, or bundle ID - just talk to the application directly.
+	1.6.1 - 2018-10-16 ( eshagdar ): remove remaining FMA references.
 	1.6 - 2018-09-20 ( eshagdar ): FileMaker 17 has only version so talk to it by name.
 	1.5.3 - 2018-01-18 ( eshagdar ): capture privSet violation error
 	1.5.2 - 2017-11-20 ( eshagdar ): disable logging
@@ -27,7 +29,7 @@ property debugMode : true
 property ScriptName : "displayFileMakerDatabase_TEST"
 
 on run
-	displayFileMakerDatabase({dbName:"b02_BridgeyMcBridgeFace", fmAppType:"Adv"})
+	displayFileMakerDatabase({dbName:"a01_PERSON"})
 end run
 
 --------------------
@@ -35,10 +37,10 @@ end run
 --------------------
 
 on displayFileMakerDatabase(prefs)
-	-- version 1.6
+	-- version 1.6.2
 	
 	try
-		set defaultPrefs to {dbName:null, fmAppType:"Pro", waitCycleDelaySeconds:5, waitSaveTotalSeconds:2 * minutes}
+		set defaultPrefs to {dbName:null, waitCycleDelaySeconds:5, waitSaveTotalSeconds:2 * minutes}
 		set prefs to prefs & defaultPrefs
 		
 		--if debugMode then logConsole(ScriptName, "displayFileMakerDatabase prefs: " & coerceToString(prefs))
@@ -87,21 +89,14 @@ on displayFileMakerDatabase(prefs)
 			set oneDocName to (reverse of characters of result) as string
 			
 			-- apparently these two TEXT variables have some difference (formatting?) even when they are identical STRINGS:
-			ignoring case
-				if oneDocName is equal to (dbName as string) then
-					--if debugMode then log "SAME"
-					using terms from application "FileMaker Pro Advanced"
-						tell application ID fmAppBundleID
-							--if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase about to show oneDocName: " & oneDocName)
-							show document oneDocName
-							if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase: " & oneDocName)
-						end tell
-					end using terms from
-					return true
-				else
-					--if debugMode then logConsole(ScriptName, "displayFileMakerDatabase DIFF: " & oneDocName)
-				end if
-			end ignoring
+			if oneDocName is equal to (dbName as string) then
+				tell application "FileMaker Pro Advanced"
+					--if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase about to show oneDocName: " & oneDocName)
+					show document oneDocName
+					if debugMode then my logConsole(ScriptName, "displayFileMakerDatabase: " & oneDocName)
+				end tell
+				return true
+			end if
 		end repeat
 		
 		

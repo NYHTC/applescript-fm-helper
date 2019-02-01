@@ -19,7 +19,7 @@ end run
 --------------------
 
 on fileNameFromPath(prefs)
-	-- version 1.0, Daniel A. Shockley
+	-- version 1.1, Daniel A. Shockley
 	
 	set filePath to filePath of prefs
 	set pathDelim to pathDelim of prefs

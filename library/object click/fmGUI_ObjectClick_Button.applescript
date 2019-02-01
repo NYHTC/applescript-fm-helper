@@ -13,6 +13,7 @@ REQUIRES:
 	
 
 HISTORY:
+	1.3.1 - 2018-12-07 ( eshagdar ): FM process name contains 'Advanced'.
 	1.3 - 2017-11-20 ( eshagdar ): make sure we're talking to the correct window - there may be several windows 'in front of' the manage layouts window.
 	1.2 - 2017-11-06 ( eshagdar ): added windowNameThatOpens.
 	1.1 - 2017-xx-xx ( eshagdar): made into a general use handler that can take a button name.
@@ -22,7 +23,7 @@ HISTORY:
 
 on run
 	tell application "System Events"
-		tell process "FileMaker Pro"
+		tell process "FileMaker Pro Advanced"
 			set windowContextRef to first window whose name begins with "Manage Layouts"
 		end tell
 	end tell
@@ -35,7 +36,7 @@ end run
 --------------------
 
 on fmGUI_ObjectClick_Button(prefs)
-	-- version 1.3
+	-- version 1.3.1
 	
 	set defaultPrefs to {buttonName:null, buttonRef:null, windowContextRef:null, windowNameThatCloses:null, windowNameThatOpens:null}
 	set prefs to prefs & defaultPrefs
@@ -51,7 +52,7 @@ on fmGUI_ObjectClick_Button(prefs)
 		-- ensure windowContext
 		if windowContextRef is null then
 			tell application "System Events"
-				tell process "FileMaker Pro"
+				tell process "FileMaker Pro Advanced"
 					set windowContextRef to window 1
 				end tell
 			end tell
@@ -60,7 +61,7 @@ on fmGUI_ObjectClick_Button(prefs)
 		-- use the most commonly found button reference ( unless specified )
 		if buttonRef is null then
 			tell application "System Events"
-				tell process "FileMaker Pro"
+				tell process "FileMaker Pro Advanced"
 					set buttonRef to button (buttonName of prefs) of windowContextRef
 				end tell
 			end tell

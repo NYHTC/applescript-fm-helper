@@ -1,10 +1,11 @@
--- ensureFileMakerDatabase({serverIP:"", dbName:"", mainDbName:"", customLinkReceiverScriptName:"", fmAppType:""})
+-- ensureFileMakerDatabase({serverIP:"", dbName:"", mainDbName:"", customLinkReceiverScriptName:""})
 -- Dan Shockley, NYHTC
 -- Make sure that a database is open and (one of) its window(s) is in front.
 
 
 (*
 HISTORY:
+	1.5 - 2018-10-16 ( eshagdar ): FM17 has only 1 version, so no need to specify.
 	1.4 - simplified isDisplayed if-block. added default prefs. put a try block around the handler.
 	1.3 - record param: {serverIP:, mainDbName:, customLinkReceiverScriptName:, dbName: }
 	1.2 - 
@@ -23,7 +24,7 @@ property ScriptName : "ensureFileMakerDatabase_Test"
 property debugMode : true
 
 on run
-	ensureFileMakerDatabase({mainDbName:"a00_TIMESSQUARE", dbName:"a32_OPCENTRAL", fmAppType:"Adv", serverIP:"192.168.254.6", customLinkReceiverScriptName:"ReceiveSomeLink_DO_NOT_RENAME"})
+	ensureFileMakerDatabase({mainDbName:"a00_TIMESSQUARE", dbName:"a32_OPCENTRAL", serverIP:"192.168.254.6", customLinkReceiverScriptName:"ReceiveSomeLink_DO_NOT_RENAME"})
 end run
 
 
@@ -34,12 +35,12 @@ end run
 on ensureFileMakerDatabase(prefs)
 	-- version 1.4
 	
-	set defaultPrefs to {serverIP:"", dbName:"", mainDbName:"", customLinkReceiverScriptName:"", fmAppType:""}
+	set defaultPrefs to {serverIP:"", dbName:"", mainDbName:"", customLinkReceiverScriptName:""}
 	set prefs to prefs & defaultPrefs
 	set dbName to dbName of prefs
 	
 	try
-		set isDisplayed to displayFileMakerDatabase({dbName:dbName, fmAppType:"Adv"}) -- first, just see if one is available.
+		set isDisplayed to displayFileMakerDatabase({dbName:dbName}) -- first, just see if one is available.
 		if debugMode then logConsole(ScriptName, "Tried to display: " & dbName)
 		
 		if not isDisplayed then
@@ -49,7 +50,7 @@ on ensureFileMakerDatabase(prefs)
 				-- was able to open it, so NOW display window.
 				delay 0.5
 				if debugMode then logConsole(ScriptName, "Tried to open, now try again to display: " & dbName)
-				set isDisplayed to displayFileMakerDatabase({dbName:dbName, fmAppType:"Adv"})
+				set isDisplayed to displayFileMakerDatabase({dbName:dbName})
 				return isDisplayed
 			else
 				-- Was NOT able to open it, so return false.

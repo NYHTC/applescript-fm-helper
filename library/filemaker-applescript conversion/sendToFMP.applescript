@@ -33,7 +33,7 @@ on sendToFMP(someData)
 	end try
 	
 	set asTransfer to "AppleScript_Transfer-DO_NOT_RENAME"
-	set fmpName to "FileMaker Pro"
+	set fmpName to "FileMaker Pro Advanced"
 	if (path to me) does not contain fmpName then
 		tell application "System Events"
 			set fmpActiveName to displayed name of (first application process whose displayed name begins with fmpName)

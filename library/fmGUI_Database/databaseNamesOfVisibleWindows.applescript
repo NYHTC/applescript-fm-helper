@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.7 - 2018-10-16 ( eshagdar ): FM17 has only FMP ( no more FMA)
 	1.6 - 2018-09-20 ( eshagdar ): FileMaker 17 has only version so talk to it by name.
 	1.5 - added a time-out loop for dealing with delay in being able to get list of databases. 
 	1.4 - added error-handling
@@ -28,7 +29,7 @@ end run
 --------------------
 
 on databaseNamesOfVisibleWindows(prefs)
-	-- version 1.6
+	-- version 1.7
 	
 	set defaultPrefs to {}
 	set prefs to prefs & defaultPrefs

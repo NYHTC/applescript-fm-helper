@@ -17,7 +17,7 @@ HISTORY:
 
 on run
 	tell application "System Events"
-		tell process "FileMaker Pro"
+		tell process "FileMaker Pro Advanced"
 			set frontmost to true
 			delay 0.25
 			--set optionsButton to first button of tab group 1 of window 1 whose name starts with "Options"

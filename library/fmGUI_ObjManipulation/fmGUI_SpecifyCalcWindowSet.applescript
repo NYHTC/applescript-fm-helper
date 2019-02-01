@@ -41,7 +41,7 @@ on fmGUI_SpecifyCalcWindowSet(prefs)
 		if not windowWaitUntil_FrontIS({windowName:calcBoxWindowName}) then error "Timed out waiting for '" & calcBoxWindowName & "' window" number -1024
 		
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				set calcBox to text area 1 of scroll area 1 of splitter group 1 of window 1
 				if value of calcBox is not equal to calcValue of prefs then
 					set the value of calcBox to calcValue of prefs

@@ -23,7 +23,7 @@ end run
 on namesOfTOsOfWindowName(someWindowName)
 	-- version 1.1
 	
-	tell application "Filemaker Pro"
+	tell application "FileMaker Pro Advanced"
 		set dbCount to count of every database
 		repeat with dbNum from 1 to dbCount
 			-- might not HAVE any windows:

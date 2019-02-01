@@ -4,6 +4,7 @@
 
 (*
 HISTORY:
+	1.3 - 2018-10-16 ( eshagdar ): FM17 has only FMP ( no more FMA)
 	1.2.1 - 2017-11-16 ( eshagdar,dshockley ): send partialMatch param to RunScript.
 	1.2 - 2017-11-10 ( eshagdar ): run script via sub-handler. renamed varaibles for clarification.
 	1.1.1 - 2017-10-18 ( eshagdar ): added debugging logging. added parenthesis around prefs value extraction.
@@ -33,7 +34,7 @@ end run
 --------------------
 
 on fmGUI_fullAccessToggle(prefs)
-	-- version 1.2.1
+	-- version 1.3
 	
 	try
 		set defaultPrefs to {ensureMode:null, script_enterFullAccess:"Full Access Switch ON", script_leaveFullAccess:"Full Access Switch OFF", scriptFolderName:"Shortcuts", fullAccessAccountName:null, fullAccessPassword:null, userAccountName:null, userPassword:null}

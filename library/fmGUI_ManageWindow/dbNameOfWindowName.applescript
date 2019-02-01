@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.5.1 - 2018-12-07 ( eshagdar ): not specifying someWindowName uses the frontmost window.
 	1.5 - 2018-09-20 ( eshagdar ): FM17 only has one version ( everything is pro ), so talk to FM by name instead of id.
 	1.4.1 - 2017-08-02 ( eshagdar ): FM15 has the host name after the name of the database.
 	1.4 - 2017-01-13 ( eshagdar ): updated for FM15 - handle script workspace
@@ -20,12 +21,7 @@ REQUIRES:
 
 
 on run
-	tell application "System Events"
-		tell process "FileMaker Pro Advanced"
-			set frontmostWindowName to name of window 1
-		end tell
-	end tell
-	dbNameOfWindowName(frontmostWindowName)
+	dbNameOfWindowName("")
 end run
 
 --------------------
@@ -33,7 +29,15 @@ end run
 --------------------
 
 on dbNameOfWindowName(someWindowName)
-	-- version 1.5
+	-- version 1.5.1
+	
+	if someWindowName is equal to "" then
+		tell application "System Events"
+			tell process "FileMaker Pro Advanced"
+				set someWindowName to name of window 1
+			end tell
+		end tell
+	end if
 	
 	set tryNameByExtractingPartBeforeHost to false -- only if the window turns out to block normal AppleScript and we are in a sub-window whose ancestor(s) might have the database name.
 	

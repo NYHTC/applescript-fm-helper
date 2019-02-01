@@ -11,7 +11,7 @@ HISTORY:
 
 on run
 	tell application "System Events"
-		tell process "FileMaker Pro"
+		tell process "FileMaker Pro Advanced"
 			set frontmost to true
 			set cancelButton to get first button of window 1 whose name is "Cancel"
 		end tell

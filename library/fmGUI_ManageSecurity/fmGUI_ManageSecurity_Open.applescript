@@ -46,7 +46,7 @@ on fmGUI_ManageSecurity_Open(prefs)
 		-- test to see if ANY window has 'manage security for' as the name - this may NOT be the frontmost window
 		try
 			tell application "System Events"
-				tell process "FileMaker Pro"
+				tell process "FileMaker Pro Advanced"
 					set alreadyInManageSecurity to exists (get first window whose name contains securityWindowName)
 				end tell
 			end tell

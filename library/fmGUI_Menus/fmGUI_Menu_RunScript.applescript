@@ -35,16 +35,17 @@ on fmGUI_Menu_RunScript(prefs)
 		delay 0.1
 		
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				
 				-- IF script workspace is the frontmost window, tell the user don't do that: 
-				(* for some insane reason, the class of the checkmark character is print settings. 
+				try
+					(* for some insane reason, the class of the checkmark character is print settings. 
 					Had to use class, since the ascii value and string value both failed. 
 					Directly using the character itself for a match caused the source file to be UTF-16, which we want to avoid for now.
 					Reason to avoid UTF-16 is that the code files are loaded together and compiled. 
 				*)
-				set selectedWindowName to title of first menu item of menu "Window" of menu bar item "Window" of menu bar 1 whose (class of value of attribute "AXMenuItemMarkChar" is print settings)
-				if selectedWindowName starts with "Script Workspace" then error "Pick a database window other than Script Workspace" number -1024
+					if (title of first menu item of menu "Window" of menu bar item "Window" of menu bar 1 whose (class of value of attribute "AXMenuItemMarkChar" is print settings)) starts with "Script Workspace" then error "Pick a database window other than Script Workspace" number -1024
+				end try
 				
 				-- iterate through list of script folders, then get the script
 				set scriptsMenu to menu "Scripts" of menu bar item "Scripts" of menu bar 1

@@ -22,7 +22,7 @@ end run
 
 on removeExtraAppsFromDock(prefs)
 	
-	set defaultPrefs to {listOfAllowedAppNames:{"Finder", "FileMaker Pro", "FileMaker Pro Advanced", "Script Editor", "Terminal", "System Preferences", "Downloads", "Documents", "Trash"}}
+	set defaultPrefs to {listOfAllowedAppNames:{"Finder", "FileMaker Pro Advanced", "FileMaker Pro Advanced", "Script Editor", "Terminal", "System Preferences", "Downloads", "Documents", "Trash"}}
 	
 	set prefst to prefs & defaultPrefs
 	set listOfAllowedAppNames to listOfAllowedAppNames of prefs

@@ -69,7 +69,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		else
 			-- need to change db. assume scripts are loaded once the number of scripts changes
 			tell application "System Events"
-				tell process "FileMaker Pro"
+				tell process "FileMaker Pro Advanced"
 					set scriptNumOld to count of rows of scriptTable
 				end tell
 			end tell
@@ -79,7 +79,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 			-- wait for scripts to load
 			repeat 100 times
 				tell application "System Events"
-					tell process "FileMaker Pro"
+					tell process "FileMaker Pro Advanced"
 						set scriptNumNew to count of rows of scriptTable
 					end tell
 				end tell
@@ -93,7 +93,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		
 		-- filter scripts
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				set scriptNumAll to count of rows of scriptTable
 				set filterField to text field 1 of window 1
 			end tell
@@ -104,7 +104,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		
 		-- if the same number of scripts as before, try filtering again
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				set scriptNumFiltered to count of rows of outline 1 of scroll area 1 of window "Specify Script"
 			end tell
 		end tell
@@ -119,7 +119,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		-- select script
 		try
 			tell application "System Events"
-				tell process "FileMaker Pro"
+				tell process "FileMaker Pro Advanced"
 					select (first row of outline 1 of scroll area 1 of window "Specify Script" whose value of text field 1 is equal to scriptName)
 				end tell
 			end tell
@@ -135,7 +135,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		
 		-- specify params
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				set paramsObj to text field "Optional script parameter:" of window "Specify Script"
 			end tell
 		end tell

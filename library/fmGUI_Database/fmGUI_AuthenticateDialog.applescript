@@ -49,7 +49,7 @@ on fmGUI_AuthenticateDialog(prefs)
 		
 		-- enter credentials
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				set objAccount to first text field of window 1 whose description is not pwdFieldDesc
 				set objPassword to first text field of window 1 whose description is pwdFieldDesc
 			end tell
@@ -68,7 +68,7 @@ on fmGUI_AuthenticateDialog(prefs)
 		
 		
 		-- wait for window to close
-		if fmGUI_NameOfFrontmostWindow() is equal to "FileMaker Pro" then error "incorrect credentials" number -1024
+		if fmGUI_NameOfFrontmostWindow() is equal to "FileMaker Pro Advanced" then error "incorrect credentials" number -1024
 		
 		return windowWaitUntil({windowName:windowName of prefs, windowNameTest:"does not start with", whichWindow:"front"})
 	on error errMsg number errNum

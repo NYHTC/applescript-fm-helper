@@ -1,10 +1,11 @@
--- closeDatabase({fmAppType:"Pro", waitCycleDelaySeconds:10, waitSaveTotalSeconds:10 * minutes, dbName:null, closeScriptName:"CLOSE_SCRIPT"})
+-- closeDatabase({waitCycleDelaySeconds:10, waitSaveTotalSeconds:10 * minutes, dbName:null, closeScriptName:"CLOSE_SCRIPT"})
 -- Daniel A. Shockley, NYHTC
 -- If possible, close the frontmost database. If it takes too long, error. 
 
 
 (*
 HISTORY:
+	1.6 - 2018-10-16 ( eshagdar ): FM17 only have FMP, so remove param and logic for FMA.
 	1.5 - 2017-06-06 ( eshagdar ): use a handler for checking if menu item is available
 	1.4 - 2016-07-07 ( eshagdar ): try closing DB by name first. changed the calling script to be a parameter insted of being hard-coded into the handler.
 	1.3 - 2015-04-14 ( eshagdar ): TRY calling the close script. On error, jsut close the frontmost window
@@ -36,9 +37,9 @@ end run
 --------------------
 
 on closeDatabase(prefs)
-	-- version 1.5
+	-- version 1.6
 	
-	set defaultPrefs to {fmAppType:"Pro", waitCycleDelaySeconds:10, waitSaveTotalSeconds:10 * minutes, dbName:null, closeScriptName:"CLOSE_SCRIPT"}
+	set defaultPrefs to {waitCycleDelaySeconds:10, waitSaveTotalSeconds:10 * minutes, dbName:null, closeScriptName:"CLOSE_SCRIPT"}
 	set prefs to prefs & defaultPrefs
 	
 	set waitSaveTotalSeconds to waitSaveTotalSeconds of prefs
@@ -64,15 +65,8 @@ on closeDatabase(prefs)
 		-- unable to close directly, try to call the close script
 		fmGUI_AppFrontMost()
 		
-		if fmAppType of prefs is "Adv" then
-			set fmProcessName to "FileMaker Pro Advanced"
-		else
-			set fmProcessName to "FileMaker Pro"
-		end if
-		
-		
 		tell application "System Events"
-			tell application process fmProcessName
+			tell process "FileMaker Pro Advanced"
 				set closeMenuItem to menu item "Close" of menu 1 of menu bar item "File" of menu bar 1
 			end tell
 		end tell
@@ -88,7 +82,7 @@ on closeDatabase(prefs)
 				fmGUI_ManageScripts_Open({})
 				fmGUI_ManageScripts_FmScript_Select({fmScriptName:(closeScriptName of prefs)})
 				tell application "System Events"
-					tell application process fmProcessName
+					tell process "FileMaker Pro Advanced"
 						set runScriptButton to first button of window 1 whose description is "Perform"
 						click runScriptButton
 					end tell
@@ -101,7 +95,7 @@ on closeDatabase(prefs)
 			if debugMode then logConsole(ScriptName, "No '" & (closeScriptName of prefs) & "' for " & dbName & ", attempting to close window instead")
 			fmGUI_ManageScripts_Close({})
 			tell application "System Events"
-				tell application process fmProcessName
+				tell process "FileMaker Pro Advanced"
 					click button 1 of window 1
 				end tell
 			end tell

@@ -30,7 +30,7 @@ on fmGUI_ManageLayouts_OpenEditForSelected(prefs)
 		set prefs to prefs & defaultPrefs
 		
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				set windowContextRef to first window whose name begins with "Manage Layouts"
 			end tell
 		end tell

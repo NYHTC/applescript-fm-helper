@@ -34,7 +34,7 @@ on fmGUI_ManageSecurity_AccessRecord_GetTablesNames(prefs)
 		
 		
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				return value of static text 1 of rows of table 1 of scroll area 1 of window 1
 			end tell
 		end tell

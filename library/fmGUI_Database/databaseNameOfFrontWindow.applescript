@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4 - 2018-10-16 ( eshagdar ): FM17 has only FMP ( no more FMA)
 	1.3 - 
 	1.2 - 
 	1.1 - 
@@ -26,7 +27,7 @@ end run
 --------------------
 
 on databaseNameOfFrontWindow(prefs)
-	-- version 1.3
+	-- version 1.4
 	
 	set defaultPrefs to {}
 	set prefs to prefs & defaultPrefs

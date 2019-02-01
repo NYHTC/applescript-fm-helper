@@ -30,7 +30,7 @@ on fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
 	try
 		fmGUI_ManageSecurity_GotoTab({tabName:"Privilege Sets"} & prefs)
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				set viewByPopUpButton to pop up button "View by:" of tab group 1 of window 1
 			end tell
 		end tell

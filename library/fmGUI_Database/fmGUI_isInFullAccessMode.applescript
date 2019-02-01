@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.0.2 - 2019-01-02 ( eshagdar ): FM17 has only advanced
 	1.0.1 - 2017-11-01 ( eshagdar ): updated error message
 	1.0 - 201x-xx-xx ( eshagdar ): created
 
@@ -24,7 +25,7 @@ end run
 --------------------
 
 on fmGUI_isInFullAccessMode(prefs)
-	--version 1.0.1, Erik Shagdar
+	--version 1.0.2, Erik Shagdar
 	
 	fmGUI_AppFrontMost()
 	--fmGUI_ManageLayouts_Close({})
@@ -34,7 +35,7 @@ on fmGUI_isInFullAccessMode(prefs)
 		if fmGUI_NameOfFrontmostWindow() contains listOfFullAccessWindowNames then return true
 		
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				set canAccessManageDB to enabled of first menu item of menu 1 of menu item "Manage" of menu "File" of menu bar item "File" of menu bar 1 whose name begins with "Database"
 			end tell
 		end tell

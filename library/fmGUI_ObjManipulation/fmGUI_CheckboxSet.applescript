@@ -14,7 +14,7 @@ HISTORY:
 
 on run
 	tell application "System Events"
-		tell process "FileMaker Pro"
+		tell process "FileMaker Pro Advanced"
 			set frontmost to true
 			set checkboxRef to checkbox "Item Name:" of window 1
 		end tell

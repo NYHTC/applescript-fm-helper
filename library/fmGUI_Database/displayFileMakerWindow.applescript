@@ -1,11 +1,11 @@
--- displayFileMakerDatabase({windowName:"", fmAppType:"", waitCycleDelaySeconds:"", waitSaveTotalSeconds:""})
+-- displayFileMakerDatabase({windowName:"", waitCycleDelaySeconds:"", waitSaveTotalSeconds:""})
 -- Dan Shockley, NYHTC
 -- If open, then display first window this finds and return true, else return false.
 
 
 (*
 HISTORY:
-	1.7 - 2018-09-20 ( eshagdar ): FileMaker 17 has only version so talk to it by name.
+	1.7 - 2018-09-20 ( eshagdar ): FM17 has only 1 version, so no need to specify by name/bundle
 	1.6 - get list of window names of open files from the menu instead of asking FM for document names.
 	1.5.2 - 2017-11-20 ( eshagdar ): disable logging
 	1.5.1 - 2017-10-25 ( eshagdar ): updated defaultPrefs. updated helper handlers. added delay, more debugging messages. get list of document names instead of documents - we don't need to get the name later.
@@ -54,7 +54,7 @@ on displayFileMakerWindow(prefs)
 		
 		-- get name of all documents
 		tell application "System Events"
-			tell process "Filemaker Pro")
+			tell process "FileMaker Pro Advanced"
 				set windowMenu to menu 1 of menu bar item "Window" of menu bar 1
 				set hiddenWindowMenu to menu 1 of menu item "Show Window" of windowMenu
 				set windowMenuItems to name of menu items of windowMenu
@@ -86,14 +86,14 @@ on displayFileMakerWindow(prefs)
 					if oneDocName is in windowMenuItems then
 						-- window exists
 						tell application "System Events"
-							tell (first process whose bundle identifier is fmAppBundleID)
+							tell process "FileMaker Pro Advanced"
 								set menuItemRef to menu item oneDocName of windowMenu
 							end tell
 						end tell
 					else
 						-- hidden file
 						tell application "System Events"
-							tell (first process whose bundle identifier is fmAppBundleID)
+							tell process "FileMaker Pro Advanced"
 								set menuItemRef to menu item oneDocName of hiddenWindowMenu
 							end tell
 						end tell

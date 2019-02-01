@@ -28,7 +28,7 @@ end run
 on fmGUI_ManageScripts_ListOfScriptNames(someDbName)
 	-- version 1.3
 	
-	tell application "Filemaker Pro"
+	tell application "FileMaker Pro Advanced"
 		if (count of every FileMaker script of database someDbName) is equal to 0 then
 			return {}
 		else

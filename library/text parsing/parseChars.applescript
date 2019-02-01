@@ -11,7 +11,8 @@ HISTORY:
 
 
 on run
-	parseChars({sourceTEXT:"bob is here. He is ready.", parseString:"is"})
+	--parseChars({sourceTEXT:"bob is here. He is ready.", parseString:"is"})
+	parseChars({sourceTEXT:"fizz,buzz", parseString:","})
 end run
 
 --------------------

@@ -21,7 +21,7 @@ HISTORY:
 
 on run
 	tell application "System Events"
-		tell application process "FileMaker Pro"
+		tell application process "FileMaker Pro Advanced"
 			set frontmost to true
 			delay 1
 			--set popUpButtonRef to pop up button "Available menu commands:" of window 1
@@ -107,7 +107,7 @@ on fmGUI_Popup_SelectByCommand(prefs)
 				repeat 100 times
 					try
 						tell application "System Events"
-							tell application process "FileMaker Pro"
+							tell application process "FileMaker Pro Advanced"
 								if exists (menu 1 of objRef) then exit repeat
 							end tell
 						end tell
@@ -132,7 +132,7 @@ on fmGUI_Popup_SelectByCommand(prefs)
 						error "unable to pick objValue because select command is failed" number -1024
 					end if
 					
-					tell process "FileMaker Pro"
+					tell process "FileMaker Pro Advanced"
 						click objValue
 					end tell
 				end tell

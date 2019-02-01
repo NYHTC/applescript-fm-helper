@@ -37,7 +37,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)
 		fmGUI_AppFrontMost()
 		
 		tell application "System Events"
-			tell process "FileMaker Pro"
+			tell process "FileMaker Pro Advanced"
 				set windowName to name of window 1
 				set layoutsPopup to pop up button "Layouts:" of window 1
 			end tell
@@ -55,7 +55,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)
 			
 			-- get button refs to for each radio button
 			tell application "System Events"
-				tell process "FileMaker Pro"
+				tell process "FileMaker Pro Advanced"
 					set allowCreate to checkbox "Allow creation of new layouts" of window 1
 					
 					-- need to do it by reference since the 2 sets of radio buttons 'checkboxes' have the same name
@@ -77,7 +77,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)
 			repeat with oneLayoutRec in layoutPrivList of layoutAccess of prefs
 				set oneLayoutRec to contents of oneLayoutRec
 				tell application "System Events"
-					tell process "FileMaker Pro"
+					tell process "FileMaker Pro Advanced"
 						set oneLayoutRow to (first row of table 1 of scroll area 1 of window 1 whose name of static text 1 is layoutName of oneLayoutRec)
 						select oneLayoutRow
 						set oneLayoutInfo to name of every static text of oneLayoutRow

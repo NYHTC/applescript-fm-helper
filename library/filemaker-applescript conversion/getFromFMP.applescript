@@ -30,7 +30,7 @@ on getFromFMP(prefs)
 	-- version 1.8
 		
 	set asTransfer to "AppleScript_Transfer-DO_NOT_RENAME"
-	set fmpName to "FileMaker Pro"
+	set fmpName to "FileMaker Pro Advanced"
 	
 	if (path to me) does not contain fmpName then
 		tell application "System Events"

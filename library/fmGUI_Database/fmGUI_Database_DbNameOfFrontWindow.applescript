@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1.1 - 2018-12-07 ( eshagdar ): no need to specify the name of the window - sub-handler will take the frontmost one.
 	1.1 - 
 	1.0 - 20xx-xx-xx ( dshockley ): created.
 	
@@ -12,7 +13,6 @@ HISTORY:
 REQUIRES:
 	fmGUI_DataViewer_Close
 	fmGUI_Inspector_Close
-	fmGUI_NameOfFrontmostWindow
 	namesOfTOsOfWindowName
 *)
 
@@ -27,12 +27,12 @@ end run
 --------------------
 
 on fmGUI_Database_DbNameOfFrontWindow(prefs)
-	-- version 1.1
+	-- version 1.1.1
 	try
 		fmGUI_DataViewer_Close()
 		fmGUI_Inspector_Close()
 		
-		return dbNameOfWindowName(fmGUI_NameOfFrontmostWindow())
+		return dbNameOfWindowName("")
 		
 	on error errMsg number errNum
 		error "Couldn't get fmGUI_Database_DbNameOfFrontWindow - " & errMsg number errNum
@@ -51,10 +51,6 @@ end fmGUI_DataViewer_Close
 on fmGUI_Inspector_Close()
 	tell application "htcLib" to fmGUI_Inspector_Close()
 end fmGUI_Inspector_Close
-
-on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
-end fmGUI_NameOfFrontmostWindow
 
 on dbNameOfWindowName(prefs)
 	tell application "htcLib" to dbNameOfWindowName(prefs)
