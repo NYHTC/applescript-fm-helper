@@ -4,6 +4,7 @@
 
 (*
 HISTORY:
+	1.4 - 2019-01-02 ( dshockley ): Added ExecuteOLD, QuotedPilcrow, IfSqlResultOLD, queryDebugOLD. 
 	1.3 - 2018-09-04 ( dshockley ): Added regex to remove extra spaces before semicolons. Fix for optional space at end of SQL_Field line in whereEqualsClause regex search. 
 	1.2 - 2018-05-22 ( dshockley ): modified to also convert the query to use List to separate the components of the query. 
 	1.1 - 2017-12-11 ( dshockley ): disable the usually no-longer-needed SQL_EscapeString, but WARN and comment, since it might sitll be needed when using with something OTHER THAN SQL_Where criteria. 
@@ -40,9 +41,24 @@ on BBEdit_upgrade_SQL_Query_to_newer_format({})
 	
 	set regexReplace_EscapeStringWARN to "\\1 /* WARNING!! Had SQL_EscapeString probably NO LONGER NEEDED, so DISABLED! */"
 	
-	set regexSearch_ExtraSpacesBeforeSemicolon to "([^\r])  +;"
+	set regexSearch_ExtraSpacesBeforeSemicolon to "([^
+])  +;"
 	
 	set regexReplace_ExtraSpacesBeforeSemicolon to "\\1 ;"
+	
+	
+	set literalSearch_ExecuteOLD to "sqlResult = HTC_ExecuteFileSQL ( sqlQuery; \"\"; \";\"; \"¦\" )"
+	set literalReplace_ExecuteOLD to "sqlResult = HTC_ExecuteFileSQL ( sqlQuery ; \"\" ; \";\" ; Char ( 13 ) )"
+	
+	set literalSearch_IfSqlResultOLD to "If ( sqlResult = \"?\"; \"\"; sqlResult )"
+	set literalReplace_IfSqlResultOLD to "If ( sqlResult = \"?\" ; \"\" ; sqlResult )"
+	
+	set literalSearch_queryDebugOLD to "sqlQuery & \"¦==========¦¦\" &"
+	set literalReplace_queryDebugOLD to "sqlQuery & Char ( 13 ) &  \"==========\" & Char ( 13 ) & Char ( 13 ) &"
+	
+	set literalSearch_QuotedPilcrow to "\"¦\""
+	set literalReplace_QuotedPilcrow to "Char ( 13 )"
+	
 	
 	tell application "BBEdit"
 		activate
@@ -56,6 +72,11 @@ on BBEdit_upgrade_SQL_Query_to_newer_format({})
 			replace regexSearch_WhereEqualsClause using regexReplace_WhereEqualsClause options {search mode:grep, starting at top:true}
 			replace regexSearch_EscapeStringWARN using regexReplace_EscapeStringWARN options {search mode:grep, starting at top:true}
 			replace regexSearch_ExtraSpacesBeforeSemicolon using regexReplace_ExtraSpacesBeforeSemicolon options {search mode:grep, starting at top:true}
+			
+			replace literalSearch_ExecuteOLD using literalReplace_ExecuteOLD options {search mode:literal, starting at top:true}
+			replace literalSearch_IfSqlResultOLD using literalReplace_IfSqlResultOLD options {search mode:literal, starting at top:true}
+			replace literalSearch_queryDebugOLD using literalReplace_queryDebugOLD options {search mode:literal, starting at top:true}
+			replace literalSearch_QuotedPilcrow using literalReplace_QuotedPilcrow options {search mode:literal, starting at top:true}
 			
 			
 			try
