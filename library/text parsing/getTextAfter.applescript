@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	-- - 2019-02-06 ( eshagdar ): updated sample run. no version bump.
 	1.2 - changed to get ALL, not thru next occurrence, which changes behavior to match handler NAME
 	1.1 - up to the next occurrence
 	1.0 - created
@@ -12,7 +13,7 @@ HISTORY:
 
 
 on run
-	getTextBefore("one-two&three", "&")
+	getTextAfter("one-two&three", "&")
 end run
 
 --------------------
