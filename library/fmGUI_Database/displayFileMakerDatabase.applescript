@@ -69,6 +69,7 @@ on displayFileMakerDatabase(prefs)
 				if errNum is -10011 then
 					-- just keep trying - this error can be caused when a database is opening and the open script takes a bit too long to finish, or something in the FM interface is slow to respond. 
 				else if errNum is -10004 then
+					activate
 					display dialog "unable to displayFileMakerDatabase becuase of privSet violation in some FM file errNum: " & errNum buttons "OK" default button "OK"
 					error "privSet violation in some FM file..." & errNum number errNum
 				else
