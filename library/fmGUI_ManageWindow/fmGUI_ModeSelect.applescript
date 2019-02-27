@@ -22,31 +22,18 @@ on fmGUI_ModeSelect(modeToSelect)
 	-- version 1.1
 	
 	try
+		fmGUI_AppFrontMost()
+		fmGUI_Inspector_Close()
+		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
-				my fmGUI_AppFrontMost()
-				my fmGUI_Inspector_Close()
-				
-				-- Need to click in upper-left corner of area before pasting
-				set currentMode to first word of ((description of first group of window 1) as string)
-				
-				
-				if currentMode is not equal to modeToSelect then
-					set menuItemName to modeToSelect & " Mode"
-					click (menu item menuItemName of menu 1 of menu bar item "View" of menu bar 1)
-					
-					--wait until the mode is selected ( or we time out )
-					repeat 20 times
-						set newMode to first word of ((description of first group of window 1) as string)
-						if newMode is equal to modeToSelect then exit repeat
-						delay 0.5
-					end repeat
-				end if
-				
-				return true
-				
+				set menuItem to first menu item of menu 1 of menu bar item "View" of menu bar 1 whose name is equal to modeToSelect & " Mode"
 			end tell
 		end tell
+		fmGUI_ClickMenuItem({menuItemRef:menuItem})
+		delay 0.5
+		
+		return true
 	on error errMsg number errNum
 		error "Couldn't switch to mode '" & modeToSelect & "' - " & errMsg number errNum
 	end try
@@ -63,3 +50,20 @@ end fmGUI_AppFrontMost
 on fmGUI_Inspector_Close()
 	tell application "htcLib" to fmGUI_Inspector_Close()
 end fmGUI_Inspector_Close
+
+on fmGUI_ClickMenuItem(prefs)
+	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
+	tell application "htcLib" to fmGUI_ClickMenuItem(prefs)
+end fmGUI_ClickMenuItem
+
+
+
+on coerceToString(incomingObject)
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a coerceToString into this file for the sample to run ( instead of having a copy of the handler locally ).
+	
+	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
+	set codeCoerce to read file coercePath as text
+	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	set codeCoerce to run script codeCoerce
+	tell codeCoerce to coerceToString(incomingObject)
+end coerceToString

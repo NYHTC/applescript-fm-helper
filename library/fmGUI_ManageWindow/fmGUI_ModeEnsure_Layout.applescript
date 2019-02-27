@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.0.1 - 2019-02-21 ( eshagdar ): fixed error message.
 	1.0 - created
 *)
 
@@ -18,13 +19,13 @@ end run
 --------------------
 
 on fmGUI_ModeEnsure_Layout()
-	-- version 1.0
+	-- version 1.0.1
 	
 	try
 		fmGUI_ModeSelect("Layout")
 		
 	on error errMsg number errNum
-		error "Couldn't ensure in Browse Mode - " & errMsg number errNum
+		error "Couldn't ensure in Layout Mode - " & errMsg number errNum
 	end try
 	
 end fmGUI_ModeEnsure_Layout
