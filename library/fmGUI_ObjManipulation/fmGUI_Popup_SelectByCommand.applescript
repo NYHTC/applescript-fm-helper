@@ -30,6 +30,7 @@ on run
 	end tell
 	
 	fmGUI_Popup_SelectByCommand({objRef:popUpButtonRef, objValue:"limited...", calcValue:"If ( True; True; GetAsNumber ( \"1\" ) )", clickIfAlreadySet:true})
+	
 end run
 
 --------------------
@@ -149,7 +150,7 @@ on fmGUI_Popup_SelectByCommand(prefs)
 		
 		return true
 	on error errMsg number errNum
-		error "Couldn't select menu item whose value _" & selectCommand & "_ '" & objValue & "' in popup - " & errMsg number errNum
+		error "unable to fmGUI_Popup_SelectByCommand ( value _" & selectCommand & "_ '" & objValue & "' in popup ) - " & errMsg number errNum
 	end try
 end fmGUI_Popup_SelectByCommand
 
