@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.1 - 2019-03-11 ( eshagdar ): window name can be 'Specify Calculation for “«fieldName»”', so test for window name 'starts with' (instead 'is').
 	1.0 - 2017-09-22 ( eshagdar ):created
 
 
@@ -26,19 +27,20 @@ end run
 --------------------
 
 on fmGUI_SpecifyCalcWindowSet(prefs)
-	-- version 1.0
+	-- version 1.1
 	
-	set defaultPrefs to {calc:null}
+	set defaultPrefs to {calc:null, needsSave:false}
 	set prefs to prefs & defaultPrefs
 	
-	set needsSave to false
+	set needsSave to needsSave of prefs
 	set calcBoxWindowName to "Specify Calculation"
+	set whichWindow to "front"
 	
 	
 	try
 		-- ensure context
 		fmGUI_AppFrontMost()
-		if not windowWaitUntil_FrontIS({windowName:calcBoxWindowName}) then error "Timed out waiting for '" & calcBoxWindowName & "' window" number -1024
+		if not windowWaitUntil({windowName:calcBoxWindowName, windowNameTest:"starts with", whichWindow:whichWindow}) then error "Timed out waiting for '" & calcBoxWindowName & "' window" number -1024
 		
 		tell application "System Events"
 			tell process "FileMaker Pro Advanced"
@@ -55,7 +57,7 @@ on fmGUI_SpecifyCalcWindowSet(prefs)
 		else
 			fmGUI_ObjectClick_CancelButton({})
 		end if
-		windowWaitUntil_FrontNotIS({windowName:calcBoxWindowName})
+		windowWaitUntil({windowName:calcBoxWindowName, windowNameTest:"does not start with", whichWindow:whichWindow})
 		
 		return true
 	on error errMsg number errNum
@@ -71,9 +73,9 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
-end windowWaitUntil_FrontIS
+on windowWaitUntil(prefs)
+	tell application "htcLib" to windowWaitUntil(prefs)
+end windowWaitUntil
 
 on windowWaitUntil_FrontNotIS(prefs)
 	tell application "htcLib" to windowWaitUntil_FrontNotIS(prefs)
