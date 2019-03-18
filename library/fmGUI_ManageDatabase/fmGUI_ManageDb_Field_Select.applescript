@@ -52,22 +52,22 @@ on fmGUI_ManageDb_Field_Select(prefs)
 	set afterAllTestsCode to ")"
 	set testCodeFooter to return & "end tell" & return & "end tell"
 	
+	
 	try
-		
 		fmGUI_ManageDb_FieldListFocus({})
 		
 		if tableName of prefs is not null then fmGUI_ManageDb_FieldsPickTable(tableName of prefs)
 		
-		fmGUI_AppFrontMost()
 		
+		fmGUI_AppFrontMost()
 		try
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
-					
 					select (first row of (table 1 of scroll area 1 of tab group 1 of window 1) whose value of static text 1 is fieldName of prefs)
 				end tell
 			end tell
 			return true
+			
 		on error errMsg number errNum
 			if errNum is not -1719 then
 				-- some error OTHER than not found in list:
@@ -78,27 +78,20 @@ on fmGUI_ManageDb_Field_Select(prefs)
 				repeat with oneAltPattern in altPatterns of prefs
 					set testList to contents of pattern of oneAltPattern
 					
+					-- BEGIN: try oneAltPattern: 
 					try
-						-- BEGIN: try oneAltPattern: 
-						
 						set testCode to {}
 						repeat with oneTestRec in testList
 							copy ("" & testType of oneTestRec & " " & my quoteString(testMatch of oneTestRec)) to end of testCode
 						end repeat
 						
 						set testCode to my unParseChars(testCode, betweenTestsCode & fieldNameObjectCode & " ")
-						
-						
 						set testCode to selectCode & rowRefCode & whoseCode & fieldNameObjectCode & " " & testCode & afterAllTestsCode
-						
 						set testCode to testCodeHeader & testCode & testCodeFooter
-						
-						
 						tell me to run script testCode
 						
 						set fieldNowSelected to true -- no error, so we selected it.
 						exit repeat -- no need to keep checking altPatterns
-						
 						-- ERROR: try oneAltPattern. 
 					on error errMsg number errNum
 						if errNum is not -1719 then
@@ -107,21 +100,15 @@ on fmGUI_ManageDb_Field_Select(prefs)
 						else
 							-- just try the next altPattern, so continue repeat loop.
 						end if
-						
-						-- END OF: try oneAltPattern. 
-					end try
-					
+					end try -- END OF: try oneAltPattern. 
 				end repeat
-				
-				return fieldNowSelected
-				
 			end if
 		end try
 		
+		return fieldNowSelected
 	on error errMsg number errNum
-		error "Couldn't select a Field - " & coerceToString(prefs) & " - " & errMsg number errNum
+		error "unable to fmGUI_ManageDb_Field_Select ( prefs: " & coerceToString(prefs) & " ) - " & errMsg number errNum
 	end try
-	
 end fmGUI_ManageDb_Field_Select
 
 --------------------

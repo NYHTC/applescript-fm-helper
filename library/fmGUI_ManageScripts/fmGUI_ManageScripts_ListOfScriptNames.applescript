@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3.1 - 2019-03-13 ( eshagdar ): updated error message. reformated logic for clarity and brevity.
 	1.3 - 2018-09-20 ( eshagdar ): FileMaker 17 has only version so talk to it by name.
 	1.2 - 2016-07-08 ( eshagdar ): Renamed from 'namesOfScriptsOfDatabase' to 'fmGUI_ManageScripts_ListOfScriptNames'
 	1.1 - handles when there are NO script, even though db exists. 
@@ -26,17 +27,17 @@ end run
 --------------------
 
 on fmGUI_ManageScripts_ListOfScriptNames(someDbName)
-	-- version 1.3
+	-- version 1.3.1
 	
-	tell application "FileMaker Pro Advanced"
-		if (count of every FileMaker script of database someDbName) is equal to 0 then
-			return {}
-		else
-			return name of every FileMaker script of database someDbName
-		end if
+	try
+		tell application "FileMaker Pro Advanced"
+			if (count of every FileMaker script of database someDbName) is greater than 0 then return name of every FileMaker script of database someDbName
+		end tell
 		
-		error "Could not get ManageScripts_ListOfScriptNames of database specified: " & someDbName & "." number 1024
-	end tell
+		return {}
+	on error errMsg number errNum
+		error "unable to fmGUI_ManageScripts_ListOfScriptNames (  " & someDbName & ") - " & errMsg number errNum
+	end try
 	
 end fmGUI_ManageScripts_ListOfScriptNames
 

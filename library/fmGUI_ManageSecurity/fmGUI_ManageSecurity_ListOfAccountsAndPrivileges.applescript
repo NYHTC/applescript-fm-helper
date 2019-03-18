@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.0.1 - 2019-03-18 ( eshagdar ): narrowed scope
 	1.0 - 2016-07-20 ( eshagdar ): first created
 
 
@@ -23,7 +24,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_ListOfAccountsAndPrivileges(prefs)
-	-- version 1.0
+	-- version 1.0.1
 	
 	try
 		fmGUI_AppFrontMost()
@@ -41,15 +42,13 @@ on fmGUI_ManageSecurity_ListOfAccountsAndPrivileges(prefs)
 					set oneAccountRow to {item i of accountNamesList, item i of privNamesList}
 					set end of accountsList to oneAccountRow
 				end repeat
-				
-				return accountsList
-				
 			end tell
 		end tell
+		
+		return accountsList
 	on error errMsg number errNum
 		error "Couldn't get list of account Name Privilege Set lists - " & errMsg number errNum
 	end try
-	
 end fmGUI_ManageSecurity_ListOfAccountsAndPrivileges
 
 --------------------

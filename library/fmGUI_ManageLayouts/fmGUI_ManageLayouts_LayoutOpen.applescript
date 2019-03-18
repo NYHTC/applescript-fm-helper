@@ -86,5 +86,5 @@ end fmGUI_ManageLayouts_Select
 
 on fmGUI_NameOfFrontmostWindow()
 	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
-end fmGUI_Inspector_Close
+end fmGUI_NameOfFrontmostWindow
 

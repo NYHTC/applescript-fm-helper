@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3 - updated call to fmGUI_ObjectClick_Button. If there are any updates, then then close the window.
 	1.2 - 2017-12-18 ( eshagdar ): narrowed scope. button clicking via sub-hander
 	1.1 - 201x-xx-xx ( xxxxx ): 
 	1.0 - 201x-xx-xx ( xxxxx ): created
@@ -13,7 +14,10 @@ HISTORY:
 REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_CustomMenus_Open
+	fmGUI_NameOfFrontmostWindow
 	fmGUI_ObjectClick_Button
+	fmGUI_ObjectClick_OkButton
+	windowWaitUntil_FrontNotIS
 *)
 
 
@@ -26,7 +30,7 @@ end run
 --------------------
 
 on fmGUI_CustomMenus_Update(prefs)
-	-- version 1.2
+	-- version 1.3
 	
 	try
 		fmGUI_CustomMenus_Open({})
@@ -42,7 +46,12 @@ on fmGUI_CustomMenus_Update(prefs)
 		
 		
 		-- click update button. There may be a window that comes up, and we may need to click an ok/confirm button
-		if isButtonEnabled then fmGUI_ObjectClick_Button(updateButton)
+		if isButtonEnabled then
+			fmGUI_ObjectClick_Button({buttonRef:updateButton})
+			set updateWindowName to "Custom Menus Updated"
+			if fmGUI_NameOfFrontmostWindow() is equal to updateWindowName then fmGUI_ObjectClick_OkButton({})
+			windowWaitUntil_FrontNotIS({windowName:updateWindowName})
+		end if
 		
 		
 		return true
@@ -65,10 +74,22 @@ on fmGUI_CustomMenus_Open(prefs)
 	tell application "htcLib" to fmGUI_CustomMenus_Open(prefs)
 end fmGUI_CustomMenus_Open
 
+on fmGUI_NameOfFrontmostWindow()
+	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow
+
 on fmGUI_ObjectClick_Button(prefs)
 	set buttonRef to my coerceToString(buttonRef of prefs)
 	tell application "htcLib" to fmGUI_ObjectClick_Button({buttonRef:buttonRef} & prefs)
 end fmGUI_ObjectClick_Button
+
+on fmGUI_ObjectClick_OkButton(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+end fmGUI_ObjectClick_OkButton
+
+on windowWaitUntil_FrontNotIS(prefs)
+	tell application "htcLib" to windowWaitUntil_FrontNotIS(prefs)
+end windowWaitUntil_FrontNotIS
 
 
 
