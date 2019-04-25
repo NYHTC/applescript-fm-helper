@@ -4,7 +4,7 @@
 
 (*
 HISTORY:
-	1.7 - 2019-04-25 ( dshockley ): Added error-trapping and handling. The param for the handler is now named prefs instead of accidentally being an empty list.
+	1.7 - 2019-04-25 ( dshockley ): Added error-trapping and handling. The param for the handler is now named prefs instead of accidentally being an empty list. Disabled potentially-problematic "convert to using List for query whitespace formatting" code! 
 	1.6 - 2019-04-17 ( dshockley ): Added ExecuteOLD2. Added SemicolonPilcrowLine. 
 	1.5 - 2019-04-05 ( dshockley ): Added literalSearch_SpacesToTabs. Fixed "using List for query". Other minor changes. Disabled RemoveExtraSpacesBeforeSemicolon. Added RemoveSpacesBetweenLeadingTabsAndSemicolon. 
 	1.4 - 2019-01-02 ( dshockley ): Added ExecuteOLD, QuotedPilcrow, IfSqlResultOLD, queryDebugOLD. 
@@ -115,6 +115,32 @@ on BBEdit_upgrade_SQL_Query_to_newer_format(prefs)
 				replace literalSearch_queryDebugOLD2 using literalReplace_queryDebugOLD options {search mode:literal, starting at top:true}
 				replace literalSearch_QuotedPilcrow using literalReplace_QuotedPilcrow options {search mode:literal, starting at top:true}
 				
+				
+				
+				(* DISABLED, SINCE IT CAN MANGLE INTERNAL 'IF' blocks:
+				EXAMPLE (the IF line SQL_Where gets put as the ELSE, instead of staying with " AND "!!!!): 
+	; sqlQuery = 
+		"SELECT " 
+				& SQL_Field ( LR_LOCAL_REPORT::aLR__PrimaryKey ) 
+				
+			& " FROM " 
+				& SQL_Table ( LR_LOCAL_REPORT::zAuto1 ) 
+			
+			& " WHERE " 
+				& SQL_Where ( LR_LOCAL_REPORT::aLR_UID ; "=" ; UID ) 
+			
+			& " AND " 
+				& SQL_Where ( LR_LOCAL_REPORT::aLR_LocalKey ; "=" ; localKey ) 
+		
+			& " AND " 
+				& SQL_Where ( LR_LOCAL_REPORT::bLR_DateReportFor_Month1st ; ">=" ; dateMonthFor ) 
+						
+			& If ( not IsEmpty ( dateAcctPeriod )
+				; " AND " 
+					& SQL_Where ( LR_LOCAL_REPORT::bLR_DateAccountingPeriod_Month1st ; ">=" ; dateAcctPeriod ) 
+				)
+
+				
 				try
 					(* convert to using List for query whitespace formatting: *)
 					set stringStartQuery to ";? ?sqlQuery = "
@@ -132,7 +158,7 @@ on BBEdit_upgrade_SQL_Query_to_newer_format(prefs)
 					set character posQueryEnd_NEW to return & tab & tab & tab & ")" & (contents of character posQueryEnd_NEW) & return
 					
 				end try
-				
+				*)
 				
 				
 				replace regexSearch_SemicolonPilcrowLine using regexReplace_SemicolonPilcrowLine options {search mode:grep, starting at top:true}
