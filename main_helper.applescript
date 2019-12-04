@@ -109,7 +109,20 @@ on run prefs
 	
 	
 	-- create a temp file of all libaries, then create a compiled version of it.
-	do shell script "echo " & quoted form of tempCode & " > " & quoted form of POSIX path of pathTempCode
+	--	do shell script "echo " & quoted form of tempCode & " > " & quoted form of POSIX path of pathTempCode
+	
+	try
+		close access fileRef
+	end try
+	set fileRef to (open for access file pathTempCode with write permission)
+	set eof of fileRef to 0 --> empty file contents if needed
+	--> now write the flag
+	--	write ((ASCII character 239) & (ASCII character 187) & (ASCII character 191)) to fileRef --> not as Çclass utf8È
+	--> now write the data
+	write tempCode to fileRef
+	close access fileRef
+	
+	
 	do shell script "osacompile -o " & quoted form of POSIX path of pathMain & " " & quoted form of POSIX path of pathTempCode
 	do shell script "pwd"
 	do shell script "sh " & quoted form of (POSIX path of (pathRoot & "vendor.sh"))
