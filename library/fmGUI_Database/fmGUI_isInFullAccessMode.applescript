@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.0.3 - 2019-12-06 ( dshockley ): BUG-FIX - was missing wrapper call to fmGUI_NameOfFrontmostWindow subhandler. 
 	1.0.2 - 2019-01-02 ( eshagdar ): FM17 has only advanced
 	1.0.1 - 2017-11-01 ( eshagdar ): updated error message
 	1.0 - 201x-xx-xx ( eshagdar ): created
@@ -54,3 +55,7 @@ end fmGUI_isInFullAccessMode
 on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
+
+on fmGUI_NameOfFrontmostWindow()
+	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow
