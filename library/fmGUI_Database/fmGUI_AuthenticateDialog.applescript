@@ -92,6 +92,10 @@ on fmGUI_ObjectClick_OkButton(prefs)
 	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
 end fmGUI_ObjectClick_OkButton
 
+on fmGUI_ObjectClick_SignInButton(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_SignInButton(prefs)
+end fmGUI_ObjectClick_SignInButton
+
 on fmGUI_TextFieldSet(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
 	tell application "htcLib" to fmGUI_TextFieldSet({objRef:objRefStr} & prefs)
