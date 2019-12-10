@@ -1,6 +1,6 @@
 -- clickAtCoords(xClick, yClick)
 -- Daniel A. Shockley, NYHTC
--- Click at the specifeid coordinates
+-- Click at the specified coordinates
 
 (*
 HISTORY:

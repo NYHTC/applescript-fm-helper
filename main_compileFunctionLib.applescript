@@ -8,11 +8,6 @@
 *)
 
 
-(* TODO: 
-	- If the compiled handler file already exists and has the same version, can skip recompiling (if that actually improves speed).
-*)
-
-
 property debugMode : true
 
 
@@ -50,7 +45,7 @@ on run prefs
 	set codeEnd to commentBreaker & LF & "-- END OF CODE" & LF & commentBreaker
 	
 	-- substrings for parsing sub-handler code:
-	set subStr_propertyDebugMode to "property debugMode: false" & LF
+	set subStr_handlerProperties to "property debugMode: false" & LF & "property ScriptName: \"" & appName & "\"" & LF
 	set subStr_beforeHandlerName to LF & "on "
 	set subStr_beforeHandlerParams to "("
 	set subStr_endPrefixHandler to LF & "end "
@@ -59,6 +54,10 @@ on run prefs
 		"	tell application \"Finder\" to set handlerPath to " & Â
 		"((container of (path to me)) as text) & \"###HANDLER_NAME###\" & \".scpt\"" & LF & Â
 		"	tell (load script alias handlerPath) to return ###HANDLER_CALL###"
+	
+	set subStr_special_clickAtCoords_InternalCode_InsertAfter to (ASCII character 9) & "try" & LF
+	set subStr_special_clickAtCoords_InternalCode_ToAdd to Â
+		"tell application \"Finder\" to set clickCommandPosix to POSIX path of (((container of container of (path to me)) as string) & \"vendor:cliclick:cliclick\")" & LF
 	
 	
 	tell application "Finder"
@@ -98,15 +97,21 @@ on run prefs
 						set codeOneHandler to oneFileRawCode
 					end if
 					
+					set handlerCall to getTextBetween({codeOneHandler, subStr_beforeHandlerName, LF})
+					if handlerCall contains subStr_beforeHandlerParams then
+						set handlerName to getTextBefore(handlerCall, "(")
+					else
+						set handlerName to handlerCall
+					end if
+					
+					if handlerName is "clickAtCoords" then
+						-- SPECIAL MODIFICATION to bring a "property" into the actual handler code. 
+						set codeOneHandler to my replaceSimple({codeOneHandler, subStr_special_clickAtCoords_InternalCode_InsertAfter, subStr_special_clickAtCoords_InternalCode_InsertAfter & subStr_special_clickAtCoords_InternalCode_ToAdd})
+					end if
+					
 					
 					if shouldBuildAPP then
 						-- APPEND TO APP: now append to htcLib APP code:
-						set handlerCall to getTextBetween({codeOneHandler, subStr_beforeHandlerName, LF})
-						if handlerCall contains subStr_beforeHandlerParams then
-							set handlerName to getTextBefore(handlerCall, "(")
-						else
-							set handlerName to handlerCall
-						end if
 						
 						set handlerInternalCode to replaceSimple({replaceSimple({subStr_templateHandlerWrapperCode, "###HANDLER_NAME###", compiledFolderName & ":" & handlerName}), "###HANDLER_CALL###", handlerCall})
 						set codeHandlerWrapper to subStr_beforeHandlerName & handlerCall & LF & handlerInternalCode & subStr_endPrefixHandler & handlerName & LF
@@ -124,7 +129,7 @@ on run prefs
 					-- trim the Handler code now (NOT above, since it needs the leading linefeed before the handler call):			
 					set codeOneHandler to trimWhitespace(codeOneHandler)
 					
-					set codeHandlerWithNewSubCalls to subStr_propertyDebugMode & codeOneHandler
+					set codeHandlerWithNewSubCalls to subStr_handlerProperties & codeOneHandler
 					repeat while codeSubHandlers contains subStr_beforeHandlerName
 						set skipThisSubhandler to false
 						set oneSubhandlerCall to getTextBetween({codeSubHandlers, subStr_beforeHandlerName, LF})
