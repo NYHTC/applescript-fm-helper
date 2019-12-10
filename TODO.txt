@@ -1,12 +1,13 @@
 # DEVELOPING #
- - Need to search for and figure out how to deal with any properties specified in the handler source files. Just hard-code debugMode as false and ScriptName as "htcLib". 
- - The clickAtCoords needs the additional property clickCommandPosix, set to ../vendor/cliclick/cliclick. 
 
 
 # WAITING #
- - Improve compiler: If the compiled handler file already exists and has the same version, can skip recompiling (if that actually improves speed).
- - Improve compiler: If no function was added/removed/renamed and no params changed, can SKIP recompiling htcLib.app. 
  - Consider removing all the "if debugMode then…" (logging, etc) from the handler source files. 
 
-# COMPLETED RECENTLY #
 
+
+# COMPLETED RECENTLY #
+ - Need to search for and figure out how to deal with any properties specified in the handler source files. Just hard-code debugMode as false and ScriptName as "htcLib". 
+ - The clickAtCoords needs the additional property clickCommandPosix, set to ../vendor/cliclick/cliclick. 
+ - Improve compiler: If the compiled handler file already exists and has the same version, can skip recompiling (if that actually improves speed).
+ - Improve compiler: If no function was added/removed/renamed and no params changed, can SKIP recompiling htcLib.app. 

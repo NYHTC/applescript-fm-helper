@@ -47,6 +47,9 @@ on run prefs
 		end if
 	end if
 	
+	-- now, despite possibly expecting to build app, do NOT actually finalize that if no changes made:
+	set appChangesMade to false -- this will be changed to TRUE if any changes are made to handler names and/or params
+	
 	set folderName_library to "library:"
 	set folderName_toSkip to "standalone"
 	set fileNamePrefix_toSkip to "WIP_"
@@ -70,7 +73,10 @@ on run prefs
 	set subStr_special_clickAtCoords_InternalCode_InsertAfter to (ASCII character 9) & "try" & LF
 	set subStr_special_clickAtCoords_InternalCode_ToAdd to Â
 		"tell application \"Finder\" to set clickCommandPosix to POSIX path of (((container of container of (path to me)) as string) & \"vendor:cliclick:cliclick\")" & LF
+	set subStr_beforeHandlerVersion to "-- version "
+	set subStr_afterHandlerVersion to return
 	
+	set subStr_beforeCompiledHandlerName to return & "on "
 	
 	tell application "Finder"
 		set pathRoot to (folder of (path to me)) as string
@@ -99,10 +105,24 @@ on run prefs
 			-- append all libraries into a single file
 			repeat with fileCount from 1 to count of fileNamesInOneLibrary
 				
+				-- reset variables for one file:
+				set existingVersion to ""
+				set existingHandlerCall to ""
+				set shouldCompileHandler to true
+				
 				-- read one file and get everything above the helper methods
 				set oneFileName to item fileCount of fileNamesInOneLibrary
 				if oneFileName does not start with fileNamePrefix_toSkip then
 					set pathOneFileinOneLibrary to pathOneLibrary & ":" & oneFileName
+					set compiledFileName to replaceSimple({oneFileName, ".applescript", ".scpt"})
+					set pathCompiled to (pathCompiledFolder & compiledFileName)
+					
+					try
+						set existingCompiledCode to (do shell script "osadecompile " & POSIX path of pathCompiled)
+						set existingVersion to getTextBetween({existingCompiledCode, subStr_beforeHandlerVersion, subStr_afterHandlerVersion})
+						set existingHandlerCall to getTextBetween({existingCompiledCode, subStr_beforeCompiledHandlerName, return})
+					end try
+					
 					set oneFileRawCode to read file pathOneFileinOneLibrary
 					if oneFileRawCode contains codeStart and oneFileRawCode contains codeEnd then
 						set codeOneHandler to getTextBetween({oneFileRawCode, codeStart, codeEnd})
@@ -117,15 +137,31 @@ on run prefs
 						set handlerName to handlerCall
 					end if
 					
+					set handlerVersion to getTextBetween({codeOneHandler, subStr_beforeHandlerVersion, LF})
+					
 					if handlerName is "clickAtCoords" then
 						-- SPECIAL MODIFICATION to bring a "property" into the actual handler code. 
 						set codeOneHandler to my replaceSimple({codeOneHandler, subStr_special_clickAtCoords_InternalCode_InsertAfter, subStr_special_clickAtCoords_InternalCode_InsertAfter & subStr_special_clickAtCoords_InternalCode_ToAdd})
 					end if
 					
 					
+					
+					-- COMPARE existing (previously-compiled) version and handlerCall with NEW:
+					-- if no existing or different, then DO need to re-compile app
+					if (existingHandlerCall is equal to handlerCall) and (existingVersion is equal to handlerVersion) then
+						-- do NOT need to compile, and no "change" (for this ONE handler!) to the app.
+						set shouldCompileHandler to false
+					else if (existingHandlerCall is equal to handlerCall) then
+						-- do NOT need to re-compile the app due to THIS ONE handler (might need for some other).
+					else
+						-- the handlerCall was different, so THIS handler requires an app re-compile:
+						set appChangesMade to true
+					end if
+					
+					
 					if shouldBuildAPP then
 						-- APPEND TO APP: now append to htcLib APP code:
-						
+						-- do this EVEN if the handler itself doesn't need to be re-compiled.
 						set handlerInternalCode to replaceSimple({replaceSimple({subStr_templateHandlerWrapperCode, "###HANDLER_NAME###", handlerName}), "###HANDLER_CALL###", handlerCall})
 						set codeHandlerWrapper to subStr_beforeHandlerName & handlerCall & LF & handlerInternalCode & subStr_endPrefixHandler & handlerName & LF
 						
@@ -134,65 +170,63 @@ on run prefs
 						
 					end if
 					
-					
-					-- SUBHANDLERS: process each sub-handler this handler depends upon:
-					
-					set codeSubHandlers to getTextAfter(oneFileRawCode, codeEnd)
-					
-					-- trim the Handler code now (NOT above, since it needs the leading linefeed before the handler call):			
-					set codeOneHandler to trimWhitespace(codeOneHandler)
-					
-					set codeHandlerWithNewSubCalls to subStr_handlerProperties & codeOneHandler
-					repeat while codeSubHandlers contains subStr_beforeHandlerName
-						set skipThisSubhandler to false
-						set oneSubhandlerCall to getTextBetween({codeSubHandlers, subStr_beforeHandlerName, LF})
-						if oneSubhandlerCall contains subStr_beforeHandlerParams then
-							set oneSubhandlerName to getTextBefore(oneSubhandlerCall, "(")
-						else
-							set oneSubhandlerName to oneSubhandlerCall
-						end if
+					if shouldCompileHandler then
+						-- SUBHANDLERS: process each sub-handler this handler depends upon:
 						
-						if oneSubhandlerName is "coerceToString" then
-							if codeOneHandler does not contain "coerceToString" then
-								-- the coerceToString was NOT used in the main handler, so we don't actually NEED it:
-								-- so SKIP this:
-								set skipThisSubhandler to true
+						set codeSubHandlers to getTextAfter(oneFileRawCode, codeEnd)
+						
+						-- trim the Handler code now (NOT above, since it needs the leading linefeed before the handler call):			
+						set codeOneHandler to trimWhitespace(codeOneHandler)
+						
+						set codeHandlerWithNewSubCalls to subStr_handlerProperties & codeOneHandler
+						repeat while codeSubHandlers contains subStr_beforeHandlerName
+							set skipThisSubhandler to false
+							set oneSubhandlerCall to getTextBetween({codeSubHandlers, subStr_beforeHandlerName, LF})
+							if oneSubhandlerCall contains subStr_beforeHandlerParams then
+								set oneSubhandlerName to getTextBefore(oneSubhandlerCall, "(")
+							else
+								set oneSubhandlerName to oneSubhandlerCall
 							end if
-						end if
-						
-						if not skipThisSubhandler then
-							-- we DO need this subhandler, so reformat it:
-							set subHandlerInternalCode to replaceSimple({replaceSimple({subStr_templateHandlerWrapperCode, "###HANDLER_NAME###", oneSubhandlerName}), "###HANDLER_CALL###", oneSubhandlerCall})
-							set oneSubHandlerCode to subStr_beforeHandlerName & oneSubhandlerCall & LF & subHandlerInternalCode & subStr_endPrefixHandler & oneSubhandlerName & LF
 							
-							set codeHandlerWithNewSubCalls to codeHandlerWithNewSubCalls & LF & oneSubHandlerCode
-						end if
+							if oneSubhandlerName is "coerceToString" then
+								if codeOneHandler does not contain "coerceToString" then
+									-- the coerceToString was NOT used in the main handler, so we don't actually NEED it:
+									-- so SKIP this:
+									set skipThisSubhandler to true
+								end if
+							end if
+							
+							if not skipThisSubhandler then
+								-- we DO need this subhandler, so reformat it:
+								set subHandlerInternalCode to replaceSimple({replaceSimple({subStr_templateHandlerWrapperCode, "###HANDLER_NAME###", oneSubhandlerName}), "###HANDLER_CALL###", oneSubhandlerCall})
+								set oneSubHandlerCode to subStr_beforeHandlerName & oneSubhandlerCall & LF & subHandlerInternalCode & subStr_endPrefixHandler & oneSubhandlerName & LF
+								
+								set codeHandlerWithNewSubCalls to codeHandlerWithNewSubCalls & LF & oneSubHandlerCode
+							end if
+							
+							set codeSubHandlers to getTextAfter(codeSubHandlers, subStr_endPrefixHandler & oneSubhandlerName)
+							
+						end repeat
 						
-						set codeSubHandlers to getTextAfter(codeSubHandlers, subStr_endPrefixHandler & oneSubhandlerName)
-						
-					end repeat
-					
-					
-					-- write the modified code into a temporary file:
-					try
+						-- write the modified code into a temporary file:
+						try
+							close access fileRef
+						end try
+						set fileRef to (open for access file pathTempCode with write permission)
+						set eof of fileRef to 0 --> empty file contents if needed
+						write codeHandlerWithNewSubCalls to fileRef
 						close access fileRef
-					end try
-					set fileRef to (open for access file pathTempCode with write permission)
-					set eof of fileRef to 0 --> empty file contents if needed
-					write codeHandlerWithNewSubCalls to fileRef
-					close access fileRef
-					
-					-- COMPILE the temporary file to the desired destination:
-					set compiledFileName to replaceSimple({oneFileName, ".applescript", ".scpt"})
-					set pathCompiled to (pathCompiledFolder & compiledFileName)
-					do shell script "osacompile -o " & quoted form of POSIX path of pathCompiled & " " & quoted form of POSIX path of pathTempCode
+						
+						-- COMPILE the temporary file to the desired destination:
+						do shell script "osacompile -o " & quoted form of POSIX path of pathCompiled & " " & quoted form of POSIX path of pathTempCode
+					end if
 					
 				end if
 			end repeat
 		end if
 	end repeat
 	
-	if shouldBuildAPP then
+	if shouldBuildAPP and appChangesMade then
 		-- prepend code with documentation
 		set docCode to "-- main script"
 		set docCode to docCode & LF & "-- Erik Shagdar, NYHTC"
