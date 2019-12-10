@@ -4,7 +4,7 @@
 
 
 (* HISTORY:
-	2019-12-06 ( dshockley ): Changed to COMPILE each handler, then also compile htcLib into the same folder.
+	2019-12-10 ( dshockley ): Changed to COMPILE each handler, then also compile htcLib into the same folder.
 	2017-12-18 ( eshagdar ): skip files whose name begins wtih 'WIP_' ( work in progress ).
 	2017-11-14 ( dshockley ): open system preference pane even from command line. 
 	2017-10-20 ( eshagdar ): allow running with params. If ran with 'False', dialogs ( and re-enabling assistve devices ) is suppressed. 
@@ -79,10 +79,11 @@ on run prefs
 	
 	set pathTempCode to pathRoot & tempFileName
 	set pathMain to pathRoot & mainFileName
-	set pathApp to pathRoot & appName & appExtension
 	set pathLibrary to pathRoot & folderName_library
+	set pathCompiledFolder to pathRoot & compiledFolderName & ":"
+	set pathApp to pathCompiledFolder & appName & appExtension
+	
 	set libraryNames to list folder (pathLibrary) without invisibles
-	set pathFunctionLib to pathRoot & compiledFolderName & ":"
 	
 	
 	-- loop over each sub-directory, compiling each handler and adding to htcLib APP code:
@@ -125,7 +126,7 @@ on run prefs
 					if shouldBuildAPP then
 						-- APPEND TO APP: now append to htcLib APP code:
 						
-						set handlerInternalCode to replaceSimple({replaceSimple({subStr_templateHandlerWrapperCode, "###HANDLER_NAME###", compiledFolderName & ":" & handlerName}), "###HANDLER_CALL###", handlerCall})
+						set handlerInternalCode to replaceSimple({replaceSimple({subStr_templateHandlerWrapperCode, "###HANDLER_NAME###", handlerName}), "###HANDLER_CALL###", handlerCall})
 						set codeHandlerWrapper to subStr_beforeHandlerName & handlerCall & LF & handlerInternalCode & subStr_endPrefixHandler & handlerName & LF
 						
 						if (length of tempCode) is greater than 0 then set tempCode to tempCode & return & return & return
@@ -183,7 +184,7 @@ on run prefs
 					
 					-- COMPILE the temporary file to the desired destination:
 					set compiledFileName to replaceSimple({oneFileName, ".applescript", ".scpt"})
-					set pathCompiled to (pathFunctionLib & compiledFileName)
+					set pathCompiled to (pathCompiledFolder & compiledFileName)
 					do shell script "osacompile -o " & quoted form of POSIX path of pathCompiled & " " & quoted form of POSIX path of pathTempCode
 					
 				end if
@@ -273,7 +274,7 @@ on run prefs
 						set canMakeChanges to enabled of htcLibCheckbox
 						if canMakeChanges is false then
 							click button 1 of window 1
-							display dialog "You must deselect, then reselect the HtcLib checkbox" buttons "OK" default button "OK"
+							display dialog "You must deselect, then reselect the " & appName & " checkbox" buttons "OK" default button "OK"
 							return true
 						end if
 						
@@ -288,7 +289,7 @@ on run prefs
 				end tell
 				
 				tell me to activate
-				display dialog "HtcLib is ready" buttons "OK" default button "OK"
+				display dialog appName & " is ready" buttons "OK" default button "OK"
 			end if
 			return true
 		else
