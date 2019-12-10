@@ -4,7 +4,8 @@
 
 
 # WAITING #
- - If the compiled handler file already exists and has the same version, can skip recompiling (if that actually improves speed).
+ - Improve compiler: If the compiled handler file already exists and has the same version, can skip recompiling (if that actually improves speed).
+ - Improve compiler: If no function was added/removed/renamed and no params changed, can SKIP recompiling htcLib.app. 
  - Consider removing all the "if debugMode then…" (logging, etc) from the handler source files. 
 
 # COMPLETED RECENTLY #
