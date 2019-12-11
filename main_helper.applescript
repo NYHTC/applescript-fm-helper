@@ -4,7 +4,8 @@
 
 
 (* HISTORY:
-	2019-12-10 ( dshockley ): Changed to COMPILE each handler, then also compile htcLib into the same folder.
+	2019-12-11 ( dshockley, eshagdar ): Removed shouldBuildAPP - if some handler changes, we MUST build the app, so no point in asking. Removed unneeded properties from the app build, as well as other unneeded code/comments. 
+	2019-12-10 ( dshockley ): Changed to COMPILE each handler, then also compile htcLib into the same folder. Only compile handler if the version changes. Also, only compile app if some change was made to handler calls. 
 	2017-12-18 ( eshagdar ): skip files whose name begins wtih 'WIP_' ( work in progress ).
 	2017-11-14 ( dshockley ): open system preference pane even from command line. 
 	2017-10-20 ( eshagdar ): allow running with params. If ran with 'False', dialogs ( and re-enabling assistve devices ) is suppressed. 
@@ -39,13 +40,6 @@ on run prefs
 	if class of prefs is script or prefs is equal to {} then set prefs to defaultPrefs
 	set showDialogs to ((item 1 of prefs) as boolean)
 	
-	set shouldBuildAPP to true
-	if showDialogs then
-		display dialog "Build (or rebuild/replace) the htcLib?" buttons {"Cancel", "Only Scripts", "App & Scripts"} default button "App & Scripts"
-		if button returned of result is "Only Scripts" then
-			set shouldBuildAPP to false
-		end if
-	end if
 	
 	-- now, despite possibly expecting to build app, do NOT actually finalize that if no changes made:
 	set appChangesMade to false -- this will be changed to TRUE if any changes are made to handler names and/or params
@@ -159,16 +153,14 @@ on run prefs
 					end if
 					
 					
-					if shouldBuildAPP then
-						-- APPEND TO APP: now append to htcLib APP code:
-						-- do this EVEN if the handler itself doesn't need to be re-compiled.
-						set handlerInternalCode to replaceSimple({replaceSimple({subStr_templateHandlerWrapperCode, "###HANDLER_NAME###", handlerName}), "###HANDLER_CALL###", handlerCall})
-						set codeHandlerWrapper to subStr_beforeHandlerName & handlerCall & LF & handlerInternalCode & subStr_endPrefixHandler & handlerName & LF
-						
-						if (length of tempCode) is greater than 0 then set tempCode to tempCode & return & return & return
-						set tempCode to tempCode & codeHandlerWrapper
-						
-					end if
+					-- APPEND TO APP: now append to htcLib APP code:
+					-- do this EVEN if the handler itself doesn't need to be re-compiled.
+					set handlerInternalCode to replaceSimple({replaceSimple({subStr_templateHandlerWrapperCode, "###HANDLER_NAME###", handlerName}), "###HANDLER_CALL###", handlerCall})
+					set codeHandlerWrapper to subStr_beforeHandlerName & handlerCall & LF & handlerInternalCode & subStr_endPrefixHandler & handlerName & LF
+					
+					if (length of tempCode) is greater than 0 then set tempCode to tempCode & return & return & return
+					set tempCode to tempCode & codeHandlerWrapper
+					
 					
 					if shouldCompileHandler then
 						-- SUBHANDLERS: process each sub-handler this handler depends upon:
@@ -226,33 +218,24 @@ on run prefs
 		end if
 	end repeat
 	
-	if shouldBuildAPP and appChangesMade then
+	if appChangesMade then
 		-- prepend code with documentation
 		set docCode to "-- main script"
 		set docCode to docCode & LF & "-- Erik Shagdar, NYHTC"
 		set docCode to docCode & LF
 		set docCode to docCode & LF & "-- Generated: " & (do shell script "date '+%Y-%m-%d %T'")
-		set docCode to docCode & LF & "-- Run " & quoted form of thisFileName & " to after making changes in any .applescript file and after each git pull."
-		set docCode to docCode & LF & "-- Assumes file is located at '~/Code/applescript-fm-helper/'. If it is not, make sure to update clickCommandPosix property and 'vendor.sh' script."
+		set docCode to docCode & LF & "-- Run " & quoted form of thisFileName & " after making changes in any .applescript file and after each git pull. That script will determine which functions need to be recompiled, as well as whether this app needs to be recompiled."
 		set docCode to docCode & LF
-		set docCode to docCode & LF & "property DebugMode : " & debugMode
-		set docCode to docCode & LF & "property ScriptName : \"" & appName & "\""
-		set docCode to docCode & LF & "property clickCommandPosix : POSIX path of (((path to home folder) as string)) & \"Code/applescript-fm-helper/vendor/cliclick/cliclick\""
 		
 		set tempCode to docCode & LF & LF & LF & tempCode
 		
 		
-		-- create a temp file of all libaries, then create a compiled version of it.
-		--	do shell script "echo " & quoted form of tempCode & " > " & quoted form of POSIX path of pathTempCode
 		
 		try
 			close access fileRef
 		end try
 		set fileRef to (open for access file pathTempCode with write permission)
 		set eof of fileRef to 0 --> empty file contents if needed
-		--> now write the flag
-		--	write ((ASCII character 239) & (ASCII character 187) & (ASCII character 191)) to fileRef --> not as Çclass utf8È
-		--> now write the data
 		write tempCode to fileRef
 		close access fileRef
 		
