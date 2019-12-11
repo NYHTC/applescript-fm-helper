@@ -24,7 +24,6 @@
 
 property debugMode : true
 
-
 property LF : ASCII character 10
 property tempFileName : "temp.applescript"
 
