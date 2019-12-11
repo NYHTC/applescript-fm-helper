@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2019-12-11 ( eshagdar ): ensure CompiledHandlers folder exists.
 	2019-12-11 ( dshockley, eshagdar ): Removed shouldBuildAPP - if some handler changes, we MUST build the app, so no point in asking. Removed unneeded properties from the app build, as well as other unneeded code/comments. 
 	2019-12-10 ( dshockley ): Changed to COMPILE each handler, then also compile htcLib into the same folder. Only compile handler if the version changes. Also, only compile app if some change was made to handler calls. 
 	2017-12-18 ( eshagdar ): skip files whose name begins wtih 'WIP_' ( work in progress ).
@@ -82,10 +83,17 @@ on run prefs
 	set pathCompiledFolder to pathRoot & compiledFolderName & ":"
 	set pathApp to pathCompiledFolder & appName & appExtension
 	
-	set libraryNames to list folder (pathLibrary) without invisibles
+	
+	-- ensure compiled folder exists
+	tell application "Finder"
+		if not (exists folder pathCompiledFolder) then
+			make new folder at pathRoot with properties {name:compiledFolderName}
+		end if
+	end tell
 	
 	
 	-- loop over each sub-directory, compiling each handler and adding to htcLib APP code:
+	set libraryNames to list folder (pathLibrary) without invisibles
 	repeat with dirCount from 1 to count of libraryNames
 		set oneLibraryName to item dirCount of libraryNames
 		set pathOneLibrary to pathLibrary & oneLibraryName

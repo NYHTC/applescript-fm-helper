@@ -24,7 +24,10 @@ USAGE:
 
 on run
 	set AppleScript's text item delimiters to {""}
-	getTextBetween({sourceTEXT:"abcdabcdef", beforeText:"a", afterText:"f"})
+	getTextBetween({sourceTEXT:"a|bc^de|fg^hi|jk^l", beforeText:"|", afterText:"^", textItemNum:1}) -- get everything BEFORE the fist item
+	--getTextBetween({sourceTEXT:"a|bc^de|fg^hi|jk^l", beforeText:"|", afterText:"^", textItemNum:2}) -- get the FIRST item
+	--getTextBetween({sourceTEXT:"a|bc^de|fg^hi|jk^l", beforeText:"|", afterText:"^", textItemNum:3}) -- get the SECOND item
+	--getTextBetween({sourceTEXT:"a|bc^de|fg^hi|jk^l", beforeText:"|", afterText:"^", textItemNum:4}) -- get the THIRD item
 end run
 
 
