@@ -16,8 +16,8 @@ HISTORY:
 *)
 
 on run
-	set v1 to "2018-12-03"
-	set v2 to "2018-12-03"
+	set v1 to "2018-12-02"
+	set v2 to "2018-02-22"
 	versionCompare({v1:v1, v2:v2, delim:"-"})
 end run
 

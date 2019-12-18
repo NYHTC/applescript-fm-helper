@@ -334,6 +334,7 @@ on run prefs
 		if exists pathTempCode then delete file pathTempCode
 	end tell
 	
+	return "finished htcLib and Library"
 	
 end run
 
