@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2020-01-06 ( hkierulf, dshockley, hdu ): if the app is missing, DO need to compile it. 
 	2019-12-11 ( eshagdar ): ensure CompiledHandlers folder exists.
 	2019-12-11 ( dshockley, eshagdar ): Removed shouldBuildAPP - if some handler changes, we MUST build the app, so no point in asking. Removed unneeded properties from the app build, as well as other unneeded code/comments. 
 	2019-12-10 ( dshockley ): Changed to COMPILE each handler, then also compile htcLib into the same folder. Only compile handler if the version changes. Also, only compile app if some change was made to handler calls. 
@@ -225,6 +226,19 @@ on run prefs
 		end if
 	end repeat
 	
+	
+	tell application "Finder"
+		if exists pathApp then
+			set appExists to true
+		else
+			set appExists to false
+			-- if it does not EXIST, need to say "changes made" so that it gets compiled:
+			set appChangesMade to true
+		end if
+	end tell
+	
+	
+	
 	if appChangesMade then
 		-- prepend code with documentation
 		set docCode to "-- main script"
@@ -251,12 +265,6 @@ on run prefs
 		do shell script "pwd"
 		do shell script "sh " & quoted form of (POSIX path of (pathRoot & "vendor.sh"))
 		if result does not contain "SUCCESS" then return "Error: unable to run vendor.sh"
-		
-		
-		set appExists to false
-		tell application "Finder"
-			if exists pathApp then set appExists to true
-		end tell
 		
 		
 		--quit the pre-existing app
