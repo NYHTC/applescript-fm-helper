@@ -4,6 +4,7 @@
 
 
 (* HISTORY:
+	2020-02-19 ( dshockley ): added a comment that the prefs argument is a list of shell arguments specified. 
 	2020-01-06 ( hkierulf, dshockley, hdu ): if the app is missing, DO need to compile it. 
 	2019-12-11 ( eshagdar ): ensure CompiledHandlers folder exists.
 	2019-12-11 ( dshockley, eshagdar ): Removed shouldBuildAPP - if some handler changes, we MUST build the app, so no point in asking. Removed unneeded properties from the app build, as well as other unneeded code/comments. 
@@ -24,7 +25,7 @@
 *)
 
 
-property debugMode : true
+property debugMode : false
 
 property LF : ASCII character 10
 property tempFileName : "temp.applescript"
@@ -37,6 +38,8 @@ property securityPrefPanePosix : "/System/Library/PreferencePanes/Security.prefP
 
 
 on run prefs
+	
+	-- note that, if called from a shell using osascript, prefs will be a list (where each argument is an item in the list). 
 	set defaultPrefs to {true}
 	if class of prefs is script or prefs is equal to {} then set prefs to defaultPrefs
 	set showDialogs to ((item 1 of prefs) as boolean)
@@ -115,15 +118,26 @@ on run prefs
 				-- read one file and get everything above the helper methods
 				set oneFileName to item fileCount of fileNamesInOneLibrary
 				if oneFileName does not start with fileNamePrefix_toSkip then
+					
+					-- SPECIAL DEBUGGING!!! 2020-02-19 ( dshockley )   SPECIAL DEBUGGING!!! 2020-02-19 ( dshockley )
+					-- SPECIAL DEBUGGING!!! 2020-02-19 ( dshockley )   SPECIAL DEBUGGING!!! 2020-02-19 ( dshockley )
+					-- SPECIAL DEBUGGING!!! 2020-02-19 ( dshockley )   SPECIAL DEBUGGING!!! 2020-02-19 ( dshockley )
+				--	if oneFileName is "fmGUI_ManageSecurity_Open" then set debugMode to true
+					
+					if debugMode then log "oneFileName: " & oneFileName
 					set pathOneFileinOneLibrary to pathOneLibrary & ":" & oneFileName
 					set compiledFileName to replaceSimple({oneFileName, ".applescript", ".scpt"})
 					set pathCompiled to (pathCompiledFolder & compiledFileName)
+					
+					if debugMode then log "pathCompiled: " & pathCompiled
 					
 					try
 						set existingCompiledCode to (do shell script "osadecompile " & POSIX path of pathCompiled)
 						set existingVersion to getTextBetween({existingCompiledCode, subStr_beforeHandlerVersion, subStr_afterHandlerVersion})
 						set existingHandlerCall to getTextBetween({existingCompiledCode, subStr_beforeCompiledHandlerName, return})
 					end try
+					
+					if debugMode then log "existingVersion: " & existingVersion
 					
 					set oneFileRawCode to read file pathOneFileinOneLibrary
 					if oneFileRawCode contains codeStart and oneFileRawCode contains codeEnd then

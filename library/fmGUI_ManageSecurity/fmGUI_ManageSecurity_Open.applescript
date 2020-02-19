@@ -32,7 +32,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_Open(prefs)
-	-- version 1.3
+	-- version 1.3.2
 	
 	set defaultPrefs to {fullAccessAccountName:null, fullAccessPassword:null}
 	set prefs to prefs & defaultPrefs
