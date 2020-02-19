@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.3.2 - 2020-02-19 ( dshockley ): was missing the wrapper handler for fmGUI_NameOfFrontmostWindow. 
 	1.3.1 - 2017-11-07 ( eshagdar ): test all windows, not just the first one to determine if we're already in manage security. wait until window renders.
 	1.3 - 2017-10-19 ( eshagdar ): authentication done via sub-hndler. no need to test for credentails since that test happens later on. click menu item via sub-handler. test auth via sub-handler.
 	1.2 - 2017-10-17 ( eshagdar ): updated error message. full-access test should run ONLY if not already in manage security.
@@ -100,6 +101,10 @@ end fmGUI_ClickMenuItem
 on fmGUI_isInFullAccessMode(prefs)
 	tell application "htcLib" to fmGUI_isInFullAccessMode(prefs)
 end fmGUI_isInFullAccessMode
+
+on fmGUI_NameOfFrontmostWindow()
+	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow
 
 on windowWaitUntil(prefs)
 	tell application "htcLib" to windowWaitUntil(prefs)
