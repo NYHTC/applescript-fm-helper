@@ -4,6 +4,7 @@
 
 (*
 HISTORY:
+	1.8 - 2020-02-20 ( dshockley ): Added ExtraSpacesWithinSQLWhere. 
 	1.7 - 2019-04-25 ( dshockley ): Added error-trapping and handling. The param for the handler is now named prefs instead of accidentally being an empty list. Disabled potentially-problematic "convert to using List for query whitespace formatting" code! 
 	1.6 - 2019-04-17 ( dshockley ): Added ExecuteOLD2. Added SemicolonPilcrowLine. 
 	1.5 - 2019-04-05 ( dshockley ): Added literalSearch_SpacesToTabs. Fixed "using List for query". Other minor changes. Disabled RemoveExtraSpacesBeforeSemicolon. Added RemoveSpacesBetweenLeadingTabsAndSemicolon. 
@@ -43,9 +44,16 @@ on BBEdit_upgrade_SQL_Query_to_newer_format(prefs)
 		
 		set regexReplace_EscapeStringWARN to "\\1 /* WARNING!! Had SQL_EscapeString probably NO LONGER NEEDED, so DISABLED! */"
 		
-		-- NOT SURE THIS IS NEEDED (or a good idea, since there might be matching DESIRED patterns inside quotes):				
+		-- NOT SURE THIS IS NEEDED (or a good idea, since there might be matching DESIRED patterns inside quotes):		
 		--	set regexSearch_RemoveExtraSpacesBeforeSemicolon to "([^;])  +;"
 		--	set regexReplace_RemoveExtraSpacesBeforeSemicolon to "\\1 ;"
+		
+		
+		set regexSearch_ExtraSpacesWithinSQLWhere to "([a-z0-9]) [ ]*; \"=\" ; ([^ ]+) [ ]*\\)"
+		set regexReplace_ExtraSpacesWithinSQLWhere to "\\1 ; \"=\" ; \\2 )"
+		
+		set regexSearch_ExtraSpacesBeforeClosingParen to "([^ ]+) [ ]*\\)([ ]*)\\r"
+		set regexReplace_ExtraSpacesBeforeClosingParen to "\\1 )\\2\\r"
 		
 		set regexSearch_RemoveSpacesBetweenLeadingTabsAndSemicolon to "^([	]+)[ ]+;"
 		set regexReplace_RemoveSpacesBetweenLeadingTabsAndSemicolon to "\\1;"
@@ -104,7 +112,14 @@ on BBEdit_upgrade_SQL_Query_to_newer_format(prefs)
 				
 				
 				-- NOT SURE THIS IS NEEDED (or a good idea, since there might be matching DESIRED patterns inside quotes):			
-				--			replace regexSearch_RemoveExtraSpacesBeforeSemicolon using regexReplace_RemoveExtraSpacesBeforeSemicolon options {search mode:grep, starting at top:true}
+				(*			replace regexSearch_RemoveExtraSpacesBeforeSemicolon using regexReplace_RemoveExtraSpacesBeforeSemicolon options {search mode:grep, starting at top:true}
+				*)
+				
+				replace regexSearch_ExtraSpacesWithinSQLWhere using regexReplace_ExtraSpacesWithinSQLWhere options {search mode:grep, starting at top:true}
+
+				replace regexSearch_ExtraSpacesBeforeClosingParen using regexReplace_ExtraSpacesBeforeClosingParen options {search mode:grep, starting at top:true}
+				
+				
 				
 				replace literalSearch_ExecuteOLD1 using literalReplace_ExecuteOLD1 options {search mode:literal, starting at top:true}
 				replace literalSearch_ExecuteOLD2 using literalReplace_ExecuteOLD2 options {search mode:literal, starting at top:true}
