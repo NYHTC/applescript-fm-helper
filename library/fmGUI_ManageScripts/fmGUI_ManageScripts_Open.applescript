@@ -5,9 +5,10 @@
 
 (*
 HISTORY
+	2020-03-03 ( dshockley ): Fixed typo in comments.
 	1.2 - 2017-08-07 ( eshagdar ): wait until window renders.
 	1.1 - 
-	1.0 - 201x-xx-xx ( dshcokley ): first created
+	1.0 - 201x-xx-xx ( dshockley ): first created
 
 
 REQUIRES:
