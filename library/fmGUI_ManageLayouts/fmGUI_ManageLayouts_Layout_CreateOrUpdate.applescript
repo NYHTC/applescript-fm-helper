@@ -226,7 +226,6 @@ end fmGUI_ManageLayouts_Layout_CreateOrUpdate
 -- END OF CODE
 --------------------
 
-
 on clickObjectByCoords(prefs)
 	tell application "htcLib" to clickObjectByCoords(my coerceToString(prefs))
 end clickObjectByCoords
