@@ -29,8 +29,8 @@ on fmGUI_ManageScripts_SearchBoxFind(prefs)
 		set defaultPrefs to {searchCriteria:null, delayTime:0.25, maxDelay:2, delayIncreaseBy:0.25}
 		set prefs to prefs & defaultPrefs
 		
-		tell application "htcLib" to fmGUI_AppFrontMost()
-		tell application "htcLib" to fmGUI_ManageScripts_Open({})
+		fmGUI_AppFrontMost()
+		fmGUI_ManageScripts_Open({})
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"

@@ -26,8 +26,8 @@ on fmGUI_ManageScripts_SearchBoxClear(prefs)
 	-- version 2020-03-03, Erik Shagdar, NYHTC
 	
 	try
-		tell application "htcLib" to fmGUI_AppFrontMost()
-		tell application "htcLib" to fmGUI_ManageScripts_Open({})
+		fmGUI_AppFrontMost()
+		fmGUI_ManageScripts_Open({})
 		
 		tell application "System Events"
 			tell application process "FileMaker Pro Advanced"
@@ -54,5 +54,5 @@ end fmGUI_AppFrontMost
 
 on fmGUI_ManageScripts_Open(prefs)
 	tell application "htcLib" to fmGUI_ManageScripts_Open(prefs)
-end fmGUI_NameOfFrontmostWindow
+end fmGUI_ManageScripts_Open
 
