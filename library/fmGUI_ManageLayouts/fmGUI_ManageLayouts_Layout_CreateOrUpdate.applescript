@@ -228,11 +228,12 @@ end fmGUI_ManageLayouts_Layout_CreateOrUpdate
 
 
 on clickObjectByCoords(prefs)
-	tell application "htcLib" to clickObjectByCoords(prefs)
+	tell application "htcLib" to clickObjectByCoords(my coerceToString(prefs))
 end clickObjectByCoords
 
 on fmGUI_CheckboxSet(prefs)
-	tell application "htcLib" to fmGUI_CheckboxSet(prefs)
+	set objRefStr to coerceToString(objRef of prefs)
+	tell application "htcLib" to fmGUI_CheckboxSet({objRef:objRefStr} & prefs)
 end fmGUI_CheckboxSet
 
 on fmGUI_DataViewer_Close()
@@ -256,7 +257,8 @@ on fmGUI_ManageLayouts_Select(prefs)
 end fmGUI_ManageLayouts_Select
 
 on fmGUI_PopupSet(prefs)
-	tell application "htcLib" to fmGUI_PopupSet(prefs)
+	set objRefStr to coerceToString(objRef of prefs)
+	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
 end fmGUI_PopupSet
 
 on logConsole(prefs)
@@ -267,3 +269,14 @@ on windowWaitUntil_FrontIS(prefs)
 	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS
 
+
+
+on coerceToString(incomingObject)
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a coerceToString into this file for the sample to run ( instead of having a copy of the handler locally ).
+	
+	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
+	set codeCoerce to read file coercePath as text
+	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	set codeCoerce to run script codeCoerce
+	tell codeCoerce to coerceToString(incomingObject)
+end coerceToString
