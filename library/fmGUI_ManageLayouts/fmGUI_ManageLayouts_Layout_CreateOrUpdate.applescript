@@ -241,7 +241,7 @@ end fmGUI_DataViewer_Close
 
 on fmGUI_ManageLayouts_LayoutFolderSelect(prefs)
 	tell application "htcLib" to fmGUI_ManageLayouts_LayoutFolderSelect(prefs)
-end fmGUI_ManageLayouts_Open
+end fmGUI_ManageLayouts_LayoutFolderSelect
 
 on fmGUI_ManageLayouts_Open(prefs)
 	tell application "htcLib" to fmGUI_ManageLayouts_Open(prefs)
@@ -249,7 +249,7 @@ end fmGUI_ManageLayouts_Open
 
 on fmGUI_ManageLayouts_PopupNewItemOfType(prefs)
 	tell application "htcLib" to fmGUI_ManageLayouts_PopupNewItemOfType(prefs)
-end fmGUI_ManageLayouts_Open
+end fmGUI_ManageLayouts_PopupNewItemOfType
 
 on fmGUI_ManageLayouts_Select(prefs)
 	tell application "htcLib" to fmGUI_ManageLayouts_Select(prefs)
