@@ -18,6 +18,7 @@ REQUIRES:
 	fmGUI_ManageScripts_ScriptListFocus
 	fmGUI_ManageScripts_SearchBoxClear
 	fmGUI_ManageScripts_SearchBoxFind
+	quoteString
 	unParseChars
 	
 *)
@@ -65,13 +66,11 @@ on fmGUI_ManageScripts_FmScript_Select(prefs)
 	try
 		if fmScriptName of prefs is equal to "-" then error "This is a SEPARATOR SCRIPT - don't try to edit it!" number -1024
 		
-		tell application "htcLib"
-			fmGUI_AppFrontMost()
-			fmGUI_Inspector_Close()
-			fmGUI_DataViewer_Close()
-			fmGUI_ManageScripts_Open({})
-			fmGUI_ManageScripts_ScriptListFocus({})
-		end tell
+		fmGUI_AppFrontMost()
+		fmGUI_Inspector_Close()
+		fmGUI_DataViewer_Close()
+		fmGUI_ManageScripts_Open({})
+		fmGUI_ManageScripts_ScriptListFocus({})
 		
 		
 		fmGUI_ManageScripts_SearchBoxFind({searchCriteria:fmScriptName of prefs})
@@ -110,13 +109,11 @@ on fmGUI_ManageScripts_FmScript_Select(prefs)
 							try
 								-- BEGIN: try oneAltPattern: 
 								set testCode to {}
-								tell application "htcLib"
-									repeat with oneTestRec in testList
-										copy ("" & testType of oneTestRec & " " & quoteString(testMatch of oneTestRec)) to end of testCode
-									end repeat
-								end tell
+								repeat with oneTestRec in testList
+									copy ("" & testType of oneTestRec & " " & quoteString(testMatch of oneTestRec)) to end of testCode
+								end repeat
 								
-								tell application "htcLib" to set testCode to unParseChars(testCode, betweenTestsCode & scriptNameObjectCode & " ")
+								set testCode to unParseChars(testCode, betweenTestsCode & scriptNameObjectCode & " ")
 								set testCode to selectCode & rowRefCode & whoseCode & scriptNameObjectCode & " " & testCode & afterAllTestsCode
 								set testCode to testCodeHeader & testCode & testCodeFooter
 								tell me to run script testCode
@@ -151,14 +148,6 @@ end fmGUI_ManageScripts_FmScript_Select
 -- END OF CODE
 --------------------
 
-
-
-
-
-
-
-
-
 on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
@@ -187,9 +176,11 @@ on fmGUI_ManageScripts_SearchBoxFind(prefs)
 	tell application "htcLib" to fmGUI_ManageScripts_SearchBoxFind(prefs)
 end fmGUI_ManageScripts_SearchBoxFind
 
+on quoteString(prefs)
+	tell application "htcLib" to quoteString(prefs)
+end quoteString
+
 on unParseChars(prefs)
 	tell application "htcLib" to unParseChars(prefs)
 end unParseChars
-
-
 
