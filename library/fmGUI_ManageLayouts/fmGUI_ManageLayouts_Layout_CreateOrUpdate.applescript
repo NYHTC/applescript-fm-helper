@@ -175,7 +175,7 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 			
 			
 			-- Create the layout:
-			if debugMode then tell application "htcLib" to logConsole(ScriptName, "creating layout: " & (layoutName of layoutOptions))
+			if debugMode then logConsole(ScriptName, "creating layout: " & (layoutName of layoutOptions))
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
 					set buttonRef to first button of manageLayoutsWindow whose title is "New"
@@ -183,8 +183,8 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 			end tell
 			
 			-- BEGIN: NEW WINDOW CODE
-			clickObjFromHtcLib(buttonRef)
-			tell application "htcLib" to windowWaitUntil_FrontIS({windowName:"New Layout/Report"})
+			clickObjectByCoords(buttonRef)
+			windowWaitUntil_FrontIS({windowName:"New Layout/Report"})
 			
 			
 			tell application "System Events"
@@ -194,7 +194,7 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 					set buttonRef to pop up button 1 of newLayoutDialog
 				end tell
 			end tell
-			tell application "htcLib" to fmGUI_PopupSet({objRef:my coerceToString(buttonRef), objValue:baseTableName of layoutOptions})
+			mGUI_PopupSet({objRef:my coerceToString(buttonRef), objValue:baseTableName of layoutOptions})
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
 					click button 4 of newLayoutDialog -- select 'Computer'
