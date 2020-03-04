@@ -28,10 +28,16 @@ on fmGUI_ScriptDebugger_Close()
 	fmGUI_AppFrontMost()
 	tell application "System Events"
 		tell process "FileMaker Pro Advanced"
+			
 			try
-				click button 1 of (first window whose name is "Script Debugger")
+				(* 
+				If the MBS Plugin is installed and the "Copy Script Text" feature is enabled, 
+				that is the 1st button, so get the first one after that. If it does not exist, this still works.
+				*)
+				click (first button of (first window whose name is "Script Debugger") whose name is not "Copy Script Text")
 			end try
 			return true
+			
 		end tell
 	end tell
 end fmGUI_ScriptDebugger_Close
