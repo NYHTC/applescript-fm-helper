@@ -5,7 +5,7 @@
 
 (*
 HISTORY:
-	2020-03-04 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 
+	2020-03-03 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 
 	2018-09-06 ( eshagdar ): Get positions of the new menu and click based on ACTUAL location - depending on the location of the window, the menu renders up or down of the button. Click using htcLib.
 
 
@@ -27,7 +27,7 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_PopupNewItemOfType(newItemType)
-	-- version 2020-03-04
+	-- version 2020-03-03
 	
 	try
 		fmGUI_AppFrontMost()
@@ -98,3 +98,15 @@ on fmGUI_ObjectClick_Button(prefs)
 	tell application "htcLib" to fmGUI_ObjectClick_Button({buttonRef:my coerceToString(buttonRef of prefs)} & prefs)
 end fmGUI_ObjectClick_Button
 
+
+
+
+on coerceToString(incomingObject)
+	-- 2017-07-12 ( eshagdar ): bootstrap code to bring a coerceToString into this file for the sample to run ( instead of having a copy of the handler locally ).
+	
+	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
+	set codeCoerce to read file coercePath as text
+	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	set codeCoerce to run script codeCoerce
+	tell codeCoerce to coerceToString(incomingObject)
+end coerceToString

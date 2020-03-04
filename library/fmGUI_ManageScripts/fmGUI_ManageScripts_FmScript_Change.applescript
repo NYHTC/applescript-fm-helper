@@ -194,7 +194,7 @@ on fmGUI_SelectAll()
 	tell application "htcLib" to fmGUI_SelectAll()
 end fmGUI_SelectAll
 
-on logConsole(prefs)
-	tell application "htcLib" to logConsole(prefs)
+on logConsole(processName, consoleMsg)
+	tell application "htcLib" to logConsole(processName, consoleMsg)
 end logConsole
 
