@@ -30,6 +30,7 @@ on fmGUI_2empowerFM_Toolbox_Close()
 		tell process "FileMaker Pro Advanced"
 			try
 				click button 1 of (first window whose name is "2empowerFM Toolbox")
+				-- gets an error even if button exists, but still works. 
 			end try
 			return true
 		end tell
