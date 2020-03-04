@@ -5,7 +5,7 @@
 
 (*
 HISTORY:
-	2020-03-04 ( dshockley ): added call template in comment above, added folderName:null to defaultPrefs.
+	2020-03-04 ( dshockley ): added call template in comment above, added folderName:null to defaultPrefs. 1638: Standardized version. Added fmGUI_ALL_Utilities_Close. 
 	2020-03-03 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 
 	1.1 - 201x-xx-xx ( dshockley ): ???
 	1.0 - 201x-xx-xx ( dshockley ): created
@@ -13,7 +13,7 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_DataViewer_Close
+	fmGUI_ALL_Utilities_Close
 	fmGUI_ManageLayouts_LayoutListFocus
 	fmGUI_ManageLayouts_Open
 	
@@ -29,7 +29,7 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_LayoutFolderSelect(prefs)
-	-- version 2020-03-04-1528
+	-- version 2020-03-04-1638
 	
 	set defaultPrefs to {folderName:null, folderStatus:"open"}
 	
@@ -94,9 +94,9 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_DataViewer_Close()
-	tell application "htcLib" to fmGUI_DataViewer_Close()
-end fmGUI_DataViewer_Close
+on fmGUI_ALL_Utilities_Close()
+	tell application "htcLib" to fmGUI_ALL_Utilities_Close()
+end fmGUI_ALL_Utilities_Close
 
 on fmGUI_ManageLayouts_LayoutListFocus(prefs)
 	tell application "htcLib" to fmGUI_ManageLayouts_LayoutListFocus(prefs)

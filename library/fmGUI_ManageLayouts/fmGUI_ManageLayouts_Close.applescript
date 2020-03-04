@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. Added fmGUI_ALL_Utilities_Close. 
 	1.3.1 - 2017-11-30 ( eshagdar ): fixed using old varName.
 	1.3 - 2017-11-20 ( eshagdar ): make sure we're talking to the correct window - there may be several windows 'in front of' the manage layouts window.
 	1.2 - 2017-11-06 ( eshagdar ): added to htcLib. button click via handler. wait until window closes.
@@ -14,7 +15,7 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_DataViewer_Close
+	fmGUI_ALL_Utilities_Close
 	fmGUI_NameOfFrontmostWindow
 *)
 
@@ -28,12 +29,12 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_Close(prefs)
-	-- version 1.3.1
+	-- version 2020-03-04-1635
 	
 	try
 		set windowNamePart to "Manage Layouts"
 		fmGUI_AppFrontMost()
-		fmGUI_DataViewer_Close()
+		fmGUI_ALL_Utilities_Close()
 		
 		if fmGUI_NameOfFrontmostWindow() starts with windowNamePart then
 			tell application "System Events"
@@ -60,9 +61,9 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_DataViewer_Close()
-	tell application "htcLib" to fmGUI_DataViewer_Close()
-end fmGUI_DataViewer_Close
+on fmGUI_ALL_Utilities_Close()
+	tell application "htcLib" to fmGUI_ALL_Utilities_Close()
+end fmGUI_ALL_Utilities_Close
 
 on fmGUI_NameOfFrontmostWindow()
 	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()

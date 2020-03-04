@@ -5,15 +5,15 @@
 
 (*
 HISTORY:
-	2020-03-04 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository.
+	2020-03-04 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 1641: Standardized version. Added fmGUI_ALL_Utilities_Close. 
+
 	1.3.1 - 2017-06-05 ( eshagdar ): the name of the script is the name of UI elemnt, not the value of a text field.
 	1.3 - 2017-01-12 ( eshagdar ): updated for FM15 - script names are now in a splitter group.
 	2017-06-05 ( eshagdar ): we should just be using the search bar instead of scanning through the list
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_DataViewer_Close
-	fmGUI_Inspector_Close
+	fmGUI_ALL_Utilities_Close
 	fmGUI_ManageScripts_Open
 	fmGUI_ManageScripts_ScriptListFocus
 	fmGUI_ManageScripts_SearchBoxClear
@@ -35,7 +35,7 @@ end run
 --------------------
 
 on fmGUI_ManageScripts_FmScript_Select(prefs)
-	-- version 2020-03-04-1528
+	-- version 2020-03-04-1641
 	
 	-- Attempt to select a FileMaker Script based on name or, alternatively, other partial matches.
 	
@@ -67,8 +67,7 @@ on fmGUI_ManageScripts_FmScript_Select(prefs)
 		if fmScriptName of prefs is equal to "-" then error "This is a SEPARATOR SCRIPT - don't try to edit it!" number -1024
 		
 		fmGUI_AppFrontMost()
-		fmGUI_Inspector_Close()
-		fmGUI_DataViewer_Close()
+		fmGUI_ALL_Utilities_Close()
 		fmGUI_ManageScripts_Open({})
 		fmGUI_ManageScripts_ScriptListFocus({})
 		
@@ -152,13 +151,9 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_DataViewer_Close()
-	tell application "htcLib" to fmGUI_DataViewer_Close()
-end fmGUI_DataViewer_Close
-
-on fmGUI_Inspector_Close()
-	tell application "htcLib" to fmGUI_Inspector_Close()
-end fmGUI_Inspector_Close
+on fmGUI_ALL_Utilities_Close()
+	tell application "htcLib" to fmGUI_ALL_Utilities_Close()
+end fmGUI_ALL_Utilities_Close
 
 on fmGUI_ManageScripts_Open(prefs)
 	tell application "htcLib" to fmGUI_ManageScripts_Open(prefs)

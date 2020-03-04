@@ -5,14 +5,14 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. Added fmGUI_ALL_Utilities_Close.
 	1.1.1 - 2018-12-07 ( eshagdar ): no need to specify the name of the window - sub-handler will take the frontmost one.
 	1.1 - 
 	1.0 - 20xx-xx-xx ( dshockley ): created.
 	
 
 REQUIRES:
-	fmGUI_DataViewer_Close
-	fmGUI_Inspector_Close
+	fmGUI_ALL_Utilities_Close
 	namesOfTOsOfWindowName
 *)
 
@@ -27,10 +27,9 @@ end run
 --------------------
 
 on fmGUI_Database_DbNameOfFrontWindow(prefs)
-	-- version 1.1.1
+	-- version 2020-03-04-1636
 	try
-		fmGUI_DataViewer_Close()
-		fmGUI_Inspector_Close()
+		fmGUI_ALL_Utilities_Close()
 		
 		return dbNameOfWindowName("")
 		
@@ -44,13 +43,9 @@ end fmGUI_Database_DbNameOfFrontWindow
 -- END OF CODE
 --------------------
 
-on fmGUI_DataViewer_Close()
-	tell application "htcLib" to fmGUI_DataViewer_Close()
-end fmGUI_DataViewer_Close
-
-on fmGUI_Inspector_Close()
-	tell application "htcLib" to fmGUI_Inspector_Close()
-end fmGUI_Inspector_Close
+on fmGUI_ALL_Utilities_Close()()
+	tell application "htcLib" to fmGUI_ALL_Utilities_Close()()
+end fmGUI_ALL_Utilities_Close
 
 on dbNameOfWindowName(prefs)
 	tell application "htcLib" to dbNameOfWindowName(prefs)

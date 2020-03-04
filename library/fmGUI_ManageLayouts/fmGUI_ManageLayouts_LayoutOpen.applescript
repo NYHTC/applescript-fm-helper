@@ -5,12 +5,12 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. Added fmGUI_ALL_Utilities_Close. 
 	1.0 - 2017-11-06 ( eshagdar ): created
 
 
 REQUIRES:
-	fmGUI_DataViewer_Close
-	fmGUI_Inspector_Close
+	fmGUI_ALL_Utilities_Close
 	fmGUI_ManageLayouts_Open
 	fmGUI_ManageLayouts_Select
 	fmGUI_NameOfFrontmostWindow
@@ -26,7 +26,7 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_LayoutOpen(prefs)
-	-- version 1.4
+	-- version 2020-03-04-1639
 	
 	-- 1.4 - 2018-09-06 ( eshagdar ): params is a dictionary
 	-- 1.3 - 2017-06-14 ( eshagdar ): narrowed scope
@@ -47,8 +47,7 @@ on fmGUI_ManageLayouts_LayoutOpen(prefs)
 			-- could NOT select the specified layout - ERROR
 			error "Could not select the layout named '" & someLayoutName & "' - so cannot open it."
 		else
-			fmGUI_DataViewer_Close()
-			fmGUI_Inspector_Close()
+			fmGUI_ALL_Utilities_Close()
 			set startingWindowName to fmGUI_NameOfFrontmostWindow()
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
@@ -68,13 +67,9 @@ end fmGUI_ManageLayouts_LayoutOpen
 -- END OF CODE
 --------------------
 
-on fmGUI_DataViewer_Close()
-	tell application "htcLib" to fmGUI_DataViewer_Close()
-end fmGUI_DataViewer_Close
-
-on fmGUI_Inspector_Close()
-	tell application "htcLib" to fmGUI_Inspector_Close()
-end fmGUI_Inspector_Close
+on fmGUI_ALL_Utilities_Close()
+	tell application "htcLib" to fmGUI_ALL_Utilities_Close()
+end fmGUI_ALL_Utilities_Close
 
 on fmGUI_ManageLayouts_Open(prefs)
 	tell application "htcLib" to fmGUI_ManageLayouts_Open(prefs)

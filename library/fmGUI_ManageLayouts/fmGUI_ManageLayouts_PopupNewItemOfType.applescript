@@ -5,14 +5,15 @@
 
 (*
 HISTORY:
-	2020-03-04 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 
+	2020-03-04 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 1640: Standardized version. Added fmGUI_ALL_Utilities_Close. 
+
 	2018-09-06 ( eshagdar ): Get positions of the new menu and click based on ACTUAL location - depending on the location of the window, the menu renders up or down of the button. Click using htcLib.
 
 
 REQUIRES:
 	clickAtCoords
 	fmGUI_AppFrontMost
-	fmGUI_DataViewer_Close
+	fmGUI_ALL_Utilities_Close
 	fmGUI_ManageLayouts_Open
 	fmGUI_ObjectClick_Button
 *)
@@ -27,11 +28,11 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_PopupNewItemOfType(newItemType)
-	-- version 2020-03-04-1529
+	-- version 2020-03-04-1640
 	
 	try
 		fmGUI_AppFrontMost()
-		fmGUI_DataViewer_Close()
+		fmGUI_ALL_Utilities_Close()
 		fmGUI_ManageLayouts_Open({})
 		
 		tell application "System Events"
@@ -86,9 +87,9 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_DataViewer_Close()
-	tell application "htcLib" to fmGUI_DataViewer_Close()
-end fmGUI_DataViewer_Close
+on fmGUI_ALL_Utilities_Close()
+	tell application "htcLib" to fmGUI_ALL_Utilities_Close()
+end fmGUI_ALL_Utilities_Close
 
 on fmGUI_ManageLayouts_Open(prefs)
 	tell application "htcLib" to fmGUI_ManageLayouts_Open(prefs)

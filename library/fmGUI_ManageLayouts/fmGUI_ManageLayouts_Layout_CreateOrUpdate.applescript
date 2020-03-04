@@ -5,7 +5,7 @@
 
 (*
 HISTORY:
-	2020-03-04 ( dshockley ): Minor fixes. Proper calls to fmGUI_CheckboxSet and fmGUI_PopupSet. 1625: Added support for addNearTop. 
+	2020-03-04 ( dshockley ): Minor fixes. Proper calls to fmGUI_CheckboxSet and fmGUI_PopupSet. 1625: Added support for addNearTop. 1638: Standardized version. Added fmGUI_ALL_Utilities_Close. 
 	2020-03-03 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. Use clickObjectByCoords instead of clickObjFromHtcLib.
 	-- 1.4 - 2017-06-14 ( eshagdar ): narrowed scope
 	-- 1.3 - 2017-05-18 ( eshagdar ): updated for FM15.
@@ -19,7 +19,7 @@ REQUIRES:
 	clickObjectByCoords
 	logConsole
 	fmGUI_CheckboxSet
-	fmGUI_DataViewer_Close
+	fmGUI_ALL_Utilities_Close
 	fmGUI_ManageLayouts_LayoutFolderSelect
 	fmGUI_ManageLayouts_Open
 	fmGUI_ManageLayouts_PopupNewItemOfType
@@ -40,7 +40,7 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
-	-- version 2020-03-04-1625
+	-- version 2020-03-04-1638
 	
 	set defaultPrefs to {layoutName:null, oldLayoutName:null, doNotChangeExisting:false, baseTableName:null, layoutParentFolder:"", includeInLayoutMenus:0, menuSet:null, formViewEnabled:1, listViewEnabled:1, tableViewEnabled:1, defaultView:"Form View", scriptTriggers:{}, addNearTop:false}
 	
@@ -51,7 +51,7 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 	
 	-- Select a Layout and Edit it, or create it if it didn't exist yet.
 	try
-		fmGUI_DataViewer_Close()
+		fmGUI_ALL_Utilities_Close()
 		fmGUI_ManageLayouts_Open({})
 		
 		-- INIT: 
@@ -246,9 +246,9 @@ on fmGUI_CheckboxSet(prefs)
 	tell application "htcLib" to fmGUI_CheckboxSet({objRef:objRefStr} & prefs)
 end fmGUI_CheckboxSet
 
-on fmGUI_DataViewer_Close()
-	tell application "htcLib" to fmGUI_DataViewer_Close()
-end fmGUI_DataViewer_Close
+on fmGUI_ALL_Utilities_Close()
+	tell application "htcLib" to fmGUI_ALL_Utilities_Close()
+end fmGUI_ALL_Utilities_Close
 
 on fmGUI_ManageLayouts_LayoutFolderSelect(prefs)
 	tell application "htcLib" to fmGUI_ManageLayouts_LayoutFolderSelect(prefs)
