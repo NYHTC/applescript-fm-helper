@@ -5,7 +5,7 @@
 
 (*
 HISTORY:
-	2020-03-04 ( dshockley ): Minor fixes. Proper calls to fmGUI_CheckboxSet and fmGUI_PopupSet.
+	2020-03-04 ( dshockley ): Minor fixes. Proper calls to fmGUI_CheckboxSet and fmGUI_PopupSet. 1625: Added support for addNearTop. 
 	2020-03-03 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. Use clickObjectByCoords instead of clickObjFromHtcLib.
 	-- 1.4 - 2017-06-14 ( eshagdar ): narrowed scope
 	-- 1.3 - 2017-05-18 ( eshagdar ): updated for FM15.
@@ -40,9 +40,9 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
-	-- version 2020-03-04-1543
+	-- version 2020-03-04-1625
 	
-	set defaultPrefs to {layoutName:null, oldLayoutName:null, doNotChangeExisting:false, baseTableName:null, layoutParentFolder:"", includeInLayoutMenus:0, menuSet:null, formViewEnabled:1, listViewEnabled:1, tableViewEnabled:1, defaultView:"Form View", scriptTriggers:{}}
+	set defaultPrefs to {layoutName:null, oldLayoutName:null, doNotChangeExisting:false, baseTableName:null, layoutParentFolder:"", includeInLayoutMenus:0, menuSet:null, formViewEnabled:1, listViewEnabled:1, tableViewEnabled:1, defaultView:"Form View", scriptTriggers:{}, addNearTop:false}
 	
 	set layoutOptions to layoutOptions & defaultPrefs
 	
@@ -173,6 +173,14 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 					fmGUI_CheckboxSet({objRef:checkboxRef, objValue:1})
 					
 				end if
+			else if addNearTop of layoutOptions then
+				-- select the 1st row/layout so that this new one gets added just below it, instead of at bottom of whole list:
+				tell application "System Events"
+					tell application process "FileMaker Pro Advanced"
+						select row 1 of outline 1 of scroll area 1 of manageLayoutsWindow
+					end tell
+				end tell
+				
 			end if
 			
 			
