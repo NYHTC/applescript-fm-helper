@@ -194,7 +194,7 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 					set buttonRef to pop up button 1 of newLayoutDialog
 				end tell
 			end tell
-			mGUI_PopupSet({objRef:my coerceToString(buttonRef), objValue:baseTableName of layoutOptions})
+			fmGUI_PopupSet({objRef:my coerceToString(buttonRef), objValue:baseTableName of layoutOptions})
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
 					click button 4 of newLayoutDialog -- select 'Computer'
