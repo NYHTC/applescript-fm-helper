@@ -27,7 +27,7 @@ end run
 --------------------
 
 on fmGUI_Database_DbNameOfFrontWindow(prefs)
-	-- version 2020-03-04-1636
+	-- version 2020-03-04-1647
 	try
 		fmGUI_ALL_Utilities_Close()
 		
@@ -43,8 +43,8 @@ end fmGUI_Database_DbNameOfFrontWindow
 -- END OF CODE
 --------------------
 
-on fmGUI_ALL_Utilities_Close()()
-	tell application "htcLib" to fmGUI_ALL_Utilities_Close()()
+on fmGUI_ALL_Utilities_Close()
+	tell application "htcLib" to fmGUI_ALL_Utilities_Close()
 end fmGUI_ALL_Utilities_Close
 
 on dbNameOfWindowName(prefs)

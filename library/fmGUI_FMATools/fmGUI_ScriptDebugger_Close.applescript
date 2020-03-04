@@ -23,7 +23,7 @@ end run
 --------------------
 
 on fmGUI_ScriptDebugger_Close()
-	-- version 2020-03-04
+	-- version 2020-03-04-1645
 	
 	fmGUI_AppFrontMost()
 	tell application "System Events"
