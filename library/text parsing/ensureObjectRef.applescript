@@ -4,12 +4,13 @@
 
 (*
 HISTORY:
+	1.1 - 2020-03-04 ( dshockley ): app name change - 17+ is always Advanced.
 	1.0 - 2017-06-29 ( dshockley/eshagdar ): created
 *)
 
 
 on run
-	ensureObjectRef("button \"Cancel\" of window \"Edit Privilege Set\" of application process \"FileMaker Pro\" of application \"System Events\"")
+	ensureObjectRef("button \"Cancel\" of window \"Edit Privilege Set\" of application process \"FileMaker Pro Advanced\" of application \"System Events\"")
 end run
 
 --------------------
