@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. Modernized calls to fmGUI_CheckboxSet, fmGUI_TextFieldSet. 
 	1.4.1 - 2017-09-06 ( eshagdar ): updated error message. updated call to pop up set.
 	1.4 - 2016-04-25 ( eshagdar ): added option to NOT change any of the checkboxes when tweaking a field.
 	1.3 - 2016-03-18 ( eshagdar ): updated storage tab to text that autoIndex is not null
@@ -37,7 +38,7 @@ end run
 --------------------
 
 on fmGUI_ManageDb_Field_Edit(prefs)
-	-- version 1.4.1
+	-- version 2020-03-04-1558
 	
 	-- any BOOLEAN parameters can be either actually boolean, or 1/0.  This function will change that to match UI scripting interface needs.
 	
@@ -72,7 +73,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 				-- COMMENT is for any field type:
 				set changeButton to first button of tab group 1 of window 1 whose title is "Change"
 				if fieldComment of prefs is not null then
-					if my fmGUI_TextFieldSet(text field "Comment:" of tab group 1 of window 1, fieldComment of prefs) then
+					if my fmGUI_TextFieldSet({objRef:text field "Comment:" of tab group 1 of window 1, objValue:fieldComment of prefs}) then
 						click changeButton
 					end if
 					
@@ -138,7 +139,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					
 					if editMode is "CONFORM" or calcCode of prefs is not null then
 						-- CALCULATION CODE:
-						my fmGUI_TextFieldSet(text area 1 of scroll area 4 of window 1, calcCode of prefs)
+						my fmGUI_TextFieldSet({objRef:text area 1 of scroll area 4 of window 1, objValue:calcCode of prefs})
 					end if
 					
 					-- Calc CONTEXT Table (occurrence):
@@ -151,15 +152,15 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					if alwaysEvaluate of prefs is not null then
 						set notEvaluateCheckbox to first checkbox of window 1 whose name contains "not evaluate if all referenced fields"
 						if alwaysEvaluate of prefs then
-							my fmGUI_CheckboxSet(notEvaluateCheckbox, 0)
+							my fmGUI_CheckboxSet({objRef:notEvaluateCheckbox, objValue:0})
 						else
-							my fmGUI_CheckboxSet(notEvaluateCheckbox, 1)
+							my fmGUI_CheckboxSet({objRef:notEvaluateCheckbox, objValue:1})
 						end if
 					end if
 					
 					-- Repetitions: 
 					if editMode is "CONFORM" or maxRepetition of prefs is not null then
-						my fmGUI_TextFieldSet(first text field of window 1 whose name contains "repetitions", maxRepetition of prefs)
+						my fmGUI_TextFieldSet({objRef:first text field of window 1 whose name contains "repetitions", objValue:maxRepetition of prefs})
 					end if
 					
 					
@@ -189,24 +190,26 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 						end if
 						
 						if storageGlobal of prefs then
-							my fmGUI_CheckboxSet(globalStorageCheckbox, 1)
+							my fmGUI_CheckboxSet({objRef:globalStorageCheckbox, objValue:1})
 							
 						else if not storeCalculationResults of prefs then
-							my fmGUI_CheckboxSet(doNotStoreCheckbox, 1)
+							my fmGUI_CheckboxSet({objRef:doNotStoreCheckbox, objValue:1})
 							
 						else -- NOT EITHER OF THOSE, SO UNCHECK THEM FIRST:
-							my fmGUI_CheckboxSet(globalStorageCheckbox, 0)
-							my fmGUI_CheckboxSet(doNotStoreCheckbox, 0)
+							my fmGUI_CheckboxSet({objRef:globalStorageCheckbox, objValue:0})
+							my fmGUI_CheckboxSet({objRef:doNotStoreCheckbox, objValue:0})
 							
 							-- Then see which one of the Indexing choices is needed
 							if storageIndexChoice of prefs is "None" then
-								my fmGUI_CheckboxSet(checkbox "None 1 of 3" of workingArea, 1)
+								my fmGUI_CheckboxSet({objRef:checkbox "None 1 of 3" of workingArea, objValue:1})
+								
 								
 							else if storageIndexChoice of prefs is "Minimal" then
-								my fmGUI_CheckboxSet(checkbox "Minimal 2 of 3" of workingArea, 1)
+								my fmGUI_CheckboxSet({objRef:checkbox "Minimal 2 of 3" of workingArea, objValue:1})
+								
 								
 							else if storageIndexChoice of prefs is "All" then
-								my fmGUI_CheckboxSet(checkbox "All 3 of 3" of workingArea, 1)
+								my fmGUI_CheckboxSet({objRef:checkbox "All 3 of 3" of workingArea, objValue:1})
 								
 							end if
 						end if
@@ -216,9 +219,9 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 						if autoIndex of prefs is not null then
 							set autoIndexCheckbox to first checkbox of workingArea whose name contains "create indexes"
 							if autoIndex of prefs then
-								my fmGUI_CheckboxSet(autoIndexCheckbox, 1)
+								my fmGUI_CheckboxSet({objRef:autoIndexCheckbox, objValue:1})
 							else
-								my fmGUI_CheckboxSet(autoIndexCheckbox, 0)
+								my fmGUI_CheckboxSet({objRef:autoIndexCheckbox, objValue:0})
 							end if
 							
 						end if
@@ -329,7 +332,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 						click radio button "Storage" of workingArea
 						
 						-- Repetitions:
-						my fmGUI_TextFieldSet(first text field of workingArea whose name contains "repetitions", maxRepetition of prefs)
+						my fmGUI_TextFieldSet({objRef:first text field of workingArea whose name contains "repetitions", objValue:maxRepetition of prefs})
 						
 						-- Global:
 						set globalStorageCheckbox to first checkbox of workingArea whose name contains "global storage"
@@ -382,13 +385,13 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 							
 							-- Then see which one of the Indexing choices is needed
 							if storageIndexChoice of prefs is "None" then
-								my fmGUI_CheckboxSet(checkbox "None 1 of 3" of workingArea, 1)
-								fdsfdsf
+								my fmGUI_CheckboxSet({objRef:checkbox "None 1 of 3" of workingArea, objValue:1})
+								
 							else if storageIndexChoice of prefs is "Minimal" then
-								my fmGUI_CheckboxSet(checkbox "Minimal 2 of 3" of workingArea, 1)
+								my fmGUI_CheckboxSet({objRef:checkbox "Minimal 2 of 3" of workingArea, objValue:1})
 								
 							else if storageIndexChoice of prefs is "All" then
-								my fmGUI_CheckboxSet(checkbox "All 3 of 3" of workingArea, 1)
+								my fmGUI_CheckboxSet({objRef:checkbox "All 3 of 3" of workingArea, objValue:1})
 								
 							end if
 						end if
@@ -400,9 +403,9 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 						if autoIndex of prefs is not null then
 							set autoIndexCheckbox to first checkbox of workingArea whose name contains "create indexes"
 							if autoIndex of prefs then
-								my fmGUI_CheckboxSet(autoIndexCheckbox, 1)
+								my fmGUI_CheckboxSet({objRef:autoIndexCheckbox, objValue:1})
 							else
-								my fmGUI_CheckboxSet(autoIndexCheckbox, 0)
+								my fmGUI_CheckboxSet({objRef:autoIndexCheckbox, objValue:0})
 							end if
 							
 						end if
@@ -421,20 +424,20 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					-- Serial Number:
 					if autoSerial of prefs is not null then
 						if class of autoSerial of prefs is boolean then
-							my fmGUI_CheckboxSet(checkbox "Serial number" of workingArea, 0)
+							my fmGUI_CheckboxSet({objRef:checkbox "Serial number" of workingArea, objValue:0})
 						else
 							-- autoSerial is a RECORD of settings:
-							my fmGUI_CheckboxSet(checkbox "Serial number" of workingArea, 1)
+							my fmGUI_CheckboxSet({objRef:checkbox "Serial number" of workingArea, objValue:1})
 							
 							
-							my fmGUI_TextFieldSet(first text field of workingArea whose name contains "next value", autoNextValue of autoSerial of prefs)
+							my fmGUI_TextFieldSet({objRef:first text field of workingArea whose name contains "next value", objValue:autoNextValue of autoSerial of prefs})
 							
-							my fmGUI_TextFieldSet(first text field of workingArea whose name contains "increment", autoIncrement of autoSerial of prefs)
+							my fmGUI_TextFieldSet({objRef:first text field of workingArea whose name contains "increment", objValue:autoIncrement of autoSerial of prefs})
 							
 							if autoGenerate of autoSerial of prefs is "OnCreation" then
-								my fmGUI_CheckboxSet(checkbox "On creation 1 of 2" of workingArea, 1)
+								my fmGUI_CheckboxSet({objRef:checkbox "On creation 1 of 2" of workingArea, objValue:1})
 							else if autoGenerate of autoSerial of prefs is "OnCommit" then
-								my fmGUI_CheckboxSet(checkbox "On commit 2 of 2" of workingArea, 1)
+								my fmGUI_CheckboxSet({objRef:checkbox "On commit 2 of 2" of workingArea, objValue:1})
 							end if
 							
 						end if
@@ -445,7 +448,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					if autoEnterSpecialValue of prefs is not null then
 						-- autoEnterSpecialValue: keywords used in FM-XML: PreviousRecord, CreationAccountName, CreationUserName,CreationTimestamp, ModificationAccountName, et al.
 						if autoEnterSpecialValue of prefs is "PreviousRecord" then
-							my fmGUI_CheckboxSet(first checkbox of workingArea whose name contains "last visited", 1)
+							my fmGUI_CheckboxSet({objRef:first checkbox of workingArea whose name contains "last visited", objValue:1})
 							
 						else if autoEnterSpecialValue of prefs starts with "Creation" then
 							if autoEnterSpecialValue of prefs is "CreationUserName" then
@@ -482,9 +485,9 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 							
 						else if autoEnterSpecialValue of prefs is equal to "NONE" then
 							-- need to make sure NO special values are checked on:
-							my fmGUI_CheckboxSet(first checkbox of workingArea whose title is "Creation", 0)
-							my fmGUI_CheckboxSet(first checkbox of workingArea whose title is "Modification", 0)
-							my fmGUI_CheckboxSet(first checkbox of workingArea whose name contains "last visited", 0)
+							my fmGUI_CheckboxSet({objRef:first checkbox of workingArea whose title is "Creation", objValue:0})
+							my fmGUI_CheckboxSet({objRef:first checkbox of workingArea whose title is "Modification", objValue:0})
+							my fmGUI_CheckboxSet({objRef:first checkbox of workingArea whose name contains "last visited", objValue:0})
 							
 						else if autoEnterSpecialValue of prefs is equal to null then
 							-- do not change any of the checkboxes
@@ -497,14 +500,14 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					if autoEnterIsConstant of prefs is not null then
 						set dataCheckbox to first checkbox of workingArea whose name contains "Data"
 						if autoEnterIsConstant of prefs then
-							my fmGUI_CheckboxSet(dataCheckbox, 1)
+							my fmGUI_CheckboxSet({objRef:dataCheckbox, objValue:1})
 							if autoEnterConstantData of prefs is null then
 								-- Possibly null if autoEnterIsConstant is false...
 							else
-								my fmGUI_TextFieldSet(text area "Data:" of scroll area "Data:" of workingArea, autoEnterConstantData of prefs)
+								my fmGUI_TextFieldSet({objRef:text area "Data:" of scroll area "Data:" of workingArea, objValue:autoEnterConstantData of prefs})
 							end if
 						else
-							my fmGUI_CheckboxSet(dataCheckbox, 0)
+							my fmGUI_CheckboxSet({objRef:dataCheckbox, objValue:0})
 						end if
 						
 						
@@ -522,7 +525,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					if autoEnterIsCalculation of prefs is not null then
 						if not autoEnterIsCalculation of prefs then
 							-- Need to make sure it is NOT checked:
-							my fmGUI_CheckboxSet(checkbox "Calculated value" of workingArea, 0)
+							my fmGUI_CheckboxSet({objRef:checkbox "Calculated value" of workingArea, objValue:0})
 							
 						else -- there IS a Calc:
 							set autoEnterCalcCheckbox to checkbox "Calculated value" of workingArea
@@ -549,7 +552,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 								set autoEnterCalcCode_VALUE to autoEnterCalcCode of prefs
 							end if
 							
-							my fmGUI_TextFieldSet(text area 1 of scroll area 4 of window 1, autoEnterCalcCode_VALUE)
+							my fmGUI_TextFieldSet({objRef:text area 1 of scroll area 4 of window 1, objValue:autoEnterCalcCode_VALUE})
 							
 							
 							-- Calc CONTEXT Table (occurrence):
@@ -561,9 +564,9 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 							if alwaysEvaluate of prefs is not null then
 								set notEvaluateCheckbox to first checkbox of workingArea whose name contains "not evaluate if all referenced fields"
 								if alwaysEvaluate of prefs then
-									my fmGUI_CheckboxSet(notEvaluateCheckbox, 0)
+									my fmGUI_CheckboxSet({objRef:notEvaluateCheckbox, objValue:0})
 								else
-									my fmGUI_CheckboxSet(notEvaluateCheckbox, 1)
+									my fmGUI_CheckboxSet({objRef:notEvaluateCheckbox, objValue:1})
 								end if
 							end if
 							
@@ -579,9 +582,9 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 							if overwriteExistingValue of prefs is not null then
 								set overwriteExistingValueCheckbox to first checkbox of workingArea whose name contains "Do not replace existing"
 								if overwriteExistingValue of prefs then
-									my fmGUI_CheckboxSet(overwriteExistingValueCheckbox, 0)
+									my fmGUI_CheckboxSet({objRef:overwriteExistingValueCheckbox, objValue:0})
 								else
-									my fmGUI_CheckboxSet(overwriteExistingValueCheckbox, 1)
+									my fmGUI_CheckboxSet({objRef:overwriteExistingValueCheckbox, objValue:1})
 								end if
 							end if
 							
@@ -595,9 +598,9 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 					if allowEditing of prefs is not null then
 						set prohibitModCheckbox to first checkbox of workingArea whose name contains "Prohibit modification"
 						if allowEditing of prefs then
-							my fmGUI_CheckboxSet(prohibitModCheckbox, 0)
+							my fmGUI_CheckboxSet({objRef:prohibitModCheckbox, objValue:0})
 						else
-							my fmGUI_CheckboxSet(prohibitModCheckbox, 1)
+							my fmGUI_CheckboxSet({objRef:prohibitModCheckbox, objValue:1})
 						end if
 					end if
 					
@@ -631,7 +634,7 @@ DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGING   DEBUGGIN
 							set validationCalcCode_VALUE to validationCalcCode of prefs
 						end if
 						
-						my fmGUI_TextFieldSet(text area 1 of scroll area 4 of window 1, validationCalcCode_VALUE)
+						my fmGUI_TextFieldSet({objRef:text area 1 of scroll area 4 of window 1, objValue:validationCalcCode_VALUE})
 						
 						
 						-- Calc CONTEXT Table (occurrence):
@@ -689,8 +692,9 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
-on fmGUI_CheckboxSet(checkboxObject, checkboxValue)
-	tell application "htcLib" to fmGUI_CheckboxSet(checkboxObject, checkboxValue)
+on fmGUI_CheckboxSet(prefs)
+	set objRefStr to coerceToString(objRef of prefs)
+	tell application "htcLib" to fmGUI_CheckboxSet({objRef:objRefStr} & prefs)
 end fmGUI_CheckboxSet
 
 on fmGUI_ManageDb_Field_Select(prefs)
@@ -706,12 +710,13 @@ on fmGUI_PopupSet(prefs)
 	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
 end fmGUI_PopupSet
 
-on fmGUI_TextFieldSet(textfieldObject, textfieldValue)
-	tell application "htcLib" to fmGUI_TextFieldSet(textfieldObject, textfieldValue)
+on fmGUI_TextFieldSet(prefs)
+	set objRefStr to coerceToString(objRef of prefs)
+	tell application "htcLib" to fmGUI_TextFieldSet({objRef:objRefStr} & prefs)
 end fmGUI_TextFieldSet
 
-on clickObjectByCoords(someObject)
-	tell application "htcLib" to clickObjectByCoords(someObject)
+on clickObjectByCoords(prefs)
+	tell application "htcLib" to clickObjectByCoords(my coerceToString(prefs))
 end clickObjectByCoords
 
 on windowWaitUntil(prefs)

@@ -5,7 +5,7 @@
 
 (*
 HISTORY:
-	2020-03-04 ( dshockley ): Minor fixes. 
+	2020-03-04 ( dshockley ): Minor fixes. Proper calls to fmGUI_CheckboxSet and fmGUI_PopupSet.
 	2020-03-03 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. Use clickObjectByCoords instead of clickObjFromHtcLib.
 	-- 1.4 - 2017-06-14 ( eshagdar ): narrowed scope
 	-- 1.3 - 2017-05-18 ( eshagdar ): updated for FM15.
@@ -40,7 +40,7 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
-	-- version 2020-03-04-1529
+	-- version 2020-03-04-1543
 	
 	set defaultPrefs to {layoutName:null, oldLayoutName:null, doNotChangeExisting:false, baseTableName:null, layoutParentFolder:"", includeInLayoutMenus:0, menuSet:null, formViewEnabled:1, listViewEnabled:1, tableViewEnabled:1, defaultView:"Form View", scriptTriggers:{}}
 	
@@ -123,8 +123,8 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 					end tell
 					
 					if baseTableName of layoutOptions is not null then fmGUI_PopupSet({objRef:my coerceToString(showRecordsButton), objValue:baseTableName of layoutOptions})
-					if includeInLayoutMenus of layoutOptions is not null then fmGUI_CheckboxSet(inludeInMenuButton, includeInLayoutMenus of layoutOptions)
-					if menuSet of layoutOptions is not null then fmGUI_PopupSet({objRef:my coerceToString(menuSetButton), objValue:menuSet of layoutOptions})
+					if includeInLayoutMenus of layoutOptions is not null then fmGUI_CheckboxSet({objRef:inludeInMenuButton, objValue:includeInLayoutMenus of layoutOptions})
+					if menuSet of layoutOptions is not null then fmGUI_PopupSet({objRef:menuSetButton, objValue:menuSet of layoutOptions})
 					
 					
 					tell application "System Events"
@@ -138,10 +138,10 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 					end tell
 					
 					
-					if formViewEnabled of layoutOptions is not null then fmGUI_CheckboxSet(formCheckbox, formViewEnabled of layoutOptions)
-					if listViewEnabled of layoutOptions is not null then fmGUI_CheckboxSet(listCheckbox, listViewEnabled of layoutOptions)
-					if tableViewEnabled of layoutOptions is not null then fmGUI_CheckboxSet(tableCheckbox, tableViewEnabled of layoutOptions)
-					if defaultView of layoutOptions is not null then fmGUI_PopupSet({objRef:my coerceToString(defaultButton), objValue:defaultView of layoutOptions})
+					if formViewEnabled of layoutOptions is not null then fmGUI_CheckboxSet({objRef:formCheckbox, objValue:formViewEnabled of layoutOptions})
+					if listViewEnabled of layoutOptions is not null then fmGUI_CheckboxSet({objRef:listCheckbox, objValue:listViewEnabled of layoutOptions})
+					if tableViewEnabled of layoutOptions is not null then fmGUI_CheckboxSet({objRef:tableCheckbox, objValue:tableViewEnabled of layoutOptions})
+					if defaultView of layoutOptions is not null then fmGUI_PopupSet({objRef:defaultButton, objValue:defaultView of layoutOptions})
 					
 				end if
 				
@@ -160,7 +160,7 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 			if length of (layoutParentFolder of layoutOptions) is greater than 0 then
 				-- create it IN a layout folder:
 				-- Select the folder, or create it if it doesn't exist yet:
-				if not fmGUI_ManageLayouts_LayoutFolderSelect(layoutParentFolder of layoutOptions) then
+				if not fmGUI_ManageLayouts_LayoutFolderSelect({folderName:layoutParentFolder of layoutOptions}) then
 					fmGUI_ManageLayouts_PopupNewItemOfType("Folder…")
 					tell application "System Events"
 						tell application process "FileMaker Pro Advanced"
@@ -170,7 +170,7 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 							set checkboxRef to checkbox 1 of newFolderRow
 						end tell
 					end tell
-					fmGUI_CheckboxSet(checkboxRef, 1)
+					fmGUI_CheckboxSet({objRef:checkboxRef, objValue:1})
 					
 				end if
 			end if
@@ -197,7 +197,7 @@ on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
 					set buttonRef to pop up button 1 of newLayoutDialog
 				end tell
 			end tell
-			fmGUI_PopupSet({objRef:my coerceToString(buttonRef), objValue:baseTableName of layoutOptions})
+			fmGUI_PopupSet({objRef:buttonRef, objValue:baseTableName of layoutOptions})
 			tell application "System Events"
 				tell application process "FileMaker Pro Advanced"
 					click button 4 of newLayoutDialog -- select 'Computer'
