@@ -1,10 +1,11 @@
--- fmGUI_ManageLayouts_Layout_CreateOrUpdate({layoutName:null})
+-- fmGUI_ManageLayouts_Layout_CreateOrUpdate({layoutName:null, oldLayoutName:null, doNotChangeExisting:false, baseTableName:null, layoutParentFolder:"", includeInLayoutMenus:0, menuSet:null, formViewEnabled:1, listViewEnabled:1, tableViewEnabled:1, defaultView:"Form View", scriptTriggers:{}})
 -- Daniel A. Shockley, NYHTC
 -- Create/Update a layout.
 
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Minor fixes. 
 	2020-03-03 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. Use clickObjectByCoords instead of clickObjFromHtcLib.
 	-- 1.4 - 2017-06-14 ( eshagdar ): narrowed scope
 	-- 1.3 - 2017-05-18 ( eshagdar ): updated for FM15.
@@ -27,6 +28,8 @@ REQUIRES:
 	windowWaitUntil_FrontIS
 *)
 
+property ScriptName : "fmGUI_ManageLayouts_Layout_CreateOrUpdate"
+property debugMode : true
 
 on run
 	fmGUI_ManageLayouts_Layout_CreateOrUpdate({layoutName:"Directory"})
@@ -260,8 +263,8 @@ on fmGUI_PopupSet(prefs)
 	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
 end fmGUI_PopupSet
 
-on logConsole(prefs)
-	tell application "htcLib" to logConsole(prefs)
+on logConsole(processName, consoleMsg)
+	tell application "htcLib" to logConsole(processName, consoleMsg)
 end logConsole
 
 on windowWaitUntil_FrontIS(prefs)

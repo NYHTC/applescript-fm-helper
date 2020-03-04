@@ -1,4 +1,4 @@
--- fmGUI_ManageLayouts_Open(prefs)
+-- fmGUI_ManageLayouts_Open({})
 -- Erik Shagdar, NYHTC
 -- open Manage Layouts
 

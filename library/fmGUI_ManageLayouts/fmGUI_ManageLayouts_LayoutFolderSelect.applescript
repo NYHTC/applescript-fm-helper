@@ -1,10 +1,11 @@
--- fmGUI_ManageLayouts_LayoutFolderSelect({layoutName:null})
+-- fmGUI_ManageLayouts_LayoutFolderSelect({folderName:null, folderStatus:"open"})
 -- Daniel A. Shockley, NYHTC
 -- Select a layout folder in Manage Layouts window.
 
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): added call template in comment above, added folderName:null to defaultPrefs.
 	2020-03-03 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 
 	1.1 - 201x-xx-xx ( dshockley ): ???
 	1.0 - 201x-xx-xx ( dshockley ): created
@@ -28,9 +29,9 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_LayoutFolderSelect(prefs)
-	-- version 1.1, Daniel A. Shockley
+	-- version 2020-03-04, Daniel A. Shockley
 	
-	set defaultPrefs to {folderStatus:"open"}
+	set defaultPrefs to {folderName:null, folderStatus:"open"}
 	
 	if class of prefs is class of {someKey:2} then
 		set prefs to prefs & defaultPrefs

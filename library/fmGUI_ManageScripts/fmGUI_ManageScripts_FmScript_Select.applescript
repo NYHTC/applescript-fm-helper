@@ -1,4 +1,4 @@
--- fmGUI_ManageScripts_FmScript_Select({})
+-- fmGUI_ManageScripts_FmScript_Select({fmScriptName:null, altPatterns:null})
 -- Daniel A. Shockley, NYHTC
 -- Select an existing script in the Script Workspace.
 

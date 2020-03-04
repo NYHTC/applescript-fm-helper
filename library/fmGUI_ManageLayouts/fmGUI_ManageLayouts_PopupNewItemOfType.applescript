@@ -5,7 +5,7 @@
 
 (*
 HISTORY:
-	2020-03-03 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 
+	2020-03-04 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 
 	2018-09-06 ( eshagdar ): Get positions of the new menu and click based on ACTUAL location - depending on the location of the window, the menu renders up or down of the button. Click using htcLib.
 
 
@@ -19,7 +19,7 @@ REQUIRES:
 
 
 on run
-	fmGUI_ManageLayouts_LayoutFolderSelect({layoutName:"Directory"})
+	fmGUI_ManageLayouts_PopupNewItemOfType("Layout/Report…")
 end run
 
 --------------------
@@ -27,7 +27,7 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_PopupNewItemOfType(newItemType)
-	-- 2018-09-06 ( eshagdar ): get positions of the new menu and click based on ACTUAL location - depending on the location of the window, the menu renders up or down of the button. click using htcLib
+	-- version 2020-03-04
 	
 	try
 		fmGUI_AppFrontMost()
@@ -39,7 +39,7 @@ on fmGUI_ManageLayouts_PopupNewItemOfType(newItemType)
 				set newItemOfTypeButton to first button of window 1 whose description is "New Item of Type"
 			end tell
 		end tell
-		fmGUI_ObjectClick_Button({buttonRef:my coerceToString(newItemOfTypeButton)})
+		fmGUI_ObjectClick_Button(newItemOfTypeButton)
 		delay 0.5
 		
 		
@@ -95,6 +95,6 @@ on fmGUI_ManageLayouts_Open(prefs)
 end fmGUI_ManageLayouts_Open
 
 on fmGUI_ObjectClick_Button(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_Button(prefs)
+	tell application "htcLib" to fmGUI_ObjectClick_Button({buttonRef:my coerceToString(buttonRef of prefs)} & prefs)
 end fmGUI_ObjectClick_Button
 

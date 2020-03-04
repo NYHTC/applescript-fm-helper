@@ -1,4 +1,4 @@
--- fmGUI_ManageScripts_SearchBoxFind({})
+-- fmGUI_ManageScripts_SearchBoxFind({searchCriteria:null, delayTime:0.25, maxDelay:2, delayIncreaseBy:0.25})
 -- Daniel A. Shockley, NYHTC
 -- Specify the contents of the search box in the Script Workspace, which activates a live-filter type of search. 
 

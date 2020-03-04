@@ -1,4 +1,4 @@
--- fmGUI_ManageScripts_FmScript_Change({})
+-- fmGUI_ManageScripts_FmScript_Change({fmScriptName:null, includeInMenu:null, runFullAccess:null, renameOnly:false, doNotChangeExisting:false, altPatterns:null, pasteScriptStepsFromClipbrd:null})
 -- Daniel A. Shockley, NYHTC
 -- Make sure an existing script has the specified script steps content, saving if any changes DID need to be made. 
 
