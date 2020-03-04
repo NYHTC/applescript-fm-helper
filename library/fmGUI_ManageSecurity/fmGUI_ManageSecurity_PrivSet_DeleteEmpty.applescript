@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.1 - 2017-07-12 ( eshagdar ): obj clicking done via cliClick
 	1.0 - 2017-07-10 ( eshagdar ): first created
 
@@ -25,6 +26,8 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_PrivSet_DeleteEmpty(prefs)
+	-- version 2020-03-04-1532
+	
 	set defaultPrefs to {skipDeleteList:{}}
 	set prefs to prefs & defaultPrefs
 	

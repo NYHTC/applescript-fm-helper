@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.0 - 2017-08-07 ( eshagdar ): copied logic from fmGUI_ManageSecurity_Save
 
 
@@ -24,7 +25,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_Cancel(prefs)
-	--version 1.0
+	-- version 2020-03-04-1532
 	
 	set defaulPrefs to {}
 	set prefs to prefs & defaulPrefs

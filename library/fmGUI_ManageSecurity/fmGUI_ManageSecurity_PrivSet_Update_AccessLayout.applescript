@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.0 - 2017-09-07 ( eshagdar ): moved from fmGUI_ManageSecurity_PrivSet_Update.
 
 
@@ -26,6 +27,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)
+	-- version 2020-03-04-1533
 	
 	set defaultPrefs to {accessLayout:null, layoutAccess:null}
 	set prefs to prefs & defaultPrefs

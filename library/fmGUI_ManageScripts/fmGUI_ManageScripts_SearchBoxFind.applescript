@@ -23,7 +23,7 @@ end run
 --------------------
 
 on fmGUI_ManageScripts_SearchBoxFind(prefs)
-	-- version 2020-03-03, Erik Shagdar, NYHTC
+	-- version 2020-03-04-1528
 	
 	try
 		set defaultPrefs to {searchCriteria:null, delayTime:0.25, maxDelay:2, delayIncreaseBy:0.25}

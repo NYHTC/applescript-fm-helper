@@ -34,7 +34,7 @@ end run
 --------------------
 
 on fmGUI_ManageScripts_FmScript_Change(prefs)
-	-- version 2020-03-03
+	-- version 2020-03-04-1528
 	
 	-- NOTE: pasteScriptStepsFromClipbrd is no misspelled - applescript breaks when the variable is correctly spelled.
 	set defaultPrefs to {fmScriptName:null, includeInMenu:null, runFullAccess:null, renameOnly:false, doNotChangeExisting:false, altPatterns:null, pasteScriptStepsFromClipbrd:null}

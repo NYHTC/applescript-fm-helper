@@ -5,7 +5,7 @@
 
 (*
 HISTORY:
-	2020-03-03 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository.
+	2020-03-04 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository.
 	1.3.1 - 2017-06-05 ( eshagdar ): the name of the script is the name of UI elemnt, not the value of a text field.
 	1.3 - 2017-01-12 ( eshagdar ): updated for FM15 - script names are now in a splitter group.
 	2017-06-05 ( eshagdar ): we should just be using the search bar instead of scanning through the list
@@ -35,7 +35,7 @@ end run
 --------------------
 
 on fmGUI_ManageScripts_FmScript_Select(prefs)
-	-- version 1.3.1
+	-- version 2020-03-04-1528
 	
 	-- Attempt to select a FileMaker Script based on name or, alternatively, other partial matches.
 	

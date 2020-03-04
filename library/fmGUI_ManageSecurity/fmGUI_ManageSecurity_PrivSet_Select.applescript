@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. Corrected Requires block. 
 	1.1.1 - 2017-09-06 ( eshagdar ): updated error message. added version to handler
 	1.1 - 2017-07-06 ( eshagdar ): convert params to record. use try-blcok instead of checking for existence.
 	1.0 - first created
@@ -12,7 +13,7 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_ManageSecurity_Open
+	fmGUI_ManageSecurity_GoToTab_PrivSets
 *)
 
 
@@ -25,7 +26,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_PrivSet_Select(prefs)
-	--version 1.1.1
+	-- version 2020-03-04-1532
 	
 	try
 		fmGUI_AppFrontMost()

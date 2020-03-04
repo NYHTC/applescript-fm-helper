@@ -4,6 +4,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.0 - 2017-10-17 ( eshagdar ): created
 *)
 
@@ -20,6 +21,7 @@ end run
 --------------------
 
 on xor(firstBoolean, secondBoolean)
+	-- version 2020-03-04-1535
 	try
 		return (firstBoolean or secondBoolean) and (firstBoolean ­ secondBoolean)
 	on error errMsg number errNum

@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.0 - 2017-11-06 ( eshagdar ): taken from the sub-handler ( which should return an asnwer right away instead of wating ).
 
 
@@ -28,7 +29,7 @@ end run
 --------------------
 
 on fmGUI_Wait_MenuItemAvailable(prefs)
-	--version 1.0, Erik Shagdar
+	-- version 2020-03-04-1535
 	
 	try
 		set defaultPrefs to {menuItemRef:null, maxTimeoutSec:60, checkFrequencySec:0.5}

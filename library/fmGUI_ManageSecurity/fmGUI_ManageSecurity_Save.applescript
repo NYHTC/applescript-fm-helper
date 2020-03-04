@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.5.2 - 2017-11-07 ( eshagdar ): click 'allow' to get past the 'full access accounts with no password' prompt.
 	1.5.1 - 2017-10-23 ( eshagdar ): FM16 renamed auth window name, so windw test is 'begins with' instead of 'is'
 	1.5 - 2017-10-19 ( eshagdar ): sub-handlers: button clicks, window checks, authentication.
@@ -36,7 +37,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_Save(prefs)
-	--version 1.5.2
+	-- version 2020-03-04-1534
 	
 	set defaulPrefs to {fullAccessAccountName:null, fullAccessPassword:null}
 	set prefs to prefs & defaulPrefs

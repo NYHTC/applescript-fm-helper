@@ -4,6 +4,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.0 - created
 
 
@@ -21,6 +22,7 @@ end run
 --------------------
 
 on removeExtraAppsFromDock(prefs)
+	-- version 2020-03-04-1536
 	
 	set defaultPrefs to {listOfAllowedAppNames:{"Finder", "FileMaker Pro Advanced", "FileMaker Pro Advanced", "Script Editor", "Terminal", "System Preferences", "Downloads", "Documents", "Trash"}}
 	

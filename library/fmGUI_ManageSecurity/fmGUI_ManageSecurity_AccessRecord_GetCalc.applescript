@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.0.1 - 2017-09-22 ( eshagdar ): 'calc' renamed to 'calcValue'.
 	1.0 - 2017-07-06 ( eshagdar ):created
 
@@ -25,6 +26,8 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_AccessRecord_GetCalc(prefs)
+	-- version 2020-03-04-1531
+	
 	set defaultPrefs to {calcFor:null}
 	set prefs to prefs & defaultPrefs
 	

@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): standardized version
 	1.0.3 - 2019-12-06 ( dshockley ): BUG-FIX - was missing wrapper call to fmGUI_NameOfFrontmostWindow subhandler. 
 	1.0.2 - 2019-01-02 ( eshagdar ): FM17 has only advanced
 	1.0.1 - 2017-11-01 ( eshagdar ): updated error message
@@ -26,7 +27,7 @@ end run
 --------------------
 
 on fmGUI_isInFullAccessMode(prefs)
-	--version 1.0.2, Erik Shagdar
+	-- version 2020-03-04-1530
 	
 	fmGUI_AppFrontMost()
 	--fmGUI_ManageLayouts_Close({})

@@ -18,6 +18,7 @@ end run
 --------------------
 
 on ensureObjectRef(someObjectRef)
+	-- version 1.1
 	
 	tell application "System Events"
 		

@@ -29,7 +29,7 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_LayoutFolderSelect(prefs)
-	-- version 2020-03-04, Daniel A. Shockley
+	-- version 2020-03-04-1528
 	
 	set defaultPrefs to {folderName:null, folderStatus:"open"}
 	

@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.0 - 2017-07-06 ( eshagdar ):created
 
 
@@ -24,6 +25,8 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_AccessRecord_OpenCalc(prefs)
+	-- version 2020-03-04-1531
+	
 	set defaultPrefs to {calcFor:null}
 	set prefs to prefs & defaultPrefs
 	set calcFor to calcFor of prefs

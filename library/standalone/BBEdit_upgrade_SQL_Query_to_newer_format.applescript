@@ -4,6 +4,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.8 - 2020-02-20 ( dshockley ): Added ExtraSpacesWithinSQLWhere. 
 	1.7 - 2019-04-25 ( dshockley ): Added error-trapping and handling. The param for the handler is now named prefs instead of accidentally being an empty list. Disabled potentially-problematic "convert to using List for query whitespace formatting" code! 
 	1.6 - 2019-04-17 ( dshockley ): Added ExecuteOLD2. Added SemicolonPilcrowLine. 
@@ -25,6 +26,7 @@ end run
 --------------------
 
 on BBEdit_upgrade_SQL_Query_to_newer_format(prefs)
+	-- version 2020-03-04-1535
 	
 	try
 		

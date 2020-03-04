@@ -5,7 +5,7 @@
 
 (*
 HISTORY
-	2020-03-03 ( dshockley ): Fixed typo in comments.
+	2020-03-04 ( dshockley ): Fixed typo in comments.
 	1.2 - 2017-08-07 ( eshagdar ): wait until window renders.
 	1.1 - 
 	1.0 - 201x-xx-xx ( dshockley ): first created
@@ -27,7 +27,7 @@ end run
 --------------------
 
 on fmGUI_ManageScripts_Open(prefs)
-	-- version 1.2
+	-- version 2020-03-04-1537
 	
 	try
 		fmGUI_AppFrontMost()

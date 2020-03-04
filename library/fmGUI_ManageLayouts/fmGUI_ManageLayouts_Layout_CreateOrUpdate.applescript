@@ -40,7 +40,7 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_Layout_CreateOrUpdate(layoutOptions)
-	-- version 1.4
+	-- version 2020-03-04-1529
 	
 	set defaultPrefs to {layoutName:null, oldLayoutName:null, doNotChangeExisting:false, baseTableName:null, layoutParentFolder:"", includeInLayoutMenus:0, menuSet:null, formViewEnabled:1, listViewEnabled:1, tableViewEnabled:1, defaultView:"Form View", scriptTriggers:{}}
 	

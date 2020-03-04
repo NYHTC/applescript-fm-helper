@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.0 - 2017-07-12 ( eshagdar ): first created
 
 
@@ -26,6 +27,7 @@ end run
 --------------------
 
 on fmGUI_ManageSecurity_PrivSet_Rename(prefs)
+	-- version 2020-03-04-1532
 	
 	try
 		fmGUI_AppFrontMost()

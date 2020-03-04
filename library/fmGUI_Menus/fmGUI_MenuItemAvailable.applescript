@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.1 - 2017-11-06 ( eshagdar ): this handler should an if the menu is available right now, waiting should happen in another handler. try block around entire handler.
 	1.0 - 2016-10-18 ( eshagdar ): created
 
@@ -29,7 +30,7 @@ end run
 --------------------
 
 on fmGUI_MenuItemAvailable(prefs)
-	--version 1.1, Erik Shagdar
+	-- version 2020-03-04-1535
 	
 	try
 		set defaultPrefs to {menuItemRef:null, maxTimeoutSec:60, checkFrequencySec:0.5}

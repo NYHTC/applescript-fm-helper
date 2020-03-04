@@ -5,7 +5,7 @@
 
 (*
 HISTORY:
-	2020-03-03 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 
+	2020-03-04 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 
 	2018-09-06 ( eshagdar ): Get positions of the new menu and click based on ACTUAL location - depending on the location of the window, the menu renders up or down of the button. Click using htcLib.
 
 
@@ -27,7 +27,7 @@ end run
 --------------------
 
 on fmGUI_ManageLayouts_PopupNewItemOfType(newItemType)
-	-- version 2020-03-03
+	-- version 2020-03-04-1529
 	
 	try
 		fmGUI_AppFrontMost()

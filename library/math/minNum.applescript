@@ -4,6 +4,7 @@
 
 (*
 HISTORY:
+	2020-03-04 ( dshockley ): Standardized version. 
 	1.0 - 2016-xx-xx ( eshagdar ): created
 *)
 
@@ -17,6 +18,8 @@ end run
 --------------------
 
 on minNum(someList)
+	-- version 2020-03-04-1535
+
 	try
 		if class of someList is not list then error "not a list." number -1703
 		set smallestFound to item 1 of someList as number
