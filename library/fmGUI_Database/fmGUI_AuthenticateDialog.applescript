@@ -13,6 +13,7 @@ REQUIRES:
 	
 
 HISTORY:
+	1.2.2 - 2020-04-09 ( dshockley ): made 0.5 second delay before clicking buttons, since slower machines didn't quite work.
 	1.2.1 - 2017-11-14 ( dshockley ): added 0.1 second delay after setting fields before clicking button. 
 	1.2 - 2017-11-10 ( eshagdar ): wait until the window renders
 	1.1 - 2017-10-20 ( eshagdar ): FM16 changed object names - determine fields by their description. button name changed from 'OK' to 'Sign In'.
@@ -59,10 +60,11 @@ on fmGUI_AuthenticateDialog(prefs)
 		
 		
 		-- delay a bit, then click to confirm
-		delay 0.1
+		delay 0.5
 		try
 			fmGUI_ObjectClick_OkButton({})
 		on error
+			delay 0.5
 			fmGUI_ObjectClick_SignInButton({})
 		end try
 		
