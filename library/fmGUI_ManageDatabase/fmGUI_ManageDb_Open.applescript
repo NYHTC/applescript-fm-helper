@@ -74,6 +74,7 @@ on fmGUI_ManageDb_Open(prefs)
 					set zoomField to text field 1 of tab group 1 of window 1
 					set focused of zoomField to true
 					set value of zoomField to "100"
+					key code 48 (* tab out of the zoom field *)
 				end tell
 			end tell
 			
@@ -89,27 +90,27 @@ end fmGUI_ManageDb_Open
 -- END OF CODE
 --------------------
 
-on fmGUI_AppFrontMost(prefs)
+on fmGUI_AppFrontMost()
 	tell application "Finder" to set handlerPath to ((container of (path to me)) as text) & "fmGUI_AppFrontMost" & ".scpt"
-	tell (load script alias handlerPath) to return fmGUI_AppFrontMost(prefs)
+	tell (load script alias handlerPath) to return fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageDb_DismissXDBCDialog(prefs)
 	tell application "Finder" to set handlerPath to ((container of (path to me)) as text) & "fmGUI_ManageDb_DismissXDBCDialog" & ".scpt"
 	tell (load script alias handlerPath) to return fmGUI_ManageDb_DismissXDBCDialog(prefs)
-end
+end fmGUI_ManageDb_DismissXDBCDialog
 
 on fmGUI_ManageDb_GoToTab_Relationships(prefs)
 	tell application "Finder" to set handlerPath to ((container of (path to me)) as text) & "fmGUI_ManageDb_GoToTab_Relationships" & ".scpt"
 	tell (load script alias handlerPath) to return fmGUI_ManageDb_GoToTab_Relationships(prefs)
-end
+end fmGUI_ManageDb_GoToTab_Relationships
 
 on fmGUI_Menu_OpenDB(prefs)
 	tell application "Finder" to set handlerPath to ((container of (path to me)) as text) & "fmGUI_Menu_OpenDB" & ".scpt"
 	tell (load script alias handlerPath) to return fmGUI_Menu_OpenDB(prefs)
-end
+end fmGUI_Menu_OpenDB
 
-on fmGUI_NameOfFrontmostWindow(prefs)
+on fmGUI_NameOfFrontmostWindow()
 	tell application "Finder" to set handlerPath to ((container of (path to me)) as text) & "fmGUI_NameOfFrontmostWindow" & ".scpt"
-	tell (load script alias handlerPath) to return fmGUI_NameOfFrontmostWindow(prefs)
-end
+	tell (load script alias handlerPath) to return fmGUI_NameOfFrontmostWindow()
+end fmGUI_NameOfFrontmostWindow
