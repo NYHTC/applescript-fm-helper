@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.4 - 2020-05-20 ( dshockley ): added multiple missing sub-handlers. 
 	1.3 - 2018-04-30 ( eshagdar ): get window name via handler.
 	1.2 - added xDBC connection error trapping
 	1.1 - 
@@ -17,7 +18,10 @@ TODO:
 
 REQUIRES:
 	fmGUI_AppFrontMost
+	fmGUI_ManageDb_DismissXDBCDialog
+	fmGUI_ManageDb_GoToTab_Relationships
 	fmGUI_ManageDb_RelationshipsTab
+	fmGUI_Menu_OpenDB
 	fmGUI_NameOfFrontmostWindow
 *)
 
@@ -31,7 +35,7 @@ end run
 --------------------
 
 on fmGUI_ManageDb_Open(prefs)
-	-- version 1.3
+	-- version 1.4
 	
 	try
 		fmGUI_AppFrontMost()
@@ -49,7 +53,7 @@ on fmGUI_ManageDb_Open(prefs)
 			fmGUI_ManageDb_DismissXDBCDialog({})
 			
 			
-			-- to to the TOs tab and dismiss any xDBC connections that failed to connect
+			-- go to the TOs tab and AGAIN dismiss any xDBC connections that failed to connect
 			fmGUI_ManageDb_GoToTab_Relationships({})
 			delay 1
 			fmGUI_ManageDb_DismissXDBCDialog({})
@@ -90,9 +94,21 @@ on fmGUI_AppFrontMost()
 	tell application "htcLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
+on fmGUI_ManageDb_DismissXDBCDialog(prefs)
+	tell application "htcLib" to fmGUI_ManageDb_DismissXDBCDialog(prefs)
+end fmGUI_ManageDb_DismissXDBCDialog
+
+on fmGUI_ManageDb_GoToTab_Relationships(prefs)
+	tell application "htcLib" to fmGUI_ManageDb_GoToTab_Relationships(prefs)
+end fmGUI_ManageDb_GoToTab_Relationships
+
 on fmGUI_ManageDb_RelationshipsTab(prefs)
 	tell application "htcLib" to fmGUI_ManageDb_RelationshipsTab(prefs)
 end fmGUI_ManageDb_RelationshipsTab
+
+on fmGUI_Menu_OpenDB(prefs)
+	tell application "htcLib" to fmGUI_Menu_OpenDB(prefs)
+end fmGUI_Menu_OpenDB
 
 on fmGUI_NameOfFrontmostWindow()
 	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
