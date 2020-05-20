@@ -1,10 +1,11 @@
--- displayFileMakerDatabase({windowName:"", waitCycleDelaySeconds:"", waitSaveTotalSeconds:""})
+-- displayFileMakerWindow({windowName:"", waitCycleDelaySeconds:"", waitSaveTotalSeconds:""})
 -- Dan Shockley, NYHTC
 -- If open, then display first window this finds and return true, else return false.
 
 
 (*
 HISTORY:
+	1.8 - 2020-05-20 ( dshockley ): fixed name in 1st comment line. 
 	1.7 - 2018-09-20 ( eshagdar ): FM17 has only 1 version, so no need to specify by name/bundle
 	1.6 - get list of window names of open files from the menu instead of asking FM for document names.
 	1.5.2 - 2017-11-20 ( eshagdar ): disable logging
