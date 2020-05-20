@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.6 - 2020-05-20 ( dshockley ): removed an incorrect requires-sub-handler comment. 
 	1.5 - 2017-10-30 ( eshagdar ): FM interactions are done via sub-handlers.
 	1.4 - 2016-06-29 ( eshagdar ): wait until the close/save is complete
 	1.3 - 
@@ -15,7 +16,6 @@ HISTORY:
 
 REQUIRES:
 	fmGUI_AppFrontMost
-	fmGUI_ManageDb_RelationshipsTab
 	fmGUI_NameOfFrontmostWindow
 	fmGUI_ObjectClick_OkButton
 *)

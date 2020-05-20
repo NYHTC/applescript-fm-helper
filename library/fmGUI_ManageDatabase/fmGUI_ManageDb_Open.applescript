@@ -5,7 +5,7 @@
 
 (*
 HISTORY:
-	1.4 - 2020-05-20 ( dshockley ): added multiple missing sub-handlers. 
+	1.4 - 2020-05-20 ( dshockley ): added multiple missing sub-handlers. Removed referfence to old sub-handler. 
 	1.3 - 2018-04-30 ( eshagdar ): get window name via handler.
 	1.2 - added xDBC connection error trapping
 	1.1 - 
@@ -20,7 +20,6 @@ REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_ManageDb_DismissXDBCDialog
 	fmGUI_ManageDb_GoToTab_Relationships
-	fmGUI_ManageDb_RelationshipsTab
 	fmGUI_Menu_OpenDB
 	fmGUI_NameOfFrontmostWindow
 *)
@@ -90,26 +89,27 @@ end fmGUI_ManageDb_Open
 -- END OF CODE
 --------------------
 
-on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+on fmGUI_AppFrontMost(prefs)
+	tell application "Finder" to set handlerPath to ((container of (path to me)) as text) & "fmGUI_AppFrontMost" & ".scpt"
+	tell (load script alias handlerPath) to return fmGUI_AppFrontMost(prefs)
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageDb_DismissXDBCDialog(prefs)
-	tell application "htcLib" to fmGUI_ManageDb_DismissXDBCDialog(prefs)
-end fmGUI_ManageDb_DismissXDBCDialog
+	tell application "Finder" to set handlerPath to ((container of (path to me)) as text) & "fmGUI_ManageDb_DismissXDBCDialog" & ".scpt"
+	tell (load script alias handlerPath) to return fmGUI_ManageDb_DismissXDBCDialog(prefs)
+end
 
 on fmGUI_ManageDb_GoToTab_Relationships(prefs)
-	tell application "htcLib" to fmGUI_ManageDb_GoToTab_Relationships(prefs)
-end fmGUI_ManageDb_GoToTab_Relationships
-
-on fmGUI_ManageDb_RelationshipsTab(prefs)
-	tell application "htcLib" to fmGUI_ManageDb_RelationshipsTab(prefs)
-end fmGUI_ManageDb_RelationshipsTab
+	tell application "Finder" to set handlerPath to ((container of (path to me)) as text) & "fmGUI_ManageDb_GoToTab_Relationships" & ".scpt"
+	tell (load script alias handlerPath) to return fmGUI_ManageDb_GoToTab_Relationships(prefs)
+end
 
 on fmGUI_Menu_OpenDB(prefs)
-	tell application "htcLib" to fmGUI_Menu_OpenDB(prefs)
-end fmGUI_Menu_OpenDB
+	tell application "Finder" to set handlerPath to ((container of (path to me)) as text) & "fmGUI_Menu_OpenDB" & ".scpt"
+	tell (load script alias handlerPath) to return fmGUI_Menu_OpenDB(prefs)
+end
 
-on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
-end fmGUI_NameOfFrontmostWindow
+on fmGUI_NameOfFrontmostWindow(prefs)
+	tell application "Finder" to set handlerPath to ((container of (path to me)) as text) & "fmGUI_NameOfFrontmostWindow" & ".scpt"
+	tell (load script alias handlerPath) to return fmGUI_NameOfFrontmostWindow(prefs)
+end
