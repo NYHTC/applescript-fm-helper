@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	1.6.4 - 2020-05-20 ( dshockley ): fixed typo in error message. 
 	1.6.3 - 2019-02-27 ( eshagdar ): throw up a dialog if there is a privSet violation.
 	1.6.2 - 2018-12-07 ( eshagdar ): don't both using case, terms, or bundle ID - just talk to the application directly.
 	1.6.1 - 2018-10-16 ( eshagdar ): remove remaining FMA references.
@@ -70,7 +71,7 @@ on displayFileMakerDatabase(prefs)
 					-- just keep trying - this error can be caused when a database is opening and the open script takes a bit too long to finish, or something in the FM interface is slow to respond. 
 				else if errNum is -10004 then
 					activate
-					display dialog "unable to displayFileMakerDatabase becuase of privSet violation in some FM file errNum: " & errNum buttons "OK" default button "OK"
+					display dialog "unable to displayFileMakerDatabase because of privSet violation in some FM file errNum: " & errNum buttons "OK" default button "OK"
 					error "privSet violation in some FM file..." & errNum number errNum
 				else
 					error "Error getting list of databases already open - " & errMsg number errNum
