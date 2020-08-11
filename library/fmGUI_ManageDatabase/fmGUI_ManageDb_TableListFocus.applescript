@@ -1,11 +1,12 @@
 -- fmGUI_ManageDb_TableListFocus({})
 -- NYHTC
--- Focus in the list of fields in the "Fields" tab of Manage Database
+-- Focus in the list of tables in the "Tables" tab of Manage Database
 
 
 (*
 HISTORY:
-	1.1 - 
+	1.2 - 2020-05-20 ( dshockley ): Actually go to Tables, not Fields. 
+	1.1 - [unknown changes]
 	1.0 - created
 
 
@@ -23,7 +24,7 @@ end run
 --------------------
 
 on fmGUI_ManageDb_TableListFocus(prefs)
-	-- version 1.1
+	-- version 1.2
 	
 	try
 		fmGUI_ManageDb_GoToTab_Tables({})
@@ -36,7 +37,7 @@ on fmGUI_ManageDb_TableListFocus(prefs)
 		end tell
 		
 	on error errMsg number errNum
-		error "Couldn't focus on Field list - " & errMsg number errNum
+		error "Couldn't focus on Table list - " & errMsg number errNum
 	end try
 	
 end fmGUI_ManageDb_TableListFocus
@@ -45,6 +46,6 @@ end fmGUI_ManageDb_TableListFocus
 -- END OF CODE
 --------------------
 
-on fmGUI_ManageDb_GoToTab_Fields(prefs)
-	tell application "htcLib" to fmGUI_ManageDb_GoToTab_Fields(prefs)
-end fmGUI_ManageDb_GoToTab_Fields
+on fmGUI_ManageDb_GoToTab_Tables(prefs)
+	tell application "htcLib" to fmGUI_ManageDb_GoToTab_Tables(prefs)
+end fmGUI_ManageDb_GoToTab_Tables

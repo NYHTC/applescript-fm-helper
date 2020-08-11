@@ -5,6 +5,7 @@
 
 (*
 HISTORY:
+	2020-05-21 ( dshockley ): Properly handle when there are NO existing scripts (so, return false). 
 	2020-03-04 ( dshockley, hdu ): Updated as standalone function for fm-scripts git repository. 1641: Standardized version. Added fmGUI_ALL_Utilities_Close. 
 
 	1.3.1 - 2017-06-05 ( eshagdar ): the name of the script is the name of UI elemnt, not the value of a text field.
@@ -35,7 +36,7 @@ end run
 --------------------
 
 on fmGUI_ManageScripts_FmScript_Select(prefs)
-	-- version 2020-03-04-1641
+	-- version 2020-05-21-1104
 	
 	-- Attempt to select a FileMaker Script based on name or, alternatively, other partial matches.
 	
@@ -66,76 +67,74 @@ on fmGUI_ManageScripts_FmScript_Select(prefs)
 	try
 		if fmScriptName of prefs is equal to "-" then error "This is a SEPARATOR SCRIPT - don't try to edit it!" number -1024
 		
+		set scriptNowSelected to false (* INITIALIZE *)
+		
 		fmGUI_AppFrontMost()
 		fmGUI_ALL_Utilities_Close()
 		fmGUI_ManageScripts_Open({})
-		fmGUI_ManageScripts_ScriptListFocus({})
+		set hasExistingScripts to fmGUI_ManageScripts_ScriptListFocus({}) -- returns true is focus worked, or false if "No Scripts"
 		
 		
-		fmGUI_ManageScripts_SearchBoxFind({searchCriteria:fmScriptName of prefs})
-		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
-				(*
-				set searchField to text field 1 of splitter group 1 of window 1
-				set focused of searchField to true
-				delay 0.25
-				keystroke "a" using command down
-				key code 51 -- clear the search box
-				delay 0.25
-				set value of searchField to fmScriptName of prefs
-				keystroke tab
-				*)
-				
-				-- SELECT the easy way if the object is directly available:
-				if (exists (first row of (outline 1 of scroll area 1 of splitter group 1 of window 1) whose name of UI element 1 is fmScriptName of prefs)) then
-					select (first row of (outline 1 of scroll area 1 of splitter group 1 of window 1) whose name of UI element 1 is fmScriptName of prefs)
-					return true
+		if hasExistingScripts then
+			-- there ARE scripts, and we've put the focus into the script list, so look for specified script.
+			
+			fmGUI_ManageScripts_SearchBoxFind({searchCriteria:fmScriptName of prefs})
+			tell application "System Events"
+				tell application process "FileMaker Pro Advanced"
 					
 					
-				else -- if NOT found, then seek by alternate patterns, if specified: 
-					
-					-- NOT FOUND, so try each altPattern: 
-					set scriptNowSelected to false
-					
-					my fmGUI_ManageScripts_SearchBoxClear({})
-					repeat with oneAltPattern in altPatterns of prefs
-						set testList to contents of pattern of oneAltPattern
-						if testList is equal to {{}} then
-							--list of empty list, so we can't do anything with it							
-						else
-							-- there are some valid items, so loop over them
-							
-							try
-								-- BEGIN: try oneAltPattern: 
-								set testCode to {}
-								repeat with oneTestRec in testList
-									copy ("" & testType of oneTestRec & " " & quoteString(testMatch of oneTestRec)) to end of testCode
-								end repeat
+					-- SELECT the easy way if the object is directly available:
+					if (exists (first row of (outline 1 of scroll area 1 of splitter group 1 of window 1) whose name of UI element 1 is fmScriptName of prefs)) then
+						select (first row of (outline 1 of scroll area 1 of splitter group 1 of window 1) whose name of UI element 1 is fmScriptName of prefs)
+						set scriptNowSelected to true
+						
+						
+					else -- if NOT found, then seek by alternate patterns, if specified: 
+						
+						-- NOT FOUND, so try each altPattern: 
+						set scriptNowSelected to false
+						
+						my fmGUI_ManageScripts_SearchBoxClear({})
+						repeat with oneAltPattern in altPatterns of prefs
+							set testList to contents of pattern of oneAltPattern
+							if testList is equal to {{}} then
+								--list of empty list, so we can't do anything with it							
+							else
+								-- there are some valid items, so loop over them
 								
-								set testCode to unParseChars(testCode, betweenTestsCode & scriptNameObjectCode & " ")
-								set testCode to selectCode & rowRefCode & whoseCode & scriptNameObjectCode & " " & testCode & afterAllTestsCode
-								set testCode to testCodeHeader & testCode & testCodeFooter
-								tell me to run script testCode
-								
-								set scriptNowSelected to true -- no error, so we selected it.
-								exit repeat -- no need to keep checking altPatterns
-								
-								-- ERROR: try oneAltPattern. 
-							on error errMsg number errNum
-								if errNum is not -1719 then
-									-- some error OTHER than not found in list:
-									error errMsg number errNum
-								else
-									-- just try the next altPattern, so continue repeat loop.
-								end if
-								-- END OF: try oneAltPattern. 
-							end try
-							-- END OF: List had things. 
-						end if
-					end repeat
-				end if
+								try
+									-- BEGIN: try oneAltPattern: 
+									set testCode to {}
+									repeat with oneTestRec in testList
+										copy ("" & testType of oneTestRec & " " & quoteString(testMatch of oneTestRec)) to end of testCode
+									end repeat
+									
+									set testCode to unParseChars(testCode, betweenTestsCode & scriptNameObjectCode & " ")
+									set testCode to selectCode & rowRefCode & whoseCode & scriptNameObjectCode & " " & testCode & afterAllTestsCode
+									set testCode to testCodeHeader & testCode & testCodeFooter
+									tell me to run script testCode
+									
+									set scriptNowSelected to true -- no error, so we selected it.
+									exit repeat -- no need to keep checking altPatterns
+									
+									-- ERROR: try oneAltPattern. 
+								on error errMsg number errNum
+									if errNum is not -1719 then
+										-- some error OTHER than not found in list:
+										error errMsg number errNum
+									else
+										-- just try the next altPattern, so continue repeat loop.
+									end if
+									-- END OF: try oneAltPattern. 
+								end try
+								-- END OF: List had things. 
+							end if
+						end repeat
+					end if
+				end tell
 			end tell
-		end tell
+			-- END OF: hasExistingScripts.
+		end if
 		
 		return scriptNowSelected
 	on error errMsg number errNum

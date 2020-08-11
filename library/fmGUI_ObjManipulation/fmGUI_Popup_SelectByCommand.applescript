@@ -10,6 +10,7 @@ REQUIRES:
 	
 	 
 HISTORY:
+	2020-05-21 ( dshockley ): Try a 2nd time to click-and-wait for the menu to appear. And, don't try a 2nd "exists" command, since that seems to fail. Instead, save the result of that in a variable "isMenuOpen". 
 	1.4.1 - 2018-04-30 ( eshagdar ): tell FM to click on the value since it might not be visible ( and unclickable by CLI ).
 	1.4 - 2017-09-22 ( eshagdar ): set calc using handler.
 	1.3 - 2017-09-06 ( eshagdar ): added calcValue param that sets a calc in the 'Specify Calculation' that comes up.
@@ -38,7 +39,7 @@ end run
 --------------------
 
 on fmGUI_Popup_SelectByCommand(prefs)
-	-- version 1.4.1
+	-- version 2020-05-21-1321
 	
 	set defaultPrefs to {objRef:null, objValue:null, calcValue:null, selectCommand:"is", clickIfAlreadySet:false}
 	set prefs to prefs & defaultPrefs
@@ -47,7 +48,6 @@ on fmGUI_Popup_SelectByCommand(prefs)
 	set selectCommand to selectCommand of prefs
 	set objValue to objValue of prefs
 	set clickIfAlreadySet to clickIfAlreadySet of prefs -- re-select even if popup is the requested value.
-	set calcBoxWindowName to "Specify Calculation"
 	
 	
 	try
@@ -100,16 +100,23 @@ on fmGUI_Popup_SelectByCommand(prefs)
 		
 		if mustPick then
 			if objValue is not null then
+				
+				set isMenuOpen to false (* INITIALIZE *)
+				
 				-- click pop up button so the menu becomes available
+				delay 0.3 -- short delay to make sure click can happen:
 				clickObjectByCoords(objRef)
 				
 				
-				--wait until menu is available
+				-- wait to see if menu becomes available
 				repeat 100 times
 					try
 						tell application "System Events"
 							tell application process "FileMaker Pro Advanced"
-								if exists (menu 1 of objRef) then exit repeat
+								if exists (menu 1 of objRef) then
+									set isMenuOpen to true
+									exit repeat
+								end if
 							end tell
 						end tell
 					on error
@@ -117,6 +124,33 @@ on fmGUI_Popup_SelectByCommand(prefs)
 					end try
 				end repeat
 				
+				
+				if not isMenuOpen then
+					-- SECOND attempt to click-then-wait for menu to be available, but give up sooner:
+					
+					-- click pop up button so the menu becomes available
+					clickObjectByCoords(objRef)
+					
+					--wait until menu is available
+					repeat 20 times
+						try
+							tell application "System Events"
+								tell application process "FileMaker Pro Advanced"
+									if exists (menu 1 of objRef) then
+										set isMenuOpen to true
+										exit repeat
+									end if
+								end tell
+							end tell
+						on error
+							delay 0.5
+						end try
+					end repeat
+				end if
+				
+				if not isMenuOpen then
+					error "Was not able to get the popup _menu_ to appear (by clicking base object) so an item could be chosen." number 1024
+				end if
 				
 				-- now pick an item from the pop up
 				tell application "System Events"
