@@ -7,8 +7,7 @@ Although some of the FileMaker-specific handlers are written to work with both P
 
 
 ### Install
-Once the repository is saved, be sure to execute the make.sh, which will install dependencies (cliclick) and compile an 'htcLib' application. You will need to enable assistive access in order to use it since make of the handlers maniupulate the GUI.
-
+Once the repository is saved, be sure to execute the make.sh, which will install dependencies (cliclick) and compile an 'htcLib' application. You will need to enable assistive access in order to use it since make of the handlers maniupulates the GUI. Note also that executing the recompile.sh file will do a git pull and run make.sh in one shot. 
 
 ### Usage
 Just tell application 'htcLib' to run some handler. Here is an example:
