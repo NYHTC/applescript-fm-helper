@@ -1,9 +1,9 @@
 # applescript-fm-helper Overview
-applescript-fm-helper is applescript script designed for assisting with GUI scripting, with a focus on FileMaker. It is written again 10.12.5 and is being updated for FileMaker 15.0.3 ~~OSX 10.10.5 and works with FileMaker 12~~.
+applescript-fm-helper is applescript script designed for assisting with GUI scripting, with a focus on FileMaker Pro. These scripts are currently being used primarily with macOS Mojave 10.14.6 and is for FileMaker 17 ~~OSX 10.10.5 and works with FileMaker 12~~.
 
-**NOTE:** It should work on newer versions of OS X as well newer versions of FileMaker, **but it is not officially supported.**
+**NOTE:** It should work on newer versions of OS X as well newer versions of FileMaker, **but there may be minor compatibility issues, since UI scripting is very interface-dependent.**
 
-Although some of the FileMaker-specific handlers are written to work with both Pro and Advanced, the latter is the favored.
+Although some of the FileMaker-specific handlers are written to work with both Pro and Advanced, the latter is favored.
 
 
 ### Install
