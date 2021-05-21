@@ -30,14 +30,19 @@ on run
 			if isEditWindow then
 				set rowSelected to first row of table 1 of scroll area 1 of splitter group 1 of scriptWindow whose selected is true
 			else
-				set rowSelected to first row of table 1 of scroll area 1 of tab group 1 of scriptWindow whose selected is true
+				set rowSelected to first row of table 1 of scroll area 2 of splitter group 1 of scriptWindow whose selected is true
 			end if
 			
 			-- SCRIPT STEP NAME: 
 			set stepName to value of static text 1 of UI element 1 of rowSelected
 			
 			set plusButton to button "+" of UI element 1 of rowSelected
-			my clickByPositionSize(position of plusButton, size of plusButton)
+			if exists pop over 1 of plusButton then
+				-- no need to click - the popover is already open
+			else
+				-- click to open the popover:
+				my clickByPositionSize(position of plusButton, size of plusButton)
+			end if
 			
 			if stepName is "Set Variable" then
 				set specifyButton to button "Specify…" of window 1
