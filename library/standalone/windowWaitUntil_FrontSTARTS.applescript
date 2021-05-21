@@ -1,5 +1,5 @@
 -- windowWaitUntil_FrontSTARTS({windowName:"", windowNameTest:"", whichWindow:"", waitCycleDelaySeconds:"", waitCycleMax:""})
--- Daniel A. Shockely, NYHTC
+-- Daniel A. Shockley, NYHTC
 -- keep checking until the frontmost window matches specified criteria.
 
 
