@@ -11,3 +11,4 @@
  - The clickAtCoords needs the additional property clickCommandPosix, set to ../vendor/cliclick/cliclick. 
  - Improve compiler: If the compiled handler file already exists and has the same version, can skip recompiling.
  - Improve compiler: If no function was added/removed/renamed and no params changed, can SKIP recompiling htcLib.app. 
+ 
