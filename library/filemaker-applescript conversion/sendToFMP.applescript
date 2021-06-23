@@ -25,7 +25,7 @@ end run
 --------------------
 
 on sendToFMP(someData)
-	-- version 1.6
+	-- version 1.7
 	
 	try
 		-- someData MIGHT be a record that looks like this: {someData:"BLAH BLAH BLAH"} 

@@ -27,7 +27,7 @@ end run
 --------------------
 
 on getFromFMP(prefs)
-	-- version 1.8
+	-- version 1.9
 		
 	set asTransfer to "AppleScript_Transfer-DO_NOT_RENAME"
 	set fmpName to "FileMaker Pro Advanced"
