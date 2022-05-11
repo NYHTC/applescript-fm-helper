@@ -1,4 +1,5 @@
-#! /bin/sh# make
+#! /bin/sh
+# make
 #
 # Make file for applescript-fm-helper.
 #
