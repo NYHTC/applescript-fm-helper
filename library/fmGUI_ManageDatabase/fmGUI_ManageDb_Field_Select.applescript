@@ -1,5 +1,5 @@
 -- fmGUI_ManageDb_Field_Select(fieldName:"", tableName:"", altPatterns:"")
--- Dan Shockley, NYHTC
+-- Dan Shockley
 -- Attempt to select a field based on name or, alternatively, other partial matches.
 
 
@@ -62,7 +62,7 @@ on fmGUI_ManageDb_Field_Select(prefs)
 		fmGUI_AppFrontMost()
 		try
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					select (first row of (table 1 of scroll area 1 of tab group 1 of window 1) whose value of static text 1 is fieldName of prefs)
 				end tell
 			end tell
@@ -116,17 +116,17 @@ end fmGUI_ManageDb_Field_Select
 --------------------
 
 on coerceToString(incomingObject)
-	tell application "htcLib" to coerceToString(incomingObject)
+	tell application "fmGuiLib" to coerceToString(incomingObject)
 end coerceToString
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageDb_FieldListFocus(prefs)
-	tell application "htcLib" to fmGUI_ManageDb_FieldListFocus(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageDb_FieldListFocus(prefs)
 end fmGUI_ManageDb_FieldListFocus
 
 on fmGUI_ManageDb_FieldsPickTable(baseTableName)
-	tell application "htcLib" to fmGUI_ManageDb_FieldsPickTable(baseTableName)
+	tell application "fmGuiLib" to fmGUI_ManageDb_FieldsPickTable(baseTableName)
 end fmGUI_ManageDb_FieldsPickTable

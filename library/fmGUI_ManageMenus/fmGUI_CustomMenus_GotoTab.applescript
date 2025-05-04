@@ -1,5 +1,5 @@
 -- fmGUI_CustomMenus_Open({tabName:""})
--- Dan Shockley, NYHTC
+-- Dan Shockley
 -- Open Manage Custom Menus window and go to the specified tab
 
 
@@ -37,7 +37,7 @@ on fmGUI_CustomMenus_GotoTab(prefs)
 		
 		
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				click (first radio button of tab group 1 of window 1 whose name is tabName of prefs)
 			end tell
 		end tell
@@ -55,9 +55,9 @@ end fmGUI_CustomMenus_GotoTab
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_CustomMenus_Open(prefs)
-	tell application "htcLib" to fmGUI_CustomMenus_Open(prefs)
+	tell application "fmGuiLib" to fmGUI_CustomMenus_Open(prefs)
 end fmGUI_CustomMenus_Open

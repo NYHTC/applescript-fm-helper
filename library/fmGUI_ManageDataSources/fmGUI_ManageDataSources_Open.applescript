@@ -1,5 +1,5 @@
 -- fmGUI_ManageDataSources_Open(prefs)
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 -- Open Manage Data Sources
 
 
@@ -32,7 +32,7 @@ on fmGUI_ManageDataSources_Open(prefs)
 		fmGUI_AppFrontMost()
 		if fmGUI_NameOfFrontmostWindow() does not start with "Manage External Data Sources" then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					click (first menu item of menu 1 of menu item "Manage" of menu 1 of menu bar item "File" of menu bar 1 whose name starts with "External Data Source")
 				end tell
 			end tell
@@ -49,9 +49,9 @@ end fmGUI_ManageDataSources_Open
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+	tell application "fmGuiLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow

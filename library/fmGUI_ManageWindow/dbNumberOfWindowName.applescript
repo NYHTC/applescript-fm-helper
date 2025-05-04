@@ -1,5 +1,5 @@
 -- dbNumberOfWindowName(someWindowName)
--- Daniel A. Shockley
+-- Dan Shockley
 -- return the number of the specified window
 
 
@@ -11,7 +11,7 @@ HISTORY:
 
 
 on run
-	tell application "FileMaker Pro Advanced" to set frontmostWindowName to name of window 1
+	tell application "FileMaker Pro" to set frontmostWindowName to name of window 1
 	dbNumberOfWindowName(frontmostWindowName)
 end run
 
@@ -22,7 +22,7 @@ end run
 on dbNumberOfWindowName(someWindowName)
 	-- version 1.1
 	
-	tell application "FileMaker Pro Advanced"
+	tell application "FileMaker Pro"
 		set dbCount to count of every database
 		repeat with dbNum from 1 to dbCount
 			try

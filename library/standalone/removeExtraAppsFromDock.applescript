@@ -1,5 +1,5 @@
 -- removeExtraAppsFromDock{listOfAllowedAppNames:null}
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- Remove all apps from the dock that are not specified. Has a default set of apps, but is ignored if a list is passed in
 
 (*
@@ -24,7 +24,7 @@ end run
 on removeExtraAppsFromDock(prefs)
 	-- version 2020-03-04-1536
 	
-	set defaultPrefs to {listOfAllowedAppNames:{"Finder", "FileMaker Pro Advanced", "FileMaker Pro Advanced", "Script Editor", "Terminal", "System Preferences", "Downloads", "Documents", "Trash"}}
+	set defaultPrefs to {listOfAllowedAppNames:{"Finder", "FileMaker Pro Advanced", "FileMaker Pro", "Script Editor", "Terminal", "System Preferences", "Downloads", "Documents", "Trash"}}
 	
 	set prefst to prefs & defaultPrefs
 	set listOfAllowedAppNames to listOfAllowedAppNames of prefs

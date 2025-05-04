@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_PrivSet_Select({privSetName:"Developer", fullAccessAccountName:"admin", fullAccessPassword:""})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- select the specified privilege set
 
 
@@ -34,7 +34,7 @@ on fmGUI_ManageSecurity_PrivSet_Select(prefs)
 		
 		try
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					select (first row of (table 1 of scroll area 1 of tab group 1 of window 1) whose name of static text 1 is privSetName of prefs)
 				end tell
 			end tell
@@ -55,9 +55,9 @@ end fmGUI_ManageSecurity_PrivSet_Select
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
 end fmGUI_ManageSecurity_GoToTab_PrivSets

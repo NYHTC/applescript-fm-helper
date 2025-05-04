@@ -1,26 +1,28 @@
 -- fmGUI_ManageScripts_Select_SpecifyScriptWindow({dbName:null, scriptName:null, scriptParams:null})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- specify script ( and options ) from the specify script window
 
 
 (*
+
+HISTORY:
+	2024-07-23 ( danshockley ): Updated to tell app by process ID (works-with-FM19+). 
+	1.0.1 - 2018-01-09 ( eshagdar ): try filtering a second time if it fails at first.
+	1.0 - 2017-12-20 ( eshagdar ): first created
+
 REQUIRES:
 	fmGUI_AppFrontMost
 	fmGUI_NameOfFrontmostWindow
 	fmGUI_ObjectClick_OkButton
 	fmGUI_PopupSet
 	fmGUI_TextFieldSet
+	getFmAppProcessID
 	getTextBetween
-
-
-HISTORY:
-	1.0.1 - 2018-01-09 ( eshagdar ): try filtering a second time if it fails at first.
-	1.0 - 2017-12-20 ( eshagdar ): first created
 *)
 
 
 on run
-	fmGUI_ManageScripts_Select_SpecifyScriptWindow({dbName:"<CurrentFile>", scriptName:"HtcCloseAllDatabases", scriptParams:"CallStack ( \"\" )"})
+	fmGUI_ManageScripts_Select_SpecifyScriptWindow({dbName:"<CurrentFile>", scriptName:"OPEN_SCRIPT", scriptParams:"CallStack ( \"\" )"})
 end run
 
 --------------------
@@ -28,7 +30,7 @@ end run
 --------------------
 
 on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
-	-- version 1.0.1
+	-- version 2024-07-23
 	
 	try
 		set defaultPrefs to {dbName:null, scriptName:null, scriptParams:null}
@@ -37,6 +39,12 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		set scriptName to scriptName of prefs
 		set scriptParams to scriptParams of prefs
 		
+		try
+			set fmProcID to fmProcID of prefs
+		on error
+			set fmProcID to my getFmAppProcessID()
+		end try
+		
 		
 		fmGUI_AppFrontMost()
 		if fmGUI_NameOfFrontmostWindow() is not "Specify Script" then error "wrong context" number -1024
@@ -44,7 +52,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		
 		-- get currently selected db
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set selectedDbObj to pop up button 2 of window "Specify Script"
 				set scriptTable to outline 1 of scroll area 1 of window "Specify Script"
 				set selectedDbName to value of selectedDbObj
@@ -69,7 +77,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		else
 			-- need to change db. assume scripts are loaded once the number of scripts changes
 			tell application "System Events"
-				tell process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set scriptNumOld to count of rows of scriptTable
 				end tell
 			end tell
@@ -79,7 +87,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 			-- wait for scripts to load
 			repeat 100 times
 				tell application "System Events"
-					tell process "FileMaker Pro Advanced"
+					tell application process "FileMaker Pro"
 						set scriptNumNew to count of rows of scriptTable
 					end tell
 				end tell
@@ -93,7 +101,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		
 		-- filter scripts
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set scriptNumAll to count of rows of scriptTable
 				set filterField to text field 1 of window 1
 			end tell
@@ -104,7 +112,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		
 		-- if the same number of scripts as before, try filtering again
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set scriptNumFiltered to count of rows of outline 1 of scroll area 1 of window "Specify Script"
 			end tell
 		end tell
@@ -119,7 +127,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		-- select script
 		try
 			tell application "System Events"
-				tell process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					select (first row of outline 1 of scroll area 1 of window "Specify Script" whose value of text field 1 is equal to scriptName)
 				end tell
 			end tell
@@ -135,7 +143,7 @@ on fmGUI_ManageScripts_Select_SpecifyScriptWindow(prefs)
 		
 		-- specify params
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set paramsObj to text field "Optional script parameter:" of window "Specify Script"
 			end tell
 		end tell
@@ -161,30 +169,34 @@ end fmGUI_ManageScripts_Select_SpecifyScriptWindow
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+	tell application "fmGuiLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow
 
 on fmGUI_ObjectClick_OkButton(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_OkButton(prefs)
 end fmGUI_ObjectClick_OkButton
 
 on fmGUI_PopupSet(prefs)
 	set objRef to my coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_PopupSet({objRef:objRef} & prefs)
+	tell application "fmGuiLib" to fmGUI_PopupSet({objRef:objRef} & prefs)
 end fmGUI_PopupSet
 
 on fmGUI_TextFieldSet(prefs)
 	set objRef to my coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_TextFieldSet({objRef:objRef} & prefs)
+	tell application "fmGuiLib" to fmGUI_TextFieldSet({objRef:objRef} & prefs)
 end fmGUI_TextFieldSet
 
 on getTextBetween(prefs)
-	tell application "htcLib" to getTextBetween(prefs)
+	tell application "fmGuiLib" to getTextBetween(prefs)
 end getTextBetween
+
+on getFmAppProcessID()
+	tell application "fmGuiLib" to getFmAppProcessID()
+end getFmAppProcessID
 
 
 
@@ -193,7 +205,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceTEXT:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceTEXT:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

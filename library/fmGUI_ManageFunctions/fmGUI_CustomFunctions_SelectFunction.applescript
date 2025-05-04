@@ -1,17 +1,19 @@
 -- fmGUI_CustomFunctions_ParamsForFunction({functionName:null})
--- Dan Shockley, NYHTC
+-- Dan Shockley
 -- select a function by name
 
 
 (*
 HISTORY:
+	2024-07-15 ( danshockley ): Updated to tell app by process ID (works-with-FM19+). 
 	1.1.1 - 2018-05-01 ( eshagdar ): ensure function is actually selected
 	1.1 - 2017-06-28 ( eshagdar ): convert prefs to a record. put try block around handler. changed existence test to a try-block.
 	1.0 - created
 
 
 REQUIRES:
-	fmGUI_ManageDb_GoToTab
+	fmGUI_CustomFunctions_Open
+	getFmAppProcessID
 *)
 
 
@@ -24,15 +26,19 @@ end run
 --------------------
 
 on fmGUI_CustomFunctions_SelectFunction(prefs)
-	-- version 1.1.1
+	-- version 2024-07-15
 	
 	set defaultPrefs to {functionName:null}
 	set prefs to prefs & defaultPrefs
-	
 	try
 		fmGUI_CustomFunctions_Open({})
+		try
+			set fmProcID to fmProcID of prefs
+		on error
+			set fmProcID to my getFmAppProcessID()
+		end try
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell process id fmProcID
 				try
 					select (first row of (table 1 of scroll area 1 of window 1) whose name of static text 1 is functionName of prefs)
 					delay 0.05
@@ -57,5 +63,9 @@ end fmGUI_CustomFunctions_SelectFunction
 --------------------
 
 on fmGUI_CustomFunctions_Open(prefs)
-	tell application "htcLib" to fmGUI_CustomFunctions_Open(prefs)
+	tell application "fmGuiLib" to fmGUI_CustomFunctions_Open(prefs)
 end fmGUI_CustomFunctions_Open
+
+on getFmAppProcessID()
+	tell application "fmGuiLib" to getFmAppProcessID()
+end getFmAppProcessID

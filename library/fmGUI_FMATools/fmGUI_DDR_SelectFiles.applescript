@@ -1,5 +1,5 @@
 -- fmGUI_DDR_SelectFiles({dbNameList:{}})
--- Erik Shagar, NYHTC
+-- Erik Shagar
 -- Ensure files are selected when generating a DDR. All databases are selected if a list is not specified.
 
 (*
@@ -22,7 +22,7 @@ end run
 --------------------
 
 on fmGUI_DDR_SelectFiles(prefs)
-	-- version 1.1, Erik Shagar, NYHTC
+	-- version 1.1, Erik Shagar
 	
 	try
 		set defaultPrefs to {dbNameList:{}}
@@ -44,7 +44,7 @@ on fmGUI_DDR_SelectFiles(prefs)
 		-- get list of available files
 		fmGUI_AppFrontMost()
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set filesTable to table "Available files:" of scroll area 1 of window 1
 				set listAvailableFiles to value of static text 1 of every row of filesTable
 			end tell
@@ -56,7 +56,7 @@ on fmGUI_DDR_SelectFiles(prefs)
 		
 		repeat with iter from 1 to count of listAvailableFiles
 			tell application "System Events"
-				tell process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set oneFileIncludeCheckboxRef to checkbox 1 of row iter of filesTable
 					set oneFileIncludeCheckboxValue to value of oneFileIncludeCheckboxRef
 				end tell
@@ -66,7 +66,7 @@ on fmGUI_DDR_SelectFiles(prefs)
 				(oneFileName is not in dbNameList and oneFileIncludeCheckboxValue is 1) then
 				-- need to UI script since the table may need to be scrolled
 				tell application "System Events"
-					tell process "FileMaker Pro Advanced"
+					tell application process "FileMaker Pro"
 						click oneFileIncludeCheckboxRef
 					end tell
 				end tell
@@ -85,5 +85,5 @@ end fmGUI_DDR_SelectFiles
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost

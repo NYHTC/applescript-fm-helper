@@ -1,5 +1,5 @@
 -- fmGUI_ManageLayouts_Select({layoutName:null})
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 -- select a layout from Manage Layouts window
 
 
@@ -39,7 +39,7 @@ on fmGUI_ManageLayouts_Select(prefs)
 		fmGUI_ManageLayouts_Open({})
 		
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set contextWindow to first window whose name begins with layoutWindowName
 				set searchTextField to text field 1 of contextWindow
 				set searchButton to button 1 of text field 1 of contextWindow
@@ -53,7 +53,7 @@ on fmGUI_ManageLayouts_Select(prefs)
 		-- after filter, search across all matches and select the first row that matches		
 		try
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set clearButton to button 2 of text field 1 of contextWindow
 					select (first row of outline 1 of scroll area 1 of contextWindow whose value of text field 1 is layoutName)
 				end tell
@@ -76,21 +76,21 @@ end fmGUI_ManageLayouts_Select
 --------------------
 
 on fmGUI_ManageLayouts_Open(prefs)
-	tell application "htcLib" to fmGUI_ManageLayouts_Open(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageLayouts_Open(prefs)
 end fmGUI_ManageLayouts_Open
 
 on fmGUI_ManageLayouts_LayoutListFocus(prefs)
-	tell application "htcLib" to fmGUI_ManageLayouts_LayoutListFocus(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageLayouts_LayoutListFocus(prefs)
 end fmGUI_ManageLayouts_LayoutListFocus
 
 on fmGUI_ObjectClick_Button(prefs)
 	set buttonRef to my coerceToString(buttonRef of prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_Button({buttonRef:buttonRef} & prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_Button({buttonRef:buttonRef} & prefs)
 end fmGUI_ObjectClick_Button
 
 on fmGUI_TextFieldSet(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_TextFieldSet({objRef:objRefStr} & prefs)
+	tell application "fmGuiLib" to fmGUI_TextFieldSet({objRef:objRefStr} & prefs)
 end fmGUI_TextFieldSet
 
 
@@ -100,7 +100,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

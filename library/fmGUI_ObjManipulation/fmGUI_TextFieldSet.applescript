@@ -1,5 +1,5 @@
 -- fmGUI_TextFieldSet({objRef:null, objValue:null})
--- Dan Shockley, NYHTC
+-- Dan Shockley
 -- Works on text fields and/or text areas, as referenced by the parameter.
 
 
@@ -12,7 +12,7 @@ HISTORY:
 
 on run
 	tell application "System Events"
-		tell application process "FileMaker Pro Advanced"
+		tell application process "FileMaker Pro"
 			set frontmost to true
 			--set FieldCommentInManageDatabase to text field "Comment:" of tab group 1 of window 1
 			set privSetDescription to text field "Description" of window 1
@@ -59,7 +59,7 @@ on ensureObjectRef(someObjectRef)
 	
 	tell application "Finder" to set ensureObjPath to (container of (container of (path to me)) as text) & "text parsing:ensureObjectRef.applescript"
 	set codeEnsureObj to read file ensureObjPath as text
-	tell application "htcLib" to set codeEnsureObj to "script codeEnsureObj " & return & getTextBetween({sourceText:codeEnsureObj, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeEnsureObj"
+	tell application "fmGuiLib" to set codeEnsureObj to "script codeEnsureObj " & return & getTextBetween({sourceText:codeEnsureObj, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeEnsureObj"
 	set codeEnsureObj to run script codeEnsureObj
 	tell codeEnsureObj to ensureObjectRef(someObjectRef)
 end ensureObjectRef

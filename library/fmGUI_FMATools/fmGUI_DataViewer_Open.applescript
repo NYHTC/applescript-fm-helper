@@ -1,5 +1,5 @@
 -- fmGUI_DataViewer_Open({fullAccessAccountName:"", fullAccessPassword:""})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- Open FileMaker's Inspector window
 
 
@@ -36,7 +36,7 @@ on fmGUI_DataViewer_Open(prefs)
 		
 		-- select data viewer window
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				try
 					set dvWindow to first window whose name is equal to dvName
 					set dataViewerMenuItem to null
@@ -51,7 +51,7 @@ on fmGUI_DataViewer_Open(prefs)
 		if dataViewerMenuItem is not null then
 			fmGUI_ClickMenuItem({menuItemRef:dataViewerMenuItem})
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set dvWindow to first window whose name is equal to dvName
 				end tell
 			end tell
@@ -61,13 +61,13 @@ on fmGUI_DataViewer_Open(prefs)
 		-- authenticate viewer if needed
 		try
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					get scroll area 1 of tab group 1 of window 1
 				end tell
 			end tell
 		on error
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set authButton to first button of tab group 1 of dvWindow whose description contains "Auth"
 				end tell
 			end tell
@@ -87,20 +87,20 @@ end fmGUI_DataViewer_Open
 --------------------
 
 on clickObjectByCoords(prefs)
-	tell application "htcLib" to clickObjectByCoords(my coerceToString(prefs))
+	tell application "fmGuiLib" to clickObjectByCoords(my coerceToString(prefs))
 end clickObjectByCoords
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_AuthenticateDialog(prefs)
-	tell application "htcLib" to fmGUI_AuthenticateDialog(prefs)
+	tell application "fmGuiLib" to fmGUI_AuthenticateDialog(prefs)
 end fmGUI_AuthenticateDialog
 
 on fmGUI_ClickMenuItem(prefs)
 	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
-	tell application "htcLib" to fmGUI_ClickMenuItem(prefs)
+	tell application "fmGuiLib" to fmGUI_ClickMenuItem(prefs)
 end fmGUI_ClickMenuItem
 
 
@@ -110,7 +110,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

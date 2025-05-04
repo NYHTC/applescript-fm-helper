@@ -1,5 +1,5 @@
 -- namesOfTOsOfWindowName(someWindowName)
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 -- return the name of every table occurence of the specified window
 
 
@@ -12,7 +12,7 @@ HISTORY:
 
 
 on run
-	tell application "FileMaker Pro Advanced" to set frontmostWindowName to name of window 1
+	tell application "FileMaker Pro" to set frontmostWindowName to name of window 1
 	namesOfTOsOfWindowName(frontmostWindowName)
 end run
 
@@ -23,7 +23,7 @@ end run
 on namesOfTOsOfWindowName(someWindowName)
 	-- version 1.1
 	
-	tell application "FileMaker Pro Advanced"
+	tell application "FileMaker Pro"
 		set dbCount to count of every database
 		repeat with dbNum from 1 to dbCount
 			-- might not HAVE any windows:

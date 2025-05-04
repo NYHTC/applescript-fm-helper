@@ -1,11 +1,11 @@
 -- fmGUI_ManageSecurity_AccountEdit({accountName:null, accountOldName:null, authenticatedVia:null, accountPassword:null, mustChangeOnNextLogin:0, accountStatus:1, privilegeSet:null, accountDescription:null, accountRowNumber:null})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- edit an account
 
 
 (*
 HISTORY:
-	1.2.1 - 2017-10-31 ( eshagdar ): moved from tuneup tool to htcLib
+	1.2.1 - 2017-10-31 ( eshagdar ): moved from tuneup tool to fmGuiLib
 	1.2 - 2017-06-14 ( eshagdar ): narrowed scope	
 	1.1 - 2015-11-17 ( eshagdar ): password must be typed out instead of having the value set via UI scripting
 	1.0 - created
@@ -51,7 +51,7 @@ on fmGUI_ManageSecurity_AccountEdit(prefs)
 		if fmGUI_NameOfFrontmostWindow() is not "Edit Account" then
 			fmGUI_ManageSecurity_GoToTab_Accounts(fullAccessCredentials)
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set accountTable to table 1 of scroll area 1 of tab group 1 of window 1
 					
 					--select account, first by accountName, then by accountOldName
@@ -83,7 +83,7 @@ on fmGUI_ManageSecurity_AccountEdit(prefs)
 		--handle objects on the window from the top down:
 		if authenticatedVia of prefs is not null then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set accountAuthButton to first pop up button of window 1 whose name contains "authenticated via"
 				end tell
 			end tell
@@ -93,7 +93,7 @@ on fmGUI_ManageSecurity_AccountEdit(prefs)
 		
 		if accountName is not null then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set accountNameRef to text field "Account Name:" of window 1
 				end tell
 			end tell
@@ -103,7 +103,7 @@ on fmGUI_ManageSecurity_AccountEdit(prefs)
 		
 		if accountPassword of prefs is not null then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set changeButton to first button of window 1 whose name contains "Change"
 				end tell
 			end tell
@@ -111,7 +111,7 @@ on fmGUI_ManageSecurity_AccountEdit(prefs)
 			
 			windowWaitUntil_FrontIS({windowName:passwordWindowName})
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set passRef to text field 1 of window 1
 					set confRef to text field 2 of window 1
 					set setButton to button "Set Password" of window 1
@@ -126,7 +126,7 @@ on fmGUI_ManageSecurity_AccountEdit(prefs)
 		
 		if mustChangeOnNextLogin of prefs is not null then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set changePasswordCheckbox to checkbox "Require password change on next sign-in" of window 1
 				end tell
 			end tell
@@ -136,7 +136,7 @@ on fmGUI_ManageSecurity_AccountEdit(prefs)
 		
 		if accountStatus of prefs is not null then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					if accountStatus of prefs is 0 then
 						set statusCheckbox to first radio button of window 1 whose name begins with "Inactive"
 					else
@@ -150,7 +150,7 @@ on fmGUI_ManageSecurity_AccountEdit(prefs)
 		
 		if privilegeSet of prefs is not null then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set privSetButton to pop up button "Privilege Set:" of window 1
 				end tell
 			end tell
@@ -160,7 +160,7 @@ on fmGUI_ManageSecurity_AccountEdit(prefs)
 		
 		if accountDescription of prefs is not null then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set descObj to text field "Description:" of window 1
 				end tell
 			end tell
@@ -183,47 +183,47 @@ end fmGUI_ManageSecurity_AccountEdit
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_CheckboxSet(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_CheckboxSet({objRef:objRefStr} & prefs)
+	tell application "fmGuiLib" to fmGUI_CheckboxSet({objRef:objRefStr} & prefs)
 end fmGUI_CheckboxSet
 
 on fmGUI_ManageSecurity_GoToTab_Accounts(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_GoToTab_Accounts(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageSecurity_GoToTab_Accounts(prefs)
 end fmGUI_ManageSecurity_GoToTab_Accounts
 
 on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+	tell application "fmGuiLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow
 
 on fmGUI_ObjectClick_Button(prefs)
 	set buttonRef to my coerceToString(buttonRef of prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_Button({buttonRef:buttonRef} & prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_Button({buttonRef:buttonRef} & prefs)
 end fmGUI_ObjectClick_Button
 
 on fmGUI_ObjectClick_OkButton(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_OkButton(prefs)
 end fmGUI_ObjectClick_OkButton
 
 on fmGUI_PopupSet(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
+	tell application "fmGuiLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
 end fmGUI_PopupSet
 
 on fmGUI_TextFieldSet(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_TextFieldSet({objRef:objRefStr} & prefs)
+	tell application "fmGuiLib" to fmGUI_TextFieldSet({objRef:objRefStr} & prefs)
 end fmGUI_TextFieldSet
 
 on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS
 
 on windowWaitUntil_FrontNotIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontNotIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontNotIS(prefs)
 end windowWaitUntil_FrontNotIS
 
 
@@ -232,7 +232,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

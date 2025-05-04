@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_AccessRecord_GetInfo_OneTable({})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- gather the info about one table
 
 
@@ -35,7 +35,7 @@ on fmGUI_ManageSecurity_AccessRecord_GetInfo_OneTable(prefs)
 		windowWaitUntil_FrontIS({windowName:"Custom Record Privileges"})
 		
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				select (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is equal to tableName of prefs)
 				set oneTableRec to {baseTable:tableName of prefs Â
 					, viewAccess:value of pop up button "View" of window 1 Â
@@ -70,13 +70,13 @@ end fmGUI_ManageSecurity_AccessRecord_GetInfo_OneTable
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageSecurity_AccessRecord_GetCalc(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_AccessRecord_GetCalc(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageSecurity_AccessRecord_GetCalc(prefs)
 end fmGUI_ManageSecurity_AccessRecord_GetCalc
 
 on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS

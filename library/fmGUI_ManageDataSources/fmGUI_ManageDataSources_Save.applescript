@@ -1,5 +1,5 @@
 -- fmGUI_ManageDataSources_Save(notInManageWindowIsError:null)
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 -- Close ( and Save ) Manage Data Sources
 
 
@@ -41,7 +41,7 @@ on fmGUI_ManageDataSources_Save(prefs)
 	try
 		fmGUI_AppFrontMost()
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				if name of window 1 starts with manageWindowNamePrefix then
 					try
 						set manageWindowName to name of window 1
@@ -78,9 +78,9 @@ end fmGUI_ManageDataSources_Save
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on windowWaitUntil(prefs)
-	tell application "htcLib" to windowWaitUntil(prefs)
+	tell application "fmGuiLib" to windowWaitUntil(prefs)
 end windowWaitUntil

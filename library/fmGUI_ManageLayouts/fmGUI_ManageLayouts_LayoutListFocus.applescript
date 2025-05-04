@@ -1,5 +1,5 @@
 -- fmGUI_ManageLayouts_LayoutListFocus(prefs)
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 -- open Manage Layouts
 
 
@@ -34,7 +34,7 @@ on fmGUI_ManageLayouts_LayoutListFocus(prefs)
 		fmGUI_ManageLayouts_Open({})
 		
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set contextWindow to first window whose name begins with layoutWindowName
 				set focused of (outline 1 of scroll area 1 of contextWindow) to true
 			end tell
@@ -51,5 +51,5 @@ end fmGUI_ManageLayouts_LayoutListFocus
 --------------------
 
 on fmGUI_ManageLayouts_Open(prefs)
-	tell application "htcLib" to fmGUI_ManageLayouts_Open(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageLayouts_Open(prefs)
 end fmGUI_ManageLayouts_Open

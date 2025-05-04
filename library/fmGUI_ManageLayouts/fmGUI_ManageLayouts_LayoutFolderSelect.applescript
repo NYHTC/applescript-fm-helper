@@ -1,5 +1,5 @@
 -- fmGUI_ManageLayouts_LayoutFolderSelect({folderName:null, folderStatus:"open"})
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 -- Select a layout folder in Manage Layouts window.
 
 
@@ -48,7 +48,7 @@ on fmGUI_ManageLayouts_LayoutFolderSelect(prefs)
 		fmGUI_ManageLayouts_LayoutListFocus({})
 		
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set manageLayoutsWindow to window 1
 				
 				-- Expand every folder first: 
@@ -91,18 +91,18 @@ end fmGUI_ManageLayouts_LayoutFolderSelect
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ALL_Utilities_Close()
-	tell application "htcLib" to fmGUI_ALL_Utilities_Close()
+	tell application "fmGuiLib" to fmGUI_ALL_Utilities_Close()
 end fmGUI_ALL_Utilities_Close
 
 on fmGUI_ManageLayouts_LayoutListFocus(prefs)
-	tell application "htcLib" to fmGUI_ManageLayouts_LayoutListFocus(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageLayouts_LayoutListFocus(prefs)
 end fmGUI_ManageLayouts_LayoutListFocus
 
 on fmGUI_ManageLayouts_Open(prefs)
-	tell application "htcLib" to fmGUI_ManageLayouts_Open(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageLayouts_Open(prefs)
 end fmGUI_ManageLayouts_Open
 

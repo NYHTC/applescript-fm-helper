@@ -1,10 +1,11 @@
 -- fmGUI_CustomFunctions_Save({})
--- Dan Shockley, NYHTC
+-- Dan Shockley
 -- Save and close Manage Custom Functions window
 
 
 (*
 HISTORY:
+	2024-07-15 ( danshockley ): Updated to tell app by process ID (works-with-FM19+). 
 	1.2 - 2017-06-28 ( eshagdar ): wait until window is closed
 	1.1 - 
 	1.0 - created
@@ -24,14 +25,18 @@ end run
 --------------------
 
 on fmGUI_CustomFunctions_Save(prefs)
-	-- version 1.2
-	
+	-- version 2024-07-15
+	try
+		set fmProcID to fmProcID of prefs
+	on error
+		set fmProcID to my getFmAppProcessID()
+	end try	
 	try
 		set frontmostWindowName to fmGUI_NameOfFrontmostWindow()
 		if frontmostWindowName starts with "Manage Custom Functions for" then
 			try
 				tell application "System Events"
-					tell application process "FileMaker Pro Advanced"
+			tell process id fmProcID
 						click (button "OK" of window 1)
 					end tell
 				end tell
@@ -54,9 +59,13 @@ end fmGUI_CustomFunctions_Save
 --------------------
 
 on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+	tell application "fmGuiLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow
 
 on windowWaitUntil(prefs)
-	tell application "htcLib" to windowWaitUntil(prefs)
+	tell application "fmGuiLib" to windowWaitUntil(prefs)
 end windowWaitUntil
+
+on getFmAppProcessID()
+	tell application "fmGuiLib" to getFmAppProcessID()
+end getFmAppProcessID

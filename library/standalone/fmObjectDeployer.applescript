@@ -12,8 +12,8 @@ DESCRIPTION:
 
 
 HISTORY: 
-
-	2021-12-21 ( dshockley ): created. NOT YET DEVELOPED!!! 
+	2024-04-13 ( danshockley ): Still not developed, but moved into "standalone" library folder to avoid compliation attempt.
+	2021-12-21 ( danshockley ): created. NOT YET DEVELOPED!!! 
 	
 *)
 

@@ -1,5 +1,5 @@
 -- fmGUI_DDR_SelectTables({TableList:{}})
--- Erik Shagar, NYHTC
+-- Erik Shagar
 -- Ensure tables are selected when generating a DDR. All tables are selected if a list is not specified.
 
 (*
@@ -21,7 +21,7 @@ end run
 --------------------
 
 on fmGUI_DDR_SelectTables(prefs)
-	-- version 1.1, Erik Shagar, NYHTC
+	-- version 1.1, Erik Shagar
 	
 	try
 		set defaultPrefs to {TableList:{}}
@@ -32,7 +32,7 @@ on fmGUI_DDR_SelectTables(prefs)
 		-- get list of available tables
 		fmGUI_AppFrontMost()
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set tablesTable to table "Include fields from tables in selected file:" of scroll area 2 of window 1
 				set listOfTableNamesToSelect to value of static text 1 of (every row of tablesTable whose value of checkbox 1 is not equal to 1)
 			end tell
@@ -44,7 +44,7 @@ on fmGUI_DDR_SelectTables(prefs)
 		
 		repeat with iter from 1 to count of listAvailableFiles
 			tell application "System Events"
-				tell process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set oneTableIncludeCheckboxRef to checkbox 1 of row iter of filesTable
 					set oneTableIncludeCheckboxValue to value of oneTableIncludeCheckboxRef
 				end tell
@@ -54,7 +54,7 @@ on fmGUI_DDR_SelectTables(prefs)
 				(oneTableName is not in TableList and oneTableIncludeCheckboxValue is 1) then
 				-- need to UI script since the table may need to be scrolled
 				tell application "System Events"
-					tell process "FileMaker Pro Advanced"
+					tell application process "FileMaker Pro"
 						click oneTableIncludeCheckboxRef
 					end tell
 				end tell
@@ -73,5 +73,5 @@ end fmGUI_DDR_SelectTables
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost

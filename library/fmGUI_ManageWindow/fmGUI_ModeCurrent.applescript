@@ -1,5 +1,5 @@
 -- fmGUI_ModeCurrent({})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- Return the mode of the frontmost layout.
 
 
@@ -23,7 +23,7 @@ on fmGUI_ModeCurrent(prefs)
 	try
 		fmGUI_AppFrontMost()
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set currentMode to first word of ((description of first group of window 1) as string)
 				return currentMode
 			end tell
@@ -39,5 +39,5 @@ end fmGUI_ModeCurrent
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost

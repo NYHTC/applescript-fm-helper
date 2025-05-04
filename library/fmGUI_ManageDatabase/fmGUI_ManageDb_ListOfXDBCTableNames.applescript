@@ -1,5 +1,5 @@
 -- fmGUI_ManageDb_ListOfXDBCTableNames({})
--- Daniel Shockley, NYHTC
+-- Daniel Shockley
 -- Return a list of XDBC table names.
 
 
@@ -33,7 +33,7 @@ on fmGUI_ManageDb_ListOfXDBCTableNames(prefs)
 		fmGUI_ManageDb_GoToTab_Tables({})
 		
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set xDBCTableNames to value of static text 1 of (every row of (table 1 of scroll area 1 of tab group 1 of window 1) whose value of static text 2 is not "FileMaker")
 			end tell
 		end tell
@@ -51,9 +51,9 @@ end fmGUI_ManageDb_ListOfXDBCTableNames
 --------------------
 
 on fmGUI_ManageDb_GoToTab_Tables(prefs)
-	tell application "htcLib" to fmGUI_ManageDb_GoToTab_Tables(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageDb_GoToTab_Tables(prefs)
 end fmGUI_ManageDb_GoToTab_Tables
 
 on fmGUI_ManageDB_Save(prefs)
-	tell application "htcLib" to fmGUI_ManageDB_Save(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageDB_Save(prefs)
 end fmGUI_ManageDB_Save

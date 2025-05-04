@@ -1,10 +1,11 @@
 -- fmGUI_ClickMenuItem({menuItemRef:null, waitForMenuAvailable: null})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- click on a menu item in FileMaker
 
 
 (*
 HISTORY:
+	2024-07-15 ( danshockley ): Updated to tell app by process ID (works-with-FM19+). 
 	1.1 - 2017-11-06 ( eshagdar ): we should not wait for the menu item to be available since clicking it may disable it ( e.g. manage DB ). Instead, briefly delay, then exit.
 	1.0 - 2016-10-18 ( eshagdar ): first created
 
@@ -16,7 +17,8 @@ REQUIRES:
 
 on run
 	tell application "System Events"
-		tell application process "FileMaker Pro Advanced"
+		set fmProcID to id of first application process whose name contains "FileMaker"
+		tell process id fmProcID
 			set frontmost to true
 			--set someMenuItem to menu item "Copy" of menu 1 of menu bar item "Edit" of menu bar 1
 			--set someMenuItem to first menu item of menu 1 of menu item "Manage" of menu 1 of menu bar item "File" of menu bar 1 whose name starts with "Scripts"
@@ -32,7 +34,7 @@ end run
 --------------------
 
 on fmGUI_ClickMenuItem(prefs)
-	-- version 1.1, Erik Shagdar
+	-- version 2024-07-15
 	
 	set defaultPrefs to {menuItemRef:null, waitForMenuAvailable:false}
 	set prefs to prefs & defaultPrefs
@@ -40,9 +42,14 @@ on fmGUI_ClickMenuItem(prefs)
 	
 	try
 		fmGUI_AppFrontMost()
+		try
+			set fmProcID to fmProcID of prefs
+		on error
+			set fmProcID to my getFmAppProcessID()
+		end try
 		
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell process id fmProcID
 				click menuItemRef
 			end tell
 		end tell
@@ -63,14 +70,17 @@ end fmGUI_ClickMenuItem
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_Wait_MenuItemAvailable(prefs)
 	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
-	tell application "htcLib" to fmGUI_Wait_MenuItemAvailable(prefs)
+	tell application "fmGuiLib" to fmGUI_Wait_MenuItemAvailable(prefs)
 end fmGUI_Wait_MenuItemAvailable
 
+on getFmAppProcessID()
+	tell application "fmGuiLib" to getFmAppProcessID()
+end getFmAppProcessID
 
 
 on coerceToString(incomingObject)
@@ -78,7 +88,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString
@@ -90,7 +100,7 @@ on ensureObjectRef(someObjectRef)
 	
 	tell application "Finder" to set ensureObjPath to (container of (container of (path to me)) as text) & "text parsing:ensureObjectRef.applescript"
 	set codeEnsureObj to read file ensureObjPath as text
-	tell application "htcLib" to set codeEnsureObj to "script codeEnsureObj " & return & getTextBetween({sourceText:codeEnsureObj, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeEnsureObj"
+	tell application "fmGuiLib" to set codeEnsureObj to "script codeEnsureObj " & return & getTextBetween({sourceText:codeEnsureObj, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeEnsureObj"
 	set codeEnsureObj to run script codeEnsureObj
 	tell codeEnsureObj to ensureObjectRef(someObjectRef)
 end ensureObjectRef

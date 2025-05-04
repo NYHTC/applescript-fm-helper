@@ -1,5 +1,5 @@
 -- fmGUI_ManageDb_GoToTab({tabName:null})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- Go to the "Fields" tab of manage database
 
 
@@ -35,7 +35,7 @@ on fmGUI_ManageDb_GoToTab(prefs)
 		fmGUI_AppFrontMost()
 		fmGUI_ManageDb_Open({})
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set tabObject to a reference to (first radio button of tab group 1 of window 1 whose title contains tabName)
 				repeat 100 times
 					click tabObject
@@ -58,9 +58,9 @@ end fmGUI_ManageDb_GoToTab
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageDb_Open(prefs)
-	tell application "htcLib" to fmGUI_ManageDb_Open(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageDb_Open(prefs)
 end fmGUI_ManageDb_Open

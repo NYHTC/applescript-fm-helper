@@ -1,5 +1,5 @@
 -- fmGUI_CustomFunctions_EditFunction({functionName:null, functionOldName:null, doNotChangeExisting:false, availability:"ALL", parameterList:{}, calcCode:null, doNotUpdateIfVersion:null})
--- Daniel A. Shockley, Erik Shagdar, NYHTC
+-- Daniel A. Shockley, Erik Shagdar
 -- Edits the custom function
 
 
@@ -17,6 +17,7 @@ REQUIRES:
 	windowWaitUntil_FrontIS
 
 HISTORY:
+	2024-07-15 ( danshockley ): Updated to tell app by process ID (works-with-FM19+). 
 	1.6.1 - 2018-05-01 ( eshagdar ): fuzzy search on the button names. added 
 	1.6 - 2018-04-30 ( eshagdar ): wait explicitly until window renders instead of relying on waiting after the new/edit button click.
 	1.5 - 2018-01-18 ( eshagdar ): ok/cancel buttons have dedicated handlers. new/edit button clicks done via handler that also waits for specified window name. doNotChangeExisting param throws an error - why even bother calling this handler.
@@ -39,10 +40,15 @@ end run
 --------------------
 
 on fmGUI_CustomFunctions_EditFunction(prefs)
-	-- version 1.6
+	-- version 2024-07-15
 	
 	set defaultPrefs to {functionName:null, functionOldName:null, doNotChangeExisting:false, availability:"ALL", parameterList:{}, calcCode:null, doNotUpdateIfVersion:null}
 	set prefs to prefs & defaultPrefs
+	try
+		set fmProcID to fmProcID of prefs
+	on error
+		set fmProcID to my getFmAppProcessID()
+	end try
 	
 	try
 		-- init vars		
@@ -59,7 +65,7 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 		-- open list of functions and get objects
 		fmGUI_CustomFunctions_Open({})
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell process id fmProcID
 				set editButton to first button of window 1 whose name begins with "Edit"
 				set newButton to first button of window 1 whose name begins with "New"
 			end tell
@@ -103,7 +109,7 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 			
 			-- get version of function in the file
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell process id fmProcID
 					set existingCalc to value of text area 1 of scroll area 4 of window 1
 				end tell
 			end tell
@@ -124,7 +130,7 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 		if functionName is not null then
 			if renameFunction then
 				tell application "System Events"
-					tell application process "FileMaker Pro Advanced"
+					tell process id fmProcID
 						set value of text field 1 of window 1 to functionName
 					end tell
 				end tell
@@ -135,7 +141,7 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 		-- ensure standard calc
 		if calcCode of prefs is not null then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell process id fmProcID
 					set value of text area 1 of scroll area 4 of window 1 to calcCode of prefs
 				end tell
 			end tell
@@ -147,7 +153,7 @@ on fmGUI_CustomFunctions_EditFunction(prefs)
 		set parameterList to parameterList of prefs
 		if (count of parameterList) is not 0 then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell process id fmProcID
 					repeat with paramNum from 1 to count of parameterList
 						set paramName to contents of item paramNum of parameterList
 						select row paramNum of table 1 of scroll area 3 of window 1
@@ -180,40 +186,44 @@ end fmGUI_CustomFunctions_EditFunction
 --------------------
 
 on fmGUI_CustomFunctions_Open(prefs)
-	tell application "htcLib" to fmGUI_CustomFunctions_Open(prefs)
+	tell application "fmGuiLib" to fmGUI_CustomFunctions_Open(prefs)
 end fmGUI_CustomFunctions_Open
 
 on fmGUI_CustomFunctions_SelectFunction(prefs)
-	tell application "htcLib" to fmGUI_CustomFunctions_SelectFunction(prefs)
+	tell application "fmGuiLib" to fmGUI_CustomFunctions_SelectFunction(prefs)
 end fmGUI_CustomFunctions_SelectFunction
 
 on fmGUI_ObjectClick_Button(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_Button({buttonRef:my coerceToString(buttonRef of prefs)} & prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_Button({buttonRef:my coerceToString(buttonRef of prefs)} & prefs)
 end fmGUI_ObjectClick_Button
 
 on fmGUI_ObjectClick_CancelButton(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_CancelButton(prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_CancelButton(prefs)
 end fmGUI_ObjectClick_CancelButton
 
 on fmGUI_ObjectClick_OkButton(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_OkButton(prefs)
 end fmGUI_ObjectClick_OkButton
 
 on getTextBetween(prefs)
-	tell application "htcLib" to getTextBetween(prefs)
+	tell application "fmGuiLib" to getTextBetween(prefs)
 end getTextBetween
 
 on parseChars(prefs)
-	tell application "htcLib" to parseChars(prefs)
+	tell application "fmGuiLib" to parseChars(prefs)
 end parseChars
 
 on windowWaitUntil(prefs)
-	tell application "htcLib" to windowWaitUntil(prefs)
+	tell application "fmGuiLib" to windowWaitUntil(prefs)
 end windowWaitUntil
 
 on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS
+
+on getFmAppProcessID()
+	tell application "fmGuiLib" to getFmAppProcessID()
+end getFmAppProcessID
 
 
 
@@ -222,7 +232,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceTEXT:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceTEXT:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

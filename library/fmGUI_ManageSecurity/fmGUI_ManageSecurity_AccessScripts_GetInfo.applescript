@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_AccessScripts_GetInfo({})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- get the value list access for the currently opened value list privileges
 
 
@@ -35,7 +35,7 @@ on fmGUI_ManageSecurity_AccessScripts_GetInfo(prefs)
 		
 		-- get lists of the name and privilege
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set allowCreate to value of checkbox 1 of window 1
 				set nameList to name of static text 1 of every row of table 1 of scroll area 1 of window 1
 				set privList to name of static text 3 of every row of table 1 of scroll area 1 of window 1
@@ -63,9 +63,9 @@ end fmGUI_ManageSecurity_AccessScripts_GetInfo
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS

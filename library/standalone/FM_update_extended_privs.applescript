@@ -10,12 +10,12 @@ set editExtPrivWindow to "Edit Extended Privilege"
 set debugMode to false
 
 
-tell application "htcLib" to fmGUI_ManageSecurity_GoToTab_ExtendedPrivs(credentials)
+tell application "fmGuiLib" to fmGUI_ManageSecurity_GoToTab_ExtendedPrivs(credentials)
 
 -- delete deprecated extended privilege	
 try
 	tell application "System Events"
-		tell process "FileMaker Pro Advanced"
+		tell application process "FileMaker Pro"
 			select (first row of table 1 of scroll area 1 of tab group 1 of window 1 whose value of static text 1 is equal to removePrivName)
 			click button "Delete" of tab group 1 of window 1
 		end tell
@@ -27,32 +27,32 @@ end try
 try
 	-- find and open edit window for priv
 	tell application "System Events"
-		tell process "FileMaker Pro Advanced"
+		tell application process "FileMaker Pro"
 			select (first row of table 1 of scroll area 1 of tab group 1 of window 1 whose value of static text 1 is equal to updatePrivName)
 			set editButton to first button of tab group 1 of window 1 whose name begins with "Edit"
 		end tell
 	end tell
-	tell application "htcLib" to clickObjectByCoords(my coerceToString(editButton))
-	tell application "htcLib" to windowWaitUntil_FrontIS({windowName:editExtPrivWindow})
+	tell application "fmGuiLib" to clickObjectByCoords(my coerceToString(editButton))
+	tell application "fmGuiLib" to windowWaitUntil_FrontIS({windowName:editExtPrivWindow})
 	
 	
 	-- edit priv and save change
 	tell application "System Events"
-		tell process "FileMaker Pro Advanced"
+		tell application process "FileMaker Pro"
 			set onBox to checkbox 1 of (first row of table 1 of scroll area 1 of window 1 whose value of static text 1 is equal to privSet)
 			if value of onBox is 0 then click onBox
 		end tell
 	end tell
-	tell application "htcLib" to fmGUI_ObjectClick_OkButton({})
-	tell application "htcLib" to windowWaitUntil_FrontNotIS({windowName:editExtPrivWindow})
+	tell application "fmGuiLib" to fmGUI_ObjectClick_OkButton({})
+	tell application "fmGuiLib" to windowWaitUntil_FrontNotIS({windowName:editExtPrivWindow})
 end try
 
 
-tell application "htcLib" to fmGUI_ManageSecurity_Save(credentials)
+tell application "fmGuiLib" to fmGUI_ManageSecurity_Save(credentials)
 
 -- now close the file
-tell application "htcLib" to set dbName to databaseNameOfFrontWindow({fmAppType:"Adv"})
-tell application "htcLib" to closeDatabase({dbName:dbName})
+tell application "fmGuiLib" to set dbName to databaseNameOfFrontWindow({fmAppType:"Adv"})
+tell application "fmGuiLib" to closeDatabase({dbName:dbName})
 
 
 

@@ -1,5 +1,5 @@
 -- fmGUI_isInFullAccessMode({})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- check to see if the user is logged in with a full access account ( can go into manage database ).
 
 
@@ -37,7 +37,7 @@ on fmGUI_isInFullAccessMode(prefs)
 		if fmGUI_NameOfFrontmostWindow() contains listOfFullAccessWindowNames then return true
 		
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set canAccessManageDB to enabled of first menu item of menu 1 of menu item "Manage" of menu "File" of menu bar item "File" of menu bar 1 whose name begins with "Database"
 			end tell
 		end tell
@@ -54,9 +54,9 @@ end fmGUI_isInFullAccessMode
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+	tell application "fmGuiLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow

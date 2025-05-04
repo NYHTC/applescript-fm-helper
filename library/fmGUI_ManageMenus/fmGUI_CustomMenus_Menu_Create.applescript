@@ -1,5 +1,5 @@
 -- fmGUI_CustomMenus_Menu_Create({menuSetName:null})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- create a new menu
 
 
@@ -44,7 +44,7 @@ on fmGUI_CustomMenus_Menu_Create(prefs)
 		-- click new menu button if not on the create menu window
 		if frontWindowName is equal to windowSelectMenu then
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set newMenuButton to first button of window 1 whose description starts with "New Menu"
 				end tell
 			end tell
@@ -55,7 +55,7 @@ on fmGUI_CustomMenus_Menu_Create(prefs)
 		-- create menu
 		windowWaitUntil_FrontIS({windowName:"Create Custom Menu"})
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				if menuBasedOn is null or Â
 					menuBasedOn is equal to "" or Â
 					menuBasedOn is equal to "none" then
@@ -84,24 +84,24 @@ end fmGUI_CustomMenus_Menu_Create
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+	tell application "fmGuiLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow
 
 on fmGUI_ObjectClick_Button(prefs)
 	set buttonRef to my coerceToString(buttonRef of prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_Button({buttonRef:buttonRef} & prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_Button({buttonRef:buttonRef} & prefs)
 end fmGUI_ObjectClick_Button
 
 on fmGUI_ObjectClick_OkButton(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_OkButton(prefs)
 end fmGUI_ObjectClick_OkButton
 
 on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS
 
 
@@ -111,7 +111,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

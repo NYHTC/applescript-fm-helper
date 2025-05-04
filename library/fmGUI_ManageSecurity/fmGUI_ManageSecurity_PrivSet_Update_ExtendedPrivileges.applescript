@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_PrivSet_Update_ExtendedPrivileges({extendPrivRows:null})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- update extended privileges of the currently opened privilege set
 
 
@@ -35,7 +35,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_ExtendedPrivileges(prefs)
 		fmGUI_AppFrontMost()
 		
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set windowName to name of window 1
 				set extendPrivRows to rows of table 1 of scroll area 1 of window 1
 			end tell
@@ -49,7 +49,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_ExtendedPrivileges(prefs)
 		repeat with oneExtendedPrivRow in extendPrivRows
 			set oneExtendedPrivRow to contents of oneExtendedPrivRow
 			tell application "System Events"
-				tell process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set oneExtendedPrivCheckbox to checkbox 1 of oneExtendedPrivRow
 					set oneExtendedPrivName to name of oneExtendedPrivCheckbox
 				end tell
@@ -72,12 +72,12 @@ end fmGUI_ManageSecurity_PrivSet_Update_ExtendedPrivileges
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_CheckboxSet(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_CheckboxSet({objRef:objRefStr} & prefs)
+	tell application "fmGuiLib" to fmGUI_CheckboxSet({objRef:objRefStr} & prefs)
 end fmGUI_CheckboxSet
 
 
@@ -87,7 +87,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceTEXT:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceTEXT:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

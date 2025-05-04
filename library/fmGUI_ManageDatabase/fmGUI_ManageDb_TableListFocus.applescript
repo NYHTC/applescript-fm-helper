@@ -1,5 +1,4 @@
 -- fmGUI_ManageDb_TableListFocus({})
--- NYHTC
 -- Focus in the list of tables in the "Tables" tab of Manage Database
 
 
@@ -30,7 +29,7 @@ on fmGUI_ManageDb_TableListFocus(prefs)
 		fmGUI_ManageDb_GoToTab_Tables({})
 		
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set focused of (table 1 of scroll area 1 of tab group 1 of window 1) to true
 				return true
 			end tell
@@ -47,5 +46,5 @@ end fmGUI_ManageDb_TableListFocus
 --------------------
 
 on fmGUI_ManageDb_GoToTab_Tables(prefs)
-	tell application "htcLib" to fmGUI_ManageDb_GoToTab_Tables(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageDb_GoToTab_Tables(prefs)
 end fmGUI_ManageDb_GoToTab_Tables

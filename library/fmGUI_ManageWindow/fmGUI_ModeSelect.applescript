@@ -1,10 +1,11 @@
 -- fmGUI_ModeSelect(modeToSelect)
--- Dan Shockley, NYHTC
+-- Dan Shockley
 -- Specify which mode to select - Layout, Browse, Find, Previiw
 
 
 (*
 HISTORY:
+	2024-07-15 ( danshockley ): Updated to tell app by process ID (works-with-FM19+). 
 	1.1 - 2016-08-29 ( eshagdar ): wait until mode changes.
 	1.0 - 201x-xx-xx ( dshockley ): first created
 *)
@@ -19,14 +20,14 @@ end run
 --------------------
 
 on fmGUI_ModeSelect(modeToSelect)
-	-- version 1.1
+	-- version 2024-07-15
 	
 	try
 		fmGUI_AppFrontMost()
 		fmGUI_Inspector_Close()
-		
+		set fmProcID to my getFmAppProcessID()
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell process id fmProcID
 				set menuItem to first menu item of menu 1 of menu bar item "View" of menu bar 1 whose name is equal to modeToSelect & " Mode"
 			end tell
 		end tell
@@ -44,18 +45,21 @@ end fmGUI_ModeSelect
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_Inspector_Close()
-	tell application "htcLib" to fmGUI_Inspector_Close()
+	tell application "fmGuiLib" to fmGUI_Inspector_Close()
 end fmGUI_Inspector_Close
 
 on fmGUI_ClickMenuItem(prefs)
 	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
-	tell application "htcLib" to fmGUI_ClickMenuItem(prefs)
+	tell application "fmGuiLib" to fmGUI_ClickMenuItem(prefs)
 end fmGUI_ClickMenuItem
 
+on getFmAppProcessID()
+	tell application "fmGuiLib" to getFmAppProcessID()
+end getFmAppProcessID
 
 
 on coerceToString(incomingObject)
@@ -63,7 +67,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

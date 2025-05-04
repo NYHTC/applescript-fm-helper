@@ -1,5 +1,5 @@
 -- fmGUI_Inspector_Ensure()
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 -- Opens FileMaker's Inspector window
 
 
@@ -31,7 +31,7 @@ on fmGUI_Inspector_Ensure()
 		fmGUI_ModeEnsure_Layout()
 		fmGUI_AppFrontMost()
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				if not (exists (first window whose name contains "Inspector")) then
 					click (first menu item of menu 1 of menu bar item "View" of menu bar 1 whose name is "Inspector")
 				end if
@@ -49,9 +49,9 @@ end fmGUI_Inspector_Ensure
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ModeEnsure_Layout()
-	tell application "htcLib" to fmGUI_ModeEnsure_Layout()
+	tell application "fmGuiLib" to fmGUI_ModeEnsure_Layout()
 end fmGUI_ModeEnsure_Layout

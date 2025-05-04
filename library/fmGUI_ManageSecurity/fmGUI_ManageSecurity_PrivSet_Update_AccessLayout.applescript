@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_PrivSet_Update_AccessLayout({accessLayout:null, layoutAccess:null})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- update layout access of the currently opened privilege set
 
 
@@ -39,7 +39,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)
 		fmGUI_AppFrontMost()
 		
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set windowName to name of window 1
 				set layoutsPopup to pop up button "Layouts:" of window 1
 			end tell
@@ -57,7 +57,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)
 			
 			-- get button refs to for each radio button
 			tell application "System Events"
-				tell process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set allowCreate to checkbox "Allow creation of new layouts" of window 1
 					
 					-- need to do it by reference since the 2 sets of radio buttons 'checkboxes' have the same name
@@ -79,7 +79,7 @@ on fmGUI_ManageSecurity_PrivSet_Update_AccessLayout(prefs)
 			repeat with oneLayoutRec in layoutPrivList of layoutAccess of prefs
 				set oneLayoutRec to contents of oneLayoutRec
 				tell application "System Events"
-					tell process "FileMaker Pro Advanced"
+					tell application process "FileMaker Pro"
 						set oneLayoutRow to (first row of table 1 of scroll area 1 of window 1 whose name of static text 1 is layoutName of oneLayoutRec)
 						select oneLayoutRow
 						set oneLayoutInfo to name of every static text of oneLayoutRow
@@ -128,25 +128,25 @@ end fmGUI_ManageSecurity_PrivSet_Update_AccessLayout
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_CheckboxSet(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_CheckboxSet({objRef:objRefStr} & prefs)
+	tell application "fmGuiLib" to fmGUI_CheckboxSet({objRef:objRefStr} & prefs)
 end fmGUI_CheckboxSet
 
 on fmGUI_ObjectClick_OkButton(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_OkButton(prefs)
 end fmGUI_ObjectClick_OkButton
 
 on fmGUI_Popup_SelectByCommand(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_Popup_SelectByCommand({objRef:objRefStr} & prefs)
+	tell application "fmGuiLib" to fmGUI_Popup_SelectByCommand({objRef:objRefStr} & prefs)
 end fmGUI_Popup_SelectByCommand
 
 on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS
 
 
@@ -156,7 +156,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceTEXT:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceTEXT:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

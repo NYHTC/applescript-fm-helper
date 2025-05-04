@@ -1,5 +1,5 @@
 -- fmGUI_ManageDb_FieldListFocus({})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- Focus in the list of fields in the "Fields" tab of Manage Database
 
 
@@ -30,7 +30,7 @@ on fmGUI_ManageDb_FieldListFocus(prefs)
 		fmGUI_ManageDb_GoToTab_Fields({})
 		fmGUI_AppFrontMost()
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set focused of (table 1 of scroll area 1 of tab group 1 of window 1) to true
 				return true
 			end tell
@@ -46,9 +46,9 @@ end fmGUI_ManageDb_FieldListFocus
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageDb_GoToTab_Fields(prefs)
-	tell application "htcLib" to fmGUI_ManageDb_GoToTab_Fields(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageDb_GoToTab_Fields(prefs)
 end fmGUI_ManageDb_GoToTab_Fields

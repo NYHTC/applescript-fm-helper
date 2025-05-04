@@ -1,5 +1,5 @@
 -- Script Step Specify Calc
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 
 (*
 	For a selection of script steps, bring up a useful calculation window for some chosen option.
@@ -11,7 +11,7 @@ HISTORY:
 	
 	
 REQUIRES:
-	htcLib.app
+	fmGuiLib.app
 	
 *)
 
@@ -21,7 +21,7 @@ on run
 	
 	try
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set frontmost to true
 				
 				set scriptWindow to first window whose (name begins with "Script Workspace" or name begins with "Edit Script")
@@ -129,7 +129,7 @@ on clickByPositionSize(objectPosition, objectSize)
 	set xClick to xCoord + objOffset
 	set yClick to yCoord + objOffset
 	
-	tell application "htcLib" to clickAtCoords(xClick, yClick)
+	tell application "fmGuiLib" to clickAtCoords(xClick, yClick)
 	return result
 end clickByPositionSize
 

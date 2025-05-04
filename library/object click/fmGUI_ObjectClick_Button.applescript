@@ -1,5 +1,5 @@
 -- fmGUI_ObjectClick_Button({buttonName:null, buttonRef:null, windowNameThatCloses:null, windowNameThatOpens:null})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- Wrapper method for clicking the ok button and waiting for the window to close
 
 
@@ -13,6 +13,7 @@ REQUIRES:
 	
 
 HISTORY:
+	2024-07-15 ( danshockley ): Updated to tell app by process ID (works-with-FM19+). 
 	1.3.1 - 2018-12-07 ( eshagdar ): FM process name contains 'Advanced'.
 	1.3 - 2017-11-20 ( eshagdar ): make sure we're talking to the correct window - there may be several windows 'in front of' the manage layouts window.
 	1.2 - 2017-11-06 ( eshagdar ): added windowNameThatOpens.
@@ -23,7 +24,8 @@ HISTORY:
 
 on run
 	tell application "System Events"
-		tell process "FileMaker Pro Advanced"
+		set fmProcID to id of first application process whose name contains "FileMaker"
+		tell process id fmProcID
 			set windowContextRef to first window whose name begins with "Manage Layouts"
 		end tell
 	end tell
@@ -36,7 +38,7 @@ end run
 --------------------
 
 on fmGUI_ObjectClick_Button(prefs)
-	-- version 1.3.1
+	-- version 2024-07-15
 	
 	set defaultPrefs to {buttonName:null, buttonRef:null, windowContextRef:null, windowNameThatCloses:null, windowNameThatOpens:null}
 	set prefs to prefs & defaultPrefs
@@ -47,12 +49,15 @@ on fmGUI_ObjectClick_Button(prefs)
 	
 	try
 		fmGUI_AppFrontMost()
-		
-		
+		try
+			set fmProcID to fmProcID of prefs
+		on error
+			set fmProcID to my getFmAppProcessID()
+		end try
 		-- ensure windowContext
 		if windowContextRef is null then
 			tell application "System Events"
-				tell process "FileMaker Pro Advanced"
+				tell process id fmProcID
 					set windowContextRef to window 1
 				end tell
 			end tell
@@ -61,7 +66,7 @@ on fmGUI_ObjectClick_Button(prefs)
 		-- use the most commonly found button reference ( unless specified )
 		if buttonRef is null then
 			tell application "System Events"
-				tell process "FileMaker Pro Advanced"
+				tell process id fmProcID
 					set buttonRef to button (buttonName of prefs) of windowContextRef
 				end tell
 			end tell
@@ -87,25 +92,28 @@ end fmGUI_ObjectClick_Button
 --------------------
 
 on clickObjectByCoords(someObject)
-	tell application "htcLib" to clickObjectByCoords(my coerceToString(someObject))
+	tell application "fmGuiLib" to clickObjectByCoords(my coerceToString(someObject))
 end clickObjectByCoords
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+	tell application "fmGuiLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow
 
 on windowWaitUntil_FrontNotIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontNotIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontNotIS(prefs)
 end windowWaitUntil_FrontNotIS
 
 on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS
 
+on getFmAppProcessID()
+	tell application "fmGuiLib" to getFmAppProcessID()
+end getFmAppProcessID
 
 
 on coerceToString(incomingObject)
@@ -113,7 +121,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString
@@ -125,7 +133,7 @@ on ensureObjectRef(someObjectRef)
 	
 	tell application "Finder" to set ensureObjPath to (container of (container of (path to me)) as text) & "text parsing:ensureObjectRef.applescript"
 	set codeEnsureObj to read file ensureObjPath as text
-	tell application "htcLib" to set codeEnsureObj to "script codeEnsureObj " & return & getTextBetween({sourceText:codeEnsureObj, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeEnsureObj"
+	tell application "fmGuiLib" to set codeEnsureObj to "script codeEnsureObj " & return & getTextBetween({sourceText:codeEnsureObj, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeEnsureObj"
 	set codeEnsureObj to run script codeEnsureObj
 	tell codeEnsureObj to ensureObjectRef(someObjectRef)
 end ensureObjectRef

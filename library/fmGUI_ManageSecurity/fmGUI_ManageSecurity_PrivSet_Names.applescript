@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_PrivSet_Names({fullAccessAccountName:"admin", fullAccessPassword:""})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- get a list of all existings privSet names
 
 
@@ -34,7 +34,7 @@ on fmGUI_ManageSecurity_PrivSet_Names(prefs)
 		
 		
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set privSetNameList to name of static text 1 of every row of (table 1 of scroll area 1 of tab group 1 of window 1)
 			end tell
 		end tell
@@ -50,9 +50,9 @@ end fmGUI_ManageSecurity_PrivSet_Names
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
 end fmGUI_ManageSecurity_GoToTab_PrivSets

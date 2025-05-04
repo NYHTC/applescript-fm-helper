@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_Open({fullAccessAccountName:null, fullAccessPassword:null})
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 -- Open Manage Security window
 
 
@@ -47,7 +47,7 @@ on fmGUI_ManageSecurity_Open(prefs)
 		-- test to see if ANY window has 'manage security for' as the name - this may NOT be the frontmost window
 		try
 			tell application "System Events"
-				tell process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set alreadyInManageSecurity to exists (get first window whose name contains securityWindowName)
 				end tell
 			end tell
@@ -62,7 +62,7 @@ on fmGUI_ManageSecurity_Open(prefs)
 			
 			-- open Manage security
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set manageSecMenuItem to first menu item of menu 1 of menu item "Manage" of menu 1 of menu bar item "File" of menu bar 1 whose name starts with "Security"
 				end tell
 			end tell
@@ -86,28 +86,28 @@ end fmGUI_ManageSecurity_Open
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_AuthenticateDialog(prefs)
-	tell application "htcLib" to fmGUI_AuthenticateDialog(prefs)
+	tell application "fmGuiLib" to fmGUI_AuthenticateDialog(prefs)
 end fmGUI_AuthenticateDialog
 
 on fmGUI_ClickMenuItem(prefs)
 	set prefs to {menuItemRef:my coerceToString(menuItemRef of prefs)} & prefs
-	tell application "htcLib" to fmGUI_ClickMenuItem(prefs)
+	tell application "fmGuiLib" to fmGUI_ClickMenuItem(prefs)
 end fmGUI_ClickMenuItem
 
 on fmGUI_isInFullAccessMode(prefs)
-	tell application "htcLib" to fmGUI_isInFullAccessMode(prefs)
+	tell application "fmGuiLib" to fmGUI_isInFullAccessMode(prefs)
 end fmGUI_isInFullAccessMode
 
 on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+	tell application "fmGuiLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow
 
 on windowWaitUntil(prefs)
-	tell application "htcLib" to windowWaitUntil(prefs)
+	tell application "fmGuiLib" to windowWaitUntil(prefs)
 end windowWaitUntil
 
 
@@ -117,7 +117,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

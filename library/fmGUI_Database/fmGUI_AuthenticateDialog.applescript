@@ -1,5 +1,5 @@
 -- fmGUI_AuthenticateDialog({accountName:null, pwd:null, windowName:null})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- authenticate with the provided credentials
 
 
@@ -50,7 +50,7 @@ on fmGUI_AuthenticateDialog(prefs)
 		
 		-- enter credentials
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set objAccount to first text field of window 1 whose description is not pwdFieldDesc
 				set objPassword to first text field of window 1 whose description is pwdFieldDesc
 			end tell
@@ -70,7 +70,7 @@ on fmGUI_AuthenticateDialog(prefs)
 		
 		
 		-- wait for window to close
-		if fmGUI_NameOfFrontmostWindow() is equal to "FileMaker Pro Advanced" then error "incorrect credentials" number -1024
+		if fmGUI_NameOfFrontmostWindow() is equal to "FileMaker Pro" then error "incorrect credentials" number -1024
 		
 		return windowWaitUntil({windowName:windowName of prefs, windowNameTest:"does not start with", whichWindow:"front"})
 	on error errMsg number errNum
@@ -83,28 +83,28 @@ end fmGUI_AuthenticateDialog
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+	tell application "fmGuiLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow
 
 on fmGUI_ObjectClick_OkButton(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_OkButton(prefs)
 end fmGUI_ObjectClick_OkButton
 
 on fmGUI_ObjectClick_SignInButton(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_SignInButton(prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_SignInButton(prefs)
 end fmGUI_ObjectClick_SignInButton
 
 on fmGUI_TextFieldSet(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_TextFieldSet({objRef:objRefStr} & prefs)
+	tell application "fmGuiLib" to fmGUI_TextFieldSet({objRef:objRefStr} & prefs)
 end fmGUI_TextFieldSet
 
 on windowWaitUntil(prefs)
-	tell application "htcLib" to windowWaitUntil(prefs)
+	tell application "fmGuiLib" to windowWaitUntil(prefs)
 end windowWaitUntil
 
 
@@ -114,7 +114,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_AccessRecord_OpenCalc({})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- open calc box ( or field-level access ) for the currently selected table of the record-access window in manage security
 
 
@@ -52,7 +52,7 @@ on fmGUI_ManageSecurity_AccessRecord_OpenCalc(prefs)
 		
 		-- now open the specified calc box
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				click pop up button buttonNum of window 1
 				click menu item 2 of menu 1 of pop up button buttonNum of window 1
 			end tell
@@ -69,9 +69,9 @@ end fmGUI_ManageSecurity_AccessRecord_OpenCalc
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on windowWaitUntil(prefs)
-	tell application "htcLib" to windowWaitUntil(prefs)
+	tell application "fmGuiLib" to windowWaitUntil(prefs)
 end windowWaitUntil

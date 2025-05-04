@@ -1,11 +1,13 @@
 -- CopyValuesFromViewIndexWindow({})
--- Dan Shockley, NYHTC
+-- Dan Shockley
 -- Copy Values from View Index Window
 
 (*
 HISTORY:
-	1.1 - 2019-04-25 ( dshockley ): Provide visual feedback that the rows were copied by moving to the end of scroll area.
-	1.0 - 2017-xx-xx ( dshockley ): First created. 
+	2025-04-04 ( danshockley ): Use getFmAppProcessID and then tell by process id. 
+	2023-04-21 ( danshockley ): Revised to be FileMaker-version-independent. 
+	2019-04-25 ( danshockley ): Provide visual feedback that the rows were copied by moving to the end of scroll area.
+	2017-xx-xx ( danshockley ): First created. 
 *)
 
 
@@ -18,11 +20,14 @@ end run
 --------------------
 
 on CopyValuesFromViewIndexWindow({})
-	-- version 1.1
+	-- version 2025-04-04 ( danshockley )
+	
+	set fmProcID to my getFmAppProcessID()
 	
 	tell application "System Events"
-		tell application process "FileMaker Pro Advanced"
-			--set frontmost to true
+		
+		tell process id fmProcID
+			set frontmost to true
 			if name of window 1 is not "View Index" then
 				display dialog "Please choose View Index on the field you'd like the list of index values for." buttons {"OK"} default button "OK"
 				return false
@@ -38,7 +43,7 @@ on CopyValuesFromViewIndexWindow({})
 		end tell
 	end tell
 	
-	tell application "htcLib" to set indexTextBlock to unParseChars(indexList, return)
+	tell application "fmGuiLib" to set indexTextBlock to unParseChars(indexList, return)
 	
 	set the clipboard to indexTextBlock
 	
@@ -50,3 +55,6 @@ end CopyValuesFromViewIndexWindow
 -- END OF CODE
 --------------------
 
+on getFmAppProcessID()
+	tell application "fmGuiLib" to getFmAppProcessID()
+end getFmAppProcessID

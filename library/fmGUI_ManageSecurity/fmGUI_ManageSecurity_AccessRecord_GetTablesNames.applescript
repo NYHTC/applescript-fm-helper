@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_AccessRecord_GetTablesNames({})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- get a list of table names for the currently opened custom record privileges
 
 
@@ -34,7 +34,7 @@ on fmGUI_ManageSecurity_AccessRecord_GetTablesNames(prefs)
 		
 		
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				return value of static text 1 of rows of table 1 of scroll area 1 of window 1
 			end tell
 		end tell
@@ -48,9 +48,9 @@ end fmGUI_ManageSecurity_AccessRecord_GetTablesNames
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS

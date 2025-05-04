@@ -1,5 +1,5 @@
 -- databaseNamesOfVisibleWindows({fmAppType:"Pro"})
--- Dan Shockley, NYHTC
+-- Dan Shockley
 -- return a list of db names for the specified window names
 
 
@@ -35,7 +35,7 @@ on databaseNamesOfVisibleWindows(prefs)
 	set prefs to prefs & defaultPrefs
 	
 		
-	using terms from application "FileMaker Pro Advanced"
+	using terms from application "FileMaker Pro"
 		tell application ID "com.filemaker.client.pro12"
 			set visibleWindowNames to name of every window whose visible is true
 		end tell
@@ -56,5 +56,5 @@ end databaseNamesOfVisibleWindows
 --------------------
 
 on dbNameOfWindowName(someWindowName)
-	tell application "htcLib" to dbNameOfWindowName(someWindowName)
+	tell application "fmGuiLib" to dbNameOfWindowName(someWindowName)
 end dbNameOfWindowName

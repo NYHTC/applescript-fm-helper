@@ -1,5 +1,5 @@
 -- fmGUI_ManageDataSources_EnsureExists(dataSourceName:null, dataSourcePath:null)
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 -- Ensure the specified data source exists, adding it if necessary
 
 
@@ -47,14 +47,14 @@ on fmGUI_ManageDataSources_EnsureExists(prefs)
 		
 		-- Make sure a specified Data Source exists.
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set dataSourceExists to exists (first row of (table 1 of scroll area 1 of window 1) whose name of static text 1 is dataSourceName)
 			end tell
 		end tell
 		if not dataSourceExists then
 			-- need to create it: 
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set newButton to first button of window 1 whose name starts with "New"
 				end tell
 			end tell
@@ -63,7 +63,7 @@ on fmGUI_ManageDataSources_EnsureExists(prefs)
 			
 			
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set value of text field 1 of window 1 to dataSourceName
 					set value of text area 1 of scroll area 1 of group 1 of window 1 to dataSourcePath
 					set okButton to first button of window 1 whose name starts with "OK"
@@ -87,19 +87,19 @@ end fmGUI_ManageDataSources_EnsureExists
 --------------------
 
 on clickObjectByCoords(someObject)
-	tell application "htcLib" to clickObjectByCoords(my coerceToString(someObject))
+	tell application "fmGuiLib" to clickObjectByCoords(my coerceToString(someObject))
 end clickObjectByCoords
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageDataSources_Open(prefs)
-	tell application "htcLib" to fmGUI_ManageDataSources_Open(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageDataSources_Open(prefs)
 end fmGUI_ManageDataSources_Open
 
 on windowWaitUntil_FrontIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontIS(prefs)
 end windowWaitUntil_FrontIS
 
 
@@ -108,7 +108,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

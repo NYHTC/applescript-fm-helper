@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_GoToTab_PrivSets({})
--- Dan Shockley, NYHTC
+-- Dan Shockley
 -- Go to the "Privilege Sets" tab of manage security
 
 
@@ -30,7 +30,7 @@ on fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
 	try
 		fmGUI_ManageSecurity_GotoTab({tabName:"Privilege Sets"} & prefs)
 		tell application "System Events"
-			tell process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set viewByPopUpButton to pop up button "View by:" of tab group 1 of window 1
 			end tell
 		end tell
@@ -46,12 +46,12 @@ end fmGUI_ManageSecurity_GoToTab_PrivSets
 --------------------
 
 on fmGUI_ManageSecurity_GotoTab(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_GotoTab(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageSecurity_GotoTab(prefs)
 end fmGUI_ManageSecurity_GotoTab
 
 on fmGUI_PopupSet(prefs)
 	set objRefStr to coerceToString(objRef of prefs)
-	tell application "htcLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
+	tell application "fmGuiLib" to fmGUI_PopupSet({objRef:objRefStr} & prefs)
 end fmGUI_PopupSet
 
 
@@ -61,7 +61,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

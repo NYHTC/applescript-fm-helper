@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_Cancel({})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- Close ( and CANCEL ) Manage Security
 
 
@@ -34,7 +34,7 @@ on fmGUI_ManageSecurity_Cancel(prefs)
 		fmGUI_AppFrontMost()
 		
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				if name of window 1 does not contain "Manage Security for" then error "Not in main Manage Security window." number 1024
 				set cancelButton to first button of window 1 whose name is equal to "Cancel"
 			end tell
@@ -48,7 +48,7 @@ on fmGUI_ManageSecurity_Cancel(prefs)
 		-- confirm discard
 		try
 			tell application "System Events"
-				tell application process "FileMaker Pro Advanced"
+				tell application process "FileMaker Pro"
 					set discardButton to button "Discard" of window 1
 				end tell
 			end tell
@@ -57,7 +57,7 @@ on fmGUI_ManageSecurity_Cancel(prefs)
 		
 		
 		-- wait until window is gone
-		windowWaitUntil({whichWindow:"front", windowNameTest:"is not", windowName:"FileMaker Pro Advanced"})
+		windowWaitUntil({whichWindow:"front", windowNameTest:"is not", windowName:"FileMaker Pro"})
 		windowWaitUntil({whichWindow:"front", windowNameTest:"does not start with", windowName:"Manage Security"})
 		
 		return true
@@ -72,15 +72,15 @@ end fmGUI_ManageSecurity_Cancel
 --------------------
 
 on clickObjectByCoords(prefs)
-	tell application "htcLib" to clickObjectByCoords(my coerceToString(prefs))
+	tell application "fmGuiLib" to clickObjectByCoords(my coerceToString(prefs))
 end clickObjectByCoords
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on windowWaitUntil(prefs)
-	tell application "htcLib" to windowWaitUntil(prefs)
+	tell application "fmGuiLib" to windowWaitUntil(prefs)
 end windowWaitUntil
 
 
@@ -90,7 +90,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

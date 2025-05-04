@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_AccountNames(fullAccessAccountName:null, fullAccessPassword:null)
--- Daniel A. Shockley, NYHTC
+-- Dan Shockley
 -- Open Manage Security window
 
 
@@ -32,7 +32,7 @@ on fmGUI_ManageSecurity_AccountNames(prefs)
 		fmGUI_AppFrontMost()
 		fmGUI_ManageSecurity_GoToTab_Accounts(prefs)
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set accountNames to name of static text 1 of every row of (table 1 of scroll area 1 of tab group 1 of window 1)
 			end tell
 		end tell
@@ -49,9 +49,9 @@ end fmGUI_ManageSecurity_AccountNames
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageSecurity_GoToTab_Accounts(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_GoToTab_Accounts(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageSecurity_GoToTab_Accounts(prefs)
 end fmGUI_ManageSecurity_GoToTab_Accounts

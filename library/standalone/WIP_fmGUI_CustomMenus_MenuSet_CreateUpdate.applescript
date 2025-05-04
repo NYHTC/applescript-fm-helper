@@ -1,11 +1,11 @@
 -- fmGUI_CustomMenus_MenuSet_CreateUpdate({})
--- Dan Shockley, NYHTC
+-- Dan Shockley
 -- create/update a menu set
 
 
 (*
 HISTORY:
-	1.4 - 2017-12-18 ( eshagdar ): added to htcLib. renamed fmGUI_CustomMenus_CustomMenuSet_CreateUpdate to fmGUI_CustomMenus_MenuSet_CreateUpdate.
+	1.4 - 2017-12-18 ( eshagdar ): added to fmGuiLib. renamed fmGUI_CustomMenus_CustomMenuSet_CreateUpdate to fmGUI_CustomMenus_MenuSet_CreateUpdate.
 	1.3 - 2014-06-12 ( dshockley ): updated to successfully finish editing menus
 	1.2 - 2014-03-06 ( dshockley ): updated to remove any extra menu items that go beyond what was specified by the parameters. 
 	1.1 - 2014-01-15 ( dshockley ): 
@@ -43,7 +43,7 @@ on fmGUI_CustomMenus_MenuSet_CreateUpdate(prefs)
 		
 		-- get button refs
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set createButton to first button of tab group 1 of window 1 whose name starts with "Create"
 				set editButton to first button of tab group 1 of window 1 whose name starts with "Edit"
 				set duplicateButton to first button of tab group 1 of window 1 whose name starts with "Duplicate"
@@ -73,7 +73,7 @@ on fmGUI_CustomMenus_MenuSet_CreateUpdate(prefs)
 		
 		-- We now have open a custom menu SET we can create/edit:
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				-- ensure name and comment
 				set value of text field "Menu Set Name:" of window 1 to menuSetName of menuSetRec
 				set value of text field "Comment:" of window 1 to menuSetComment of menuSetRec
@@ -242,17 +242,17 @@ end fmGUI_CustomMenus_MenuSet_CreateUpdate
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ObjectClick_OkButton(prefs)
-	tell application "htcLib" to fmGUI_ObjectClick_OkButton(prefs)
+	tell application "fmGuiLib" to fmGUI_ObjectClick_OkButton(prefs)
 end fmGUI_ObjectClick_OkButton
 
 on fmGUI_NameOfFrontmostWindow()
-	tell application "htcLib" to fmGUI_NameOfFrontmostWindow()
+	tell application "fmGuiLib" to fmGUI_NameOfFrontmostWindow()
 end fmGUI_NameOfFrontmostWindow
 
 on windowWaitUntil_FrontNotIS(prefs)
-	tell application "htcLib" to windowWaitUntil_FrontNotIS(prefs)
+	tell application "fmGuiLib" to windowWaitUntil_FrontNotIS(prefs)
 end windowWaitUntil_FrontNotIS

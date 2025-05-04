@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_PrivSet_DeleteEmpty({fullAccessAccountName:"", fullAccessPassword:"", skipDeleteList:{}})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- delete privSets that do not have any accounts.
 
 
@@ -38,7 +38,7 @@ on fmGUI_ManageSecurity_PrivSet_DeleteEmpty(prefs)
 		
 		-- get a list of all privSets
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				set privSetTable to table 1 of scroll area 1 of tab group 1 of window 1
 				set existingPrivSetNames to value of static text 1 of every row of table 1 of scroll area 1 of tab group 1 of window 1
 			end tell
@@ -56,7 +56,7 @@ on fmGUI_ManageSecurity_PrivSet_DeleteEmpty(prefs)
 			else
 				-- delete if there are no accounts for the privSet
 				tell application "System Events"
-					tell application process "FileMaker Pro Advanced"
+					tell application process "FileMaker Pro"
 						set onePrivSetRow to (first row of privSetTable whose value of static text 1 is equal to onePrivSetName)
 						
 						if value of static text 2 of onePrivSetRow is equal to "" then
@@ -78,7 +78,7 @@ on fmGUI_ManageSecurity_PrivSet_DeleteEmpty(prefs)
 		
 		-- final checks
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				-- make sure we don't have errors after deleting
 				if name of window 1 does not start with "Manage Security" then error "unable to delete privSet '" & value of static text 1 of firstPrivSetNoAccounts & "'" number -1024
 				
@@ -98,15 +98,15 @@ end fmGUI_ManageSecurity_PrivSet_DeleteEmpty
 --------------------
 
 on clickObjectByCoords(someObject)
-	tell application "htcLib" to clickObjectByCoords(my coerceToString(someObject))
+	tell application "fmGuiLib" to clickObjectByCoords(my coerceToString(someObject))
 end clickObjectByCoords
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageSecurity_GoToTab_PrivSets(prefs)
 end fmGUI_ManageSecurity_GoToTab_PrivSets
 
 
@@ -115,7 +115,7 @@ on coerceToString(incomingObject)
 	
 	tell application "Finder" to set coercePath to (container of (container of (path to me)) as text) & "text parsing:coerceToString.applescript"
 	set codeCoerce to read file coercePath as text
-	tell application "htcLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
+	tell application "fmGuiLib" to set codeCoerce to "script codeCoerce " & return & getTextBetween({sourceText:codeCoerce, beforeText:"-- START OF CODE", afterText:"-- END OF CODE"}) & return & "end script" & return & "return codeCoerce"
 	set codeCoerce to run script codeCoerce
 	tell codeCoerce to coerceToString(incomingObject)
 end coerceToString

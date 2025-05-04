@@ -1,5 +1,5 @@
 -- fmGUI_ManageSecurity_GoToTab({tabName:null})
--- Erik Shagdar, NYHTC
+-- Erik Shagdar
 -- Go to specified tab of manage scripts
 
 
@@ -36,7 +36,7 @@ on fmGUI_ManageSecurity_GoToTab(prefs)
 		fmGUI_ManageSecurity_Open(prefs)
 		
 		tell application "System Events"
-			tell application process "FileMaker Pro Advanced"
+			tell application process "FileMaker Pro"
 				
 				click (first radio button of tab group 1 of window 1 whose name is tabName of prefs)
 				return true
@@ -54,9 +54,9 @@ end fmGUI_ManageSecurity_GoToTab
 --------------------
 
 on fmGUI_AppFrontMost()
-	tell application "htcLib" to fmGUI_AppFrontMost()
+	tell application "fmGuiLib" to fmGUI_AppFrontMost()
 end fmGUI_AppFrontMost
 
 on fmGUI_ManageSecurity_Open(prefs)
-	tell application "htcLib" to fmGUI_ManageSecurity_Open(prefs)
+	tell application "fmGuiLib" to fmGUI_ManageSecurity_Open(prefs)
 end fmGUI_ManageSecurity_Open
